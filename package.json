@@ -4,7 +4,7 @@
   "description": "Online grocery store prototype",
   "type": "module",
   "scripts": {
-    "start": "node --env-file=.env server.js",
+    "start": "node server.js",
     "seed:products": "node --env-file=.env scripts/seed-products.mjs",
     "test": "node scripts/test-order-review.mjs && node scripts/test-browse-availability.mjs && node scripts/test-catalog-scale.mjs && node scripts/test-catalog-db.mjs && node scripts/test-add-product-ui.mjs && node scripts/test-chatbot.mjs"
   },
