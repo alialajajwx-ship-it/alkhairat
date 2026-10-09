@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تصفح المنتجات | الخيرات</title>
+<meta name="description" content="تصفح جميع أقسام ومنتجات بقالة الخيرات: الألبان، المخبوزات، العصائر، والمنظفات والمزيد.">
+<meta property="og:title" content="تصفح المنتجات | الخيرات">
+<meta property="og:description" content="تصفح جميع أقسام ومنتجات بقالة الخيرات مع أفضل العروض اليومية.">
+<meta property="og:image" content="/images/logo.webp">
+<link rel="icon" type="image/webp" href="/images/logo.webp">
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/browse.css">
+</head>
+<body>
+
+<%- include('partials/header', { activePage: 'browse' }) %>
+
+<main class="browse-layout">
+  <div class="container">
+    <!-- Search bar and filter toggle -->
+    <div class="search-row">
+      <div class="search-box">
+        <span class="material-symbols-outlined">search</span>
+        <input type="text" id="search-input" placeholder="ابحث عن منتج...">
+      </div>
+      <button class="filter-toggle" id="filter-toggle">
+        <span class="material-symbols-outlined">tune</span> فرز وتصفية
+      </button>
+    </div>
+
+    <div class="browse-grid">
+      <!-- Sidebar filters -->
+      <aside class="filters" id="filters-panel">
+        <button class="filter-close" id="filter-close">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+        <h3><span class="diamond"></span> العروض والخصومات</h3>
+        <ul class="filter-list plain" id="discount-filters">
+          <li data-discount="any" class="active"><span class="filter-radio"></span> الكل</li>
+          <li data-discount="on"><span class="filter-radio"></span> عليها خصم</li>
+        </ul>
+
+        <h3 class="mt"><span class="diamond"></span> السعر</h3>
+        <ul class="filter-list plain" id="price-filters">
+          <li data-price="under10"><span class="filter-radio"></span> اقل من 10 ر.س</li>
+          <li data-price="10to30"><span class="filter-radio"></span> 10 - 30 ر.س</li>
+          <li data-price="over30"><span class="filter-radio"></span> اكثر من 30 ر.س</li>
+        </ul>
+
+        <!-- «الأقسام» is the last filter section on purpose: the category list
+             is the longest one, so keeping it at the bottom leaves the short
+             filters within reach without scrolling. -->
+        <h3 class="mt"><span class="diamond"></span> الاقسام</h3>
+        <div class="filter-search">
+          <span class="material-symbols-outlined">search</span>
+          <input type="text" id="category-search" placeholder="ابحث عن قسم...">
+        </div>
+        <ul class="filter-list" id="category-filters">
+          <li class="active" data-type="all">جميع المنتجات</li>
+          <% categories.forEach(function (type, i) { %>
+          <li data-type="<%= type %>"><%= type %></li>
+          <% }); %>
+        </ul>
+      </aside>
+
+      <!-- Product results -->
+      <section class="results">
+        <div class="results-head">
+          <span id="results-count">عرض 0 منتج</span>
+        </div>
+
+        <!-- Skeleton placeholders: part of the page itself, visible the
+             instant it paints and replaced synchronously by the first
+             render (JS clears the container before appending cards) -->
+        <div class="product-grid is-loading" id="browse-products">
+          <div class="product-card skeleton-card">
+            <div class="product-thumb"><span class="skel skel-block"></span></div>
+            <div class="product-info">
+              <span class="skel skel-line w-40"></span>
+              <h3><span class="skel skel-line w-80"></span></h3>
+              <div class="p-bottom">
+                <span class="skel skel-line w-30"></span>
+                <span class="skel skel-circle"></span>
+              </div>
+            </div>
+          </div>
+          <div class="product-card skeleton-card">
+            <div class="product-thumb"><span class="skel skel-block"></span></div>
+            <div class="product-info">
+              <span class="skel skel-line w-40"></span>
+              <h3><span class="skel skel-line w-60"></span></h3>
+              <div class="p-bottom">
+                <span class="skel skel-line w-30"></span>
+                <span class="skel skel-circle"></span>
+              </div>
+            </div>
+          </div>
+          <div class="product-card skeleton-card">
+            <div class="product-thumb"><span class="skel skel-block"></span></div>
+            <div class="product-info">
+              <span class="skel skel-line w-40"></span>
+              <h3><span class="skel skel-line w-80"></span></h3>
+              <div class="p-bottom">
+                <span class="skel skel-line w-30"></span>
+                <span class="skel skel-circle"></span>
+              </div>
+            </div>
+          </div>
+          <div class="product-card skeleton-card">
+            <div class="product-thumb"><span class="skel skel-block"></span></div>
+            <div class="product-info">
+              <span class="skel skel-line w-40"></span>
+              <h3><span class="skel skel-line w-60"></span></h3>
+              <div class="p-bottom">
+                <span class="skel skel-line w-30"></span>
+                <span class="skel skel-circle"></span>
+              </div>
+            </div>
+          </div>
+          <div class="product-card skeleton-card">
+            <div class="product-thumb"><span class="skel skel-block"></span></div>
+            <div class="product-info">
+              <span class="skel skel-line w-40"></span>
+              <h3><span class="skel skel-line w-80"></span></h3>
+              <div class="p-bottom">
+                <span class="skel skel-line w-30"></span>
+                <span class="skel skel-circle"></span>
+              </div>
+            </div>
+          </div>
+          <div class="product-card skeleton-card">
+            <div class="product-thumb"><span class="skel skel-block"></span></div>
+            <div class="product-info">
+              <span class="skel skel-line w-40"></span>
+              <h3><span class="skel skel-line w-60"></span></h3>
+              <div class="p-bottom">
+                <span class="skel skel-line w-30"></span>
+                <span class="skel skel-circle"></span>
+              </div>
+            </div>
+          </div>
+          <div class="product-card skeleton-card">
+            <div class="product-thumb"><span class="skel skel-block"></span></div>
+            <div class="product-info">
+              <span class="skel skel-line w-40"></span>
+              <h3><span class="skel skel-line w-80"></span></h3>
+              <div class="p-bottom">
+                <span class="skel skel-line w-30"></span>
+                <span class="skel skel-circle"></span>
+              </div>
+            </div>
+          </div>
+          <div class="product-card skeleton-card">
+            <div class="product-thumb"><span class="skel skel-block"></span></div>
+            <div class="product-info">
+              <span class="skel skel-line w-40"></span>
+              <h3><span class="skel skel-line w-60"></span></h3>
+              <div class="p-bottom">
+                <span class="skel skel-line w-30"></span>
+                <span class="skel skel-circle"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination: the catalog is served one page at a time, so this bar
+             is the way through the rest of it -->
+        <nav class="pager" id="browse-pager" aria-label="التنقل بين صفحات المنتجات" style="display:none;"></nav>
+
+        <div class="empty-state" id="no-results" style="display:none;">
+          <span class="material-symbols-outlined">search_off</span>
+          <h3>لم يتم العثور على نتائج</h3>
+          <p>جرب تغيير كلمات البحث أو الفلاتر</p>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<!-- Filter overlay for mobile -->
+<div class="filter-overlay" id="filter-overlay"></div>
+
+<%- include('partials/footer') %>
+
+<script type="module" src="/js/data/products.js"></script>
+<script type="module" src="/js/data/cart.js"></script>
+<script type="module" src="/js/scripts/browse.js"></script>
+</body>
+</html>

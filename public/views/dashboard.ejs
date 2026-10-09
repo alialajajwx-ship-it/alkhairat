@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم | الخيرات</title>
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+
+<%- include('partials/header', { activePage: 'dashboard' }) %>
+
+<!-- تمت إضافة كلاس container هنا لضبط العرض ومنع التمدد المفرط -->
+<main class="container dash-container">
+
+  <!-- KPI Summary Cards -->
+  <section class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon"><span class="material-symbols-outlined">shopping_bag</span></div>
+      <div class="kpi-info">
+        <span>إجمالي الطلبات</span>
+        <strong id="kpi-total-orders">0 طلب</strong>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon accent"><span class="material-symbols-outlined">payments</span></div>
+      <div class="kpi-info">
+        <span>إجمالي المبيعات</span>
+        <strong id="kpi-total-sales">0 ر.س</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- Management shortcuts -->
+  <section class="products-shortcut dash-shortcuts">
+    <a href="/alternatives" class="btn btn-outline">
+      <span class="material-symbols-outlined">inventory_2</span>
+      تصفح و تعديل المنتجات
+    </a>
+  </section>
+
+  <!-- Orders Section -->
+  <section class="table-card">
+
+    <!-- Search Bar -->
+    <div class="table-toolbar">
+      <div class="search-box">
+        <span class="material-symbols-outlined">search</span>
+        <input type="text" id="search-input" placeholder="البحث برقم الطلب أو اسم العميل...">
+      </div>
+    </div>
+
+    <!-- Scroll Hint for Mobile -->
+    <div class="scroll-hint">
+      <span class="material-symbols-outlined">swipe_left</span>
+      يمكنك التمرير أفقياً لعرض باقي تفاصيل الجدول
+    </div>
+
+    <!-- Scrollable Table -->
+    <div class="table-scroll-container">
+      <table class="dashboard-table">
+        <thead>
+          <tr>
+            <th>رقم الطلب</th>
+            <th>الاسم</th>
+            <th>التواصل</th>
+            <th>الحالة</th>
+            <th>الدفع</th>
+            <th>المبلغ</th>
+            <th>تفاصيل الطلب</th> <!-- تم استرجاع العنوان القديم -->
+          </tr>
+        </thead>
+        <tbody id="orders-tbody">
+          <!-- Filled by JS -->
+          <!-- تأكد في ملف الجافاسكريبت أن تطبع الرابط التالي في العمود الأخير: -->
+          <!-- <td><a href="#" class="action-link" data-id="ORDER_ID">عرض التفاصيل</a></td> -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" id="empty-state" style="display:none;">
+      <span class="material-symbols-outlined">inbox</span>
+      <h3>لا توجد طلبات بعد</h3>
+      <p>ستظهر الطلبات هنا عندما يطلب العملاء.</p>
+    </div>
+
+  </section>
+</main>
+
+<!-- Order Details Modal -->
+<div class="order-modal-overlay" id="order-modal-overlay">
+  <div class="order-modal">
+    <div class="order-modal-header">
+      <h3>تفاصيل الطلب</h3>
+      <button class="order-modal-close" id="order-modal-close">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="order-modal-body" id="order-modal-body">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<script src="/js/scripts/dashboard.js"></script>
+</body>
+</html>

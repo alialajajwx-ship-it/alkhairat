@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تفاصيل الطلب | الخيرات</title>
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/costumer-order.css">
+</head>
+<body class="od-body">
+
+<%- include('partials/header', { activePage: '' }) %>
+
+<main class="container order-details-wrap">
+
+  <!-- Order title -->
+  <div class="od-title-row">
+    <span class="od-title-group">
+      <a href="/dashboard" class="back-link" aria-label="العودة إلى لوحة التحكم"><span class="material-symbols-outlined">arrow_forward</span></a>
+      <h1>طلب رقم <span class="order-code" id="order-id"><span class="skel skel-inline"></span></span></h1>
+    </span>
+  </div>
+
+  <!-- Loading skeleton: visible from the first paint and replaced by the real
+       content the moment the order arrives (see showContent in the page JS) -->
+  <div class="od-skeleton" id="od-skeleton" aria-hidden="true">
+    <div class="od-grid">
+      <div class="od-main">
+        <section class="panel">
+          <div class="od-skel-bar">
+            <div class="od-skel-cell">
+              <span class="skel skel-line w-60" style="margin:0 0 10px;"></span>
+              <span class="skel skel-line w-40" style="margin:0;"></span>
+            </div>
+            <div class="od-skel-cell">
+              <span class="skel skel-line w-60" style="margin:0 0 10px;"></span>
+              <span class="skel skel-line w-40" style="margin:0;"></span>
+            </div>
+            <div class="od-skel-cell">
+              <span class="skel skel-line w-60" style="margin:0 0 10px;"></span>
+              <span class="skel skel-line w-40" style="margin:0;"></span>
+            </div>
+          </div>
+        </section>
+        <section class="panel">
+          <span class="skel skel-line w-40" style="margin:0 0 16px;"></span>
+          <span class="skel skel-block" style="height:44px;"></span>
+        </section>
+        <section class="panel">
+          <span class="skel skel-line w-30" style="margin:0 0 18px;"></span>
+          <div class="od-skel-item">
+            <span class="skel skel-thumb"></span>
+            <div class="od-skel-item-info">
+              <span class="skel skel-line w-60" style="margin:0 0 10px;"></span>
+              <span class="skel skel-line w-30" style="margin:0;"></span>
+            </div>
+          </div>
+          <div class="od-skel-item">
+            <span class="skel skel-thumb"></span>
+            <div class="od-skel-item-info">
+              <span class="skel skel-line w-60" style="margin:0 0 10px;"></span>
+              <span class="skel skel-line w-30" style="margin:0;"></span>
+            </div>
+          </div>
+          <div class="od-skel-item">
+            <span class="skel skel-thumb"></span>
+            <div class="od-skel-item-info">
+              <span class="skel skel-line w-60" style="margin:0 0 10px;"></span>
+              <span class="skel skel-line w-30" style="margin:0;"></span>
+            </div>
+          </div>
+        </section>
+      </div>
+      <aside class="od-side">
+        <section class="panel">
+          <span class="skel skel-line w-40" style="margin:0 0 18px;"></span>
+          <span class="skel skel-line w-80" style="margin:0 0 12px;"></span>
+          <span class="skel skel-line w-60" style="margin:0 0 12px;"></span>
+          <span class="skel skel-line w-80" style="margin:0;"></span>
+        </section>
+        <section class="panel">
+          <span class="skel skel-line w-40" style="margin:0 0 18px;"></span>
+          <span class="skel skel-block" style="height:120px;"></span>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <div class="od-grid" id="od-grid" style="display:none;">
+    <!-- Main column: status bar + items -->
+    <div class="od-main">
+      <section class="panel status-bar">
+        <div class="status-cell">
+          <span class="s-label">تاريخ الطلب</span>
+          <span class="s-value" id="order-date">-</span>
+        </div>
+        <div class="status-cell">
+          <span class="s-label">المبلغ الإجمالي</span>
+          <span class="s-value amount" id="order-total">- ر.س</span>
+        </div>
+        <div class="status-cell">
+          <span class="s-label">الحالة</span>
+          <span class="status-pill" id="order-status"><span class="material-symbols-outlined">check_circle</span> <span id="order-status-text">-</span></span>
+        </div>
+      </section>
+
+      <section class="panel owner-stage-panel">
+        <h3><span class="material-symbols-outlined">local_shipping</span> تحديث مرحلة الطلب</h3>
+        <div class="stage-lock-hint" id="stage-lock-hint" style="display:none;">
+          <span class="material-symbols-outlined">lock</span>
+          أكّد الطلب بإرسال الرسالة النصية للعميل أولاً، ثم يمكنك تحديث مرحلة الطلب.
+        </div>
+        <div class="stage-buttons" id="stage-buttons">
+          <button class="stage-btn" data-stage="preparing">يتم التجهيز</button>
+          <button class="stage-btn" data-stage="on_the_way">قيد التوصيل</button>
+          <button class="stage-btn" data-stage="delivered">تم التوصيل</button>
+        </div>
+      </section>
+
+      <section class="panel items-panel">
+        <h3>عناصر الطلب</h3>
+        <ul class="items-list" id="items-list">
+          <!-- Populated by JS -->
+        </ul>
+      </section>
+    </div>
+
+    <!-- Side column: customer info + financial summary -->
+    <aside class="od-side">
+      <section class="panel">
+        <h3><span class="material-symbols-outlined">badge</span> معلومات العميل</h3>
+        <div class="customer-name" id="customer-name">-</div>
+        <div class="customer-phone"><span class="material-symbols-outlined">call</span> <span id="customer-phone">-</span></div>
+        <div class="side-divider"></div>
+        <div class="field-label">عنوان الطلب</div>
+        <div class="field-value" id="customer-address">-</div>
+      </section>
+
+      <!-- Customer shared location: embedded Google Map -->
+      <section class="panel" id="location-panel" style="display:none;">
+        <h3><span class="material-symbols-outlined">location_on</span> موقع العميل</h3>
+        <div class="customer-map" id="customer-map"></div>
+        <a class="btn btn-outline btn-block map-open-btn" id="map-open-link" href="#" target="_blank" rel="noopener">
+          <span class="material-symbols-outlined">open_in_new</span> فتح في خرائط جوجل
+        </a>
+      </section>
+
+      <section class="panel owner-confirm-panel" id="owner-confirm-panel">
+        <h3><span class="material-symbols-outlined">mark_email_read</span> تأكيد الطلب</h3>
+        <p class="owner-confirm-hint">اضغط الزر لتأكيد الطلب وإرسال رسالة نصية للعميل على رقم جواله.</p>
+        <button class="btn btn-primary btn-block" id="btn-confirm-order">إرسال رسالة وتأكيد الطلب</button>
+        <div class="owner-confirm-done" id="owner-confirm-done" style="display:none;">
+          <span class="material-symbols-outlined">check_circle</span>
+          تم تأكيد الطلب وإرسال الرسالة النصية للعميل
+        </div>
+      </section>
+
+      <!-- Replacement review: mark items available / low / unavailable, then
+           send the alternatives SMS (cancels the order when items are
+           missing) -->
+      <section class="panel" id="replacement-review-panel">
+        <h3><span class="material-symbols-outlined">rule</span> مراجعة توفر المنتجات</h3>
+        <p class="owner-confirm-hint">ناقص الطلب منتجات؟ حدد ما هو متوفر وما هو غير متوفر ثم أرسل رسالة البدائل للعميل.</p>
+        <a class="btn btn-outline btn-block" id="btn-review-replacements" href="#">مراجعة توفر المنتجات</a>
+      </section>
+
+      <section class="panel">
+        <h3><span class="material-symbols-outlined">receipt_long</span> ملخص الطلب</h3>
+        <div class="sum-row"><span>المجموع الفرعي</span><span id="sum-subtotal">- ر.س</span></div>
+        <div class="sum-row"><span>التوصيل</span><span id="sum-delivery">- ر.س</span></div>
+        <div class="sum-divider"></div>
+        <div class="sum-row"><span>طريقة الدفع</span><span id="sum-payment">-</span></div>
+        <div class="sum-row"><span>حالة الدفع</span><span id="sum-payment-status">-</span></div>
+        <div class="sum-divider"></div>
+        <div class="sum-row total"><span>الإجمالي</span><span id="sum-total">- ر.س</span></div>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+
+<!-- Stage update confirm popup -->
+<div class="modal-overlay" id="stage-confirm-overlay">
+  <div class="sms-modal">
+    <h3 id="stage-confirm-title">هل تريد تحديث حالة الطلب؟</h3>
+    <div class="sms-modal-actions">
+      <button class="btn btn-primary" id="btn-stage-yes">نعم</button>
+      <button class="btn btn-outline" id="btn-stage-cancel">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- SMS confirm popup -->
+<div class="modal-overlay" id="sms-confirm-overlay">
+  <div class="sms-modal">
+    <h3>هل تريد تأكيد الطلب و إرسال هذه الرسالة النصية؟</h3>
+    <div class="sms-message-box">
+      <div class="sms-msg-actions">
+        <button class="icon-btn" id="btn-edit-msg" aria-label="تعديل الرسالة">
+          <span class="material-symbols-outlined">edit</span>
+        </button>
+        <button class="text-btn" id="btn-reset-msg" style="display:none;">الرسالة الإفتراضية</button>
+      </div>
+      <p class="sms-message-preview" id="sms-message-preview"></p>
+      <textarea class="sms-message-edit" id="sms-message-edit" rows="5" style="display:none;"></textarea>
+      <button class="btn btn-primary btn-sm sms-done-btn" id="btn-done-edit" style="display:none;">تم</button>
+    </div>
+    <div class="sms-modal-actions">
+      <button class="btn btn-primary" id="btn-sms-yes">نعم</button>
+      <button class="btn btn-outline" id="btn-sms-cancel">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reset to default message popup -->
+<div class="modal-overlay" id="sms-reset-overlay">
+  <div class="sms-modal">
+    <h3>هل انت متأكد انك تريد إرجاع هذه الرسالة؟</h3>
+    <div class="sms-message-box">
+      <p class="sms-message-preview" id="default-message-preview"></p>
+    </div>
+    <div class="sms-modal-actions">
+      <button class="btn btn-primary" id="btn-reset-yes">نعم</button>
+      <button class="btn btn-outline" id="btn-reset-cancel">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/js/data/products.js"></script>
+<script type="module" src="/js/scripts/customer-order.js"></script>
+</body>
+</html>

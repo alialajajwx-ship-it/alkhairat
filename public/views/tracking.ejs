@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تتبع الطلب | الخيرات</title>
+<meta name="description" content="تتبع مسار وحالة طلبك مباشرة من بقالة الخيرات حتى وصوله.">
+<link rel="icon" type="image/webp" href="/images/logo.webp">
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/tracking.css">
+</head>
+<body>
+
+<%- include('partials/header', { activePage: '' }) %>
+
+<main class="container tracking-wrap">
+  <div class="page-hero">
+    <h1>تتبع الطلب <span id="tracking-order-id"></span></h1>
+    <p>تابع حالة طلبك لحظة بلحظة</p>
+  </div>
+
+  <!-- Order confirmation status tag -->
+  <div class="confirm-tag" id="order-confirm-tag"></div>
+
+  <!-- Shown while the store hasn't confirmed the order yet -->
+  <div class="notice-box review-notice" id="review-notice" style="display:none;">
+    <span class="material-symbols-outlined">sms</span>
+    <div class="notice-text">
+      <strong>ملاحظة مهمة:</strong>
+      طلبك الآن قيد المراجعة من قبل المتجر وليس مؤكد. ستصلك رسالة إلى رقم جوالك تأكد لك استلام الطلب وإبلاغك إذا كان الطلب في الطريق إليك أو لا. يرجى الانتظار ومتابعة رسائل جوالك بشكل مستمر.
+    </div>
+  </div>
+
+  <!-- Card orders only: the amount is HELD on the card, withdrawal waits
+       for the store's approval. Filled in by tracking.js. -->
+  <div class="notice-box hold-notice" id="card-hold-notice" style="display:none;">
+    <span class="material-symbols-outlined">credit_card</span>
+    <div class="notice-text">
+      سيتم حجز مبلغ الطلب (<strong id="card-hold-amount">0.00 ر.س</strong>) على بطاقتك الآن، ولن يتم سحبه إلا بعد موافقة المتجر على طلبك.
+    </div>
+  </div>
+
+  <!-- Shown when the store cancelled the order (items were unavailable) -->
+  <div class="notice-box cancel-notice" id="cancel-notice" style="display:none;">
+    <span class="material-symbols-outlined">cancel</span>
+    <div class="notice-text">
+      <strong>تم إلغاء هذا الطلب:</strong>
+      للأسف بعض المنتجات التي طلبتها لم تكن متوفرة، لذلك تم إلغاء الطلب وإرسال رسالة نصية (SMS) إلى رقم جوالك يوضح التفاصيل. المنتجات المتوفرة من طلبك أُرجعت إلى سلتك تلقائياً — يمكنك تعديل طلبك وإعادة الطلب في أي وقت.
+    </div>
+  </div>
+
+  <!-- Horizontal timeline — hidden until the order data arrives AND the
+       owner has confirmed the order (prevents the flash-then-disappear) -->
+  <section class="panel timeline-panel" style="display:none;">
+    <ul class="timeline" id="tracking-timeline">
+      <li id="stage-preparing">
+        <span class="dot"><span class="material-symbols-outlined">directions_car</span></span>
+        <span class="t-label">يتم التجهيز</span>
+      </li>
+      <li id="stage-on_the_way">
+        <span class="dot"><span class="material-symbols-outlined">local_shipping</span></span>
+        <span class="t-label">قيد التوصيل</span>
+      </li>
+      <li id="stage-delivered">
+        <span class="dot"><span class="material-symbols-outlined">home</span></span>
+        <span class="t-label">تم التوصيل</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Order details below -->
+  <section class="panel order-details-panel">
+    <h3><span class="diamond"></span> تفاصيل الطلب</h3>
+    <ul class="tracking-items-list" id="tracking-items">
+      <!-- Skeleton placeholders: part of the page, replaced synchronously
+           by the real items the moment the order data arrives -->
+      <li class="tracking-skeleton-item">
+        <span class="skel skel-thumb"></span>
+        <div class="ts-lines">
+          <span class="skel skel-line w-60"></span>
+          <span class="skel skel-line w-30"></span>
+        </div>
+      </li>
+      <li class="tracking-skeleton-item">
+        <span class="skel skel-thumb"></span>
+        <div class="ts-lines">
+          <span class="skel skel-line w-80"></span>
+          <span class="skel skel-line w-30"></span>
+        </div>
+      </li>
+      <li class="tracking-skeleton-item">
+        <span class="skel skel-thumb"></span>
+        <div class="ts-lines">
+          <span class="skel skel-line w-60"></span>
+          <span class="skel skel-line w-30"></span>
+        </div>
+      </li>
+    </ul>
+    <div class="sum-divider"></div>
+    <div class="sum-row"><span>المجموع الفرعي</span><span id="tracking-subtotal"><span class="skel skel-inline"></span></span></div>
+    <div class="sum-row"><span>التوصيل</span><span id="tracking-delivery"><span class="skel skel-inline"></span></span></div>
+    <div class="sum-divider"></div>
+    <div class="sum-row"><span>طريقة الدفع</span><span id="tracking-payment"><span class="skel skel-inline"></span></span></div>
+    <div class="sum-row"><span>حالة الدفع</span><span id="tracking-payment-status"><span class="skel skel-inline"></span></span></div>
+    <div class="sum-divider"></div>
+    <div class="sum-row total"><span>الاجمالي</span><span id="tracking-total"><span class="skel skel-inline"></span></span></div>
+  </section>
+
+  <!-- Quick actions -->
+  <div class="tracking-actions">
+    <a href="/orders" class="btn btn-primary">عرض طلباتي</a>
+    <a href="/browse" class="btn btn-outline">تصفح المنتجات</a>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+
+<script type="module" src="/js/data/products.js"></script>
+<script type="module" src="/js/scripts/tracking.js"></script>
+</body>
+</html>

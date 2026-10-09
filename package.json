@@ -1,0 +1,29 @@
+{
+  "name": "al-khairat-grocery",
+  "version": "1.0.0",
+  "description": "Online grocery store prototype",
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file=.env server.js",
+    "seed:products": "node --env-file=.env scripts/seed-products.mjs",
+    "test": "node scripts/test-order-review.mjs && node scripts/test-browse-availability.mjs && node scripts/test-catalog-scale.mjs && node scripts/test-catalog-db.mjs && node scripts/test-add-product-ui.mjs && node scripts/test-chatbot.mjs"
+  },
+  "dependencies": {
+    "axios": "^1.20.0",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "dayjs": "^1.11.13",
+    "dotenv": "^16.4.7",
+    "duck-duck-scrape": "^2.2.7",
+    "duckduckgo-images-api": "^1.0.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^8.7.0",
+    "express-validator": "^7.3.2",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.9.4",
+    "multer": "^2.3.0"
+  }
+}

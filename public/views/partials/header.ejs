@@ -1,0 +1,281 @@
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="brand">
+      <img src="/images/logo.webp" alt="">
+      <span>الخيرات</span>
+    </a>
+    <nav class="main-nav" id="main-nav">
+      <ul>
+        <li><a href="/" class="<%= typeof activePage !== 'undefined' && activePage === 'home' ? 'active' : '' %>"><span class="material-symbols-outlined">home</span>الرئيسية</a></li>
+        <li><a href="/browse" class="<%= typeof activePage !== 'undefined' && activePage === 'browse' ? 'active' : '' %>"><span class="material-symbols-outlined">storefront</span>تصفح المنتجات</a></li>
+        <li><a href="/orders" class="<%= typeof activePage !== 'undefined' && activePage === 'orders' ? 'active' : '' %>"><span class="material-symbols-outlined">receipt_long</span>طلباتي</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-btn" id="profile-btn" aria-label="الحساب">
+        <span class="material-symbols-outlined">person</span>
+      </button>
+      <a href="/checkout" class="icon-btn filled cart-link" aria-label="السلة" id="header-cart-link">
+        <span class="material-symbols-outlined">shopping_cart</span>
+        <span class="cart-badge" id="header-cart-badge">0</span>
+      </a>
+      <button class="hamburger-btn" id="hamburger-btn" aria-label="القائمة">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Maintenance mode banner (shown when the owner pauses the store) -->
+<div class="maintenance-banner" id="maintenance-banner">المتجر مغلق مؤقتاً — يمكنك التصفح وإنشاء حساب فقط، والطلب غير متاح حالياً</div>
+
+<script>
+// Signed-in state, published for the page scripts. The orders page uses it to
+// decide whether its localStorage order mirror may be shown: a signed-in
+// customer's orders come from the server alone (see orders.js).
+window.IS_AUTHENTICATED = <%= (typeof currentUser !== 'undefined' && currentUser) ? 'true' : 'false' %>;
+</script>
+
+<script>
+// Maintenance mode — runs on every page, before anything else.
+// Reads the store state from the server and disables ordering actions.
+(function() {
+  fetch('/api/store-status')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data || !data.maintenanceMode) return;
+
+      // Flag used by page scripts to skip order-related calls
+      window.STORE_MAINTENANCE = true;
+
+      document.body.classList.add('maintenance-mode');
+      var banner = document.getElementById('maintenance-banner');
+      if (banner) banner.classList.add('show');
+
+      // Disable the checkout entry points (cart page button, orders page)
+      document.querySelectorAll('#btn-complete-order, .reorder-btn').forEach(function(btn) {
+        btn.classList.add('btn-disabled');
+      });
+    })
+    .catch(function() {});
+})();
+</script>
+
+<!-- Mobile nav (outside header) -->
+<div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
+<nav class="mobile-nav" id="mobile-nav">
+  <div class="mobile-nav-header">
+    <a href="/" class="brand">
+      <img src="/images/logo.webp" alt="">
+      <span>الخيرات</span>
+    </a>
+    <button class="mobile-nav-close" id="mobile-nav-close">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>
+  <ul class="mobile-nav-links">
+    <li><a href="/"><span class="material-symbols-outlined">home</span>الرئيسية</a></li>
+    <li><a href="/browse"><span class="material-symbols-outlined">storefront</span>تصفح المنتجات</a></li>
+    <li><a href="/orders"><span class="material-symbols-outlined">receipt_long</span>طلباتي</a></li>
+    <li><a href="/checkout"><span class="material-symbols-outlined">shopping_cart</span>السلة</a></li>
+    <li><a href="#" id="mobile-profile-btn"><span class="material-symbols-outlined">person</span>حسابي</a></li>
+  </ul>
+</nav>
+
+<!-- Profile panel (outside header) -->
+<div class="profile-overlay" id="profile-overlay"></div>
+<div class="profile-panel" id="profile-panel">
+  <div class="profile-panel-header">
+    <span class="profile-panel-title">حسابي</span>
+    <button class="profile-panel-close" id="profile-panel-close">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </div>    <div class="profile-panel-body">
+    <div class="profile-avatar">
+      <span class="material-symbols-outlined">account_circle</span>
+    </div>
+    <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+    <p class="profile-name"><%= currentUser.name || 'مستخدم' %></p>
+    <p class="profile-email"><%= currentUser.phone %></p>
+    <% } else { %>
+    <p class="profile-name">زائر</p>
+    <p class="profile-email">غير مسجل الدخول</p>
+    <% } %>
+  </div>
+  <div class="profile-panel-actions">
+    <% if (typeof currentUser !== 'undefined' && currentUser && currentUser.role === 'owner') { %>
+    <a href="/owner-settings" class="profile-action-btn">
+      <span class="material-symbols-outlined">settings</span>
+      <span>إعدادات الحساب</span>
+    </a>
+    <% } else { %>
+    <a href="/settings" class="profile-action-btn">
+      <span class="material-symbols-outlined">settings</span>
+      <span>إعدادات الحساب</span>
+    </a>
+    <% } %>
+    <% if (typeof currentUser !== 'undefined' && currentUser && currentUser.role === 'owner' && typeof hideDashboard === 'undefined') { %>
+    <a href="/dashboard" class="profile-action-btn">
+      <span class="material-symbols-outlined">dashboard</span>
+      <span>لوحة التحكم</span>
+    </a>
+    <% } %>
+    <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+    <button class="profile-action-btn profile-logout" id="header-logout-btn">
+      <span class="material-symbols-outlined">logout</span>
+      <span>تسجيل الخروج</span>
+    </button>
+    <% } else { %>
+    <a href="/login?mode=register" class="profile-action-btn">
+      <span class="material-symbols-outlined">person_add</span>
+      <span>إنشاء حساب</span>
+    </a>
+    <a href="/login" class="profile-action-btn">
+      <span class="material-symbols-outlined">login</span>
+      <span>تسجيل الدخول</span>
+    </a>
+    <% } %>
+  </div>
+</div>
+
+<!-- Logout confirmation popup -->
+<div class="profile-overlay" id="header-logout-overlay"></div>
+<div class="header-logout-modal" id="header-logout-modal" role="dialog" aria-modal="true">
+  <p class="header-logout-text">هل أنت متأكد أنك تريد تسجيل الخروج؟</p>
+  <div class="header-logout-actions">
+    <button class="btn btn-outline" id="header-logout-cancel">إلغاء</button>
+    <button class="btn btn-danger" id="header-logout-confirm">تسجيل الخروج</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  // --- Hamburger menu ---
+  var hamburger = document.getElementById('hamburger-btn');
+  var mobileNav = document.getElementById('mobile-nav');
+  var mobileOverlay = document.getElementById('mobile-nav-overlay');
+  var closeBtn = document.getElementById('mobile-nav-close');
+
+  function openMenu() {
+    if (!mobileNav || !mobileOverlay || !hamburger) return;
+    mobileNav.classList.add('open');
+    mobileOverlay.classList.add('open');
+    hamburger.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    if (!mobileNav || !mobileOverlay || !hamburger) return;
+    mobileNav.classList.remove('open');
+    mobileOverlay.classList.remove('open');
+    hamburger.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  if (hamburger) hamburger.addEventListener('click', openMenu);
+  if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+  if (mobileOverlay) mobileOverlay.addEventListener('click', closeMenu);
+
+  // --- Profile panel ---
+  var profileBtn = document.getElementById('profile-btn');
+  var profilePanel = document.getElementById('profile-panel');
+  var profileOverlay = document.getElementById('profile-overlay');
+  var profileClose = document.getElementById('profile-panel-close');
+
+  function openProfile() {
+    if (!profilePanel || !profileOverlay) return;
+    profilePanel.classList.add('open');
+    profileOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeProfile() {
+    if (!profilePanel || !profileOverlay) return;
+    profilePanel.classList.remove('open');
+    profileOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  if (profileBtn) profileBtn.addEventListener('click', openProfile);
+  if (profileClose) profileClose.addEventListener('click', closeProfile);
+  if (profileOverlay) profileOverlay.addEventListener('click', closeProfile);
+
+  // Mobile profile button in hamburger menu
+  var mobileProfileBtn = document.getElementById('mobile-profile-btn');
+  if (mobileProfileBtn) {
+    mobileProfileBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      closeMenu();
+      setTimeout(openProfile, 250);
+    });
+  }
+
+  // --- Logout (asks for confirmation first) ---
+  var logoutBtn = document.getElementById('header-logout-btn');
+  var logoutOverlay = document.getElementById('header-logout-overlay');
+  var logoutModal = document.getElementById('header-logout-modal');
+  var logoutCancel = document.getElementById('header-logout-cancel');
+  var logoutConfirm = document.getElementById('header-logout-confirm');
+
+  function openLogoutModal() {
+    if (!logoutOverlay || !logoutModal) return;
+    closeProfile(); // the confirmation sits above the page, not the panel
+    logoutOverlay.classList.add('open');
+    logoutModal.classList.add('open');
+  }
+
+  function closeLogoutModal() {
+    if (!logoutOverlay || !logoutModal) return;
+    logoutOverlay.classList.remove('open');
+    logoutModal.classList.remove('open');
+  }
+
+  if (logoutBtn) logoutBtn.addEventListener('click', openLogoutModal);
+  if (logoutCancel) logoutCancel.addEventListener('click', closeLogoutModal);
+  if (logoutOverlay) logoutOverlay.addEventListener('click', closeLogoutModal);
+  if (logoutConfirm) {
+    logoutConfirm.addEventListener('click', async function() {
+      try {
+        await fetch('/api/logout', { method: 'POST' });
+      } catch (e) {}
+      window.location.href = '/';
+    });
+  }
+
+  // Cart badge logic
+  var CART_KEY = 'alkhairat_cart';
+  var badge = document.getElementById('header-cart-badge');
+
+  function updateBadge() {
+    try {
+      var raw = localStorage.getItem(CART_KEY);
+      var cart = raw ? JSON.parse(raw) : [];
+      var count = cart.reduce(function(sum, item) { return sum + (item.quantity || 1); }, 0);
+      badge.textContent = count;
+      badge.dataset.count = count;
+      badge.style.display = count > 0 ? 'flex' : 'none';
+      badge.classList.remove('bump');
+      void badge.offsetWidth;
+      if (count > 0) badge.classList.add('bump');
+    } catch (e) {
+      badge.textContent = '0';
+      badge.style.display = 'none';
+    }
+  }
+
+  window.updateCartBadge = updateBadge;
+  window.addEventListener('storage', function(e) {
+    if (e.key === CART_KEY) updateBadge();
+  });
+  window.addEventListener('cart-updated', updateBadge);
+  updateBadge();
+
+  // Pull the cart saved on the user's account so it follows them
+  // across sessions and devices (no-op for guests)
+  import('/js/data/cart.js')
+    .then(function(mod) { return mod.mergeServerCart(); })
+    .catch(function() {});
+})();
+</script>

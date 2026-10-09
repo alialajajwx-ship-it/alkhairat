@@ -1,0 +1,417 @@
+[
+  {
+    "id": "6eb2dc2c",
+    "name": "حليب المراعي",
+    "priceCents": 1200,
+    "keyWords": [
+      "ألبان",
+      "بقري",
+      "طازج",
+      "إفطار"
+    ],
+    "type": "dairy",
+    "imageUrl": "https://cdn.mafrservices.com/pim-content/SAU/media/product/106475/1779012000/106475_main.jpg",
+    "unlimitedQuantity": true,
+    "discountPercent": 10,
+    "discountSetAt": "2026-09-15T14:02:43.673Z"
+  },
+  {
+    "id": "20589c87",
+    "name": "لبن زبادي",
+    "priceCents": 450,
+    "keyWords": [
+      "ألبان",
+      "زبادي",
+      "بروبيوتك",
+      "فطور"
+    ],
+    "type": "dairy",
+    "imageUrl": "https://cdn.mafrservices.com/pim-content/SAU/media/product/357352/1755181805/357352_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "9d83227c",
+    "name": "جبنة كيري",
+    "priceCents": 1800,
+    "keyWords": [
+      "ألبان",
+      "مثلثات",
+      "دهنية",
+      "فطور"
+    ],
+    "type": "dairy",
+    "imageUrl": "https://cdn.mafrservices.com/pim-content/SAU/media/product/58651/1786258648/58651_main.jpg",
+    "unlimitedQuantity": true,
+    "hidden": true,
+    "hideUntil": "2026-09-13T17:06:22.924Z"
+  },
+  {
+    "id": "ededae23",
+    "name": "لبنة",
+    "priceCents": 900,
+    "keyWords": [
+      "ألبان",
+      "مصفاة",
+      "شامية",
+      "فطور"
+    ],
+    "type": "dairy",
+    "imageUrl": "https://cdn.mafrservices.com/pim-content/SAU/media/product/689003/1756015203/689003_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "3f0df6f8",
+    "name": "بيبسي",
+    "priceCents": 150,
+    "keyWords": [
+      "غازية",
+      "معلبة",
+      "باردة",
+      "كولا"
+    ],
+    "type": "drink",
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/h2e/hc8/13918850383902/652261_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "51e40c78",
+    "name": "شاي ليبتون",
+    "priceCents": 1100,
+    "keyWords": [
+      "أكياس",
+      "ساخن",
+      "أصفر",
+      "مشروب"
+    ],
+    "type": "drink",
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/h61/hec/50270446845982/388804_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "3dad3637",
+    "name": "قهوة سعودية",
+    "priceCents": 2500,
+    "keyWords": [
+      "دلة",
+      "هيل",
+      "ضيافة",
+      "سعودية"
+    ],
+    "type": "drink",
+    "discountPercent": 7,
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/h10/hfe/49557149450270/702646_main.jpg",
+    "unlimitedQuantity": true,
+    "hidden": true,
+    "hideUntil": "2026-09-14T19:39:14.006Z"
+  },
+  {
+    "id": "4e1b72eb",
+    "name": "عصير المراعي برتقال",
+    "priceCents": 600,
+    "keyWords": [
+      "فواكه",
+      "منعش",
+      "طبيعي",
+      "علبة"
+    ],
+    "type": "drink",
+    "imageUrl": "https://cdn.mafrservices.com/pim-content/SAU/media/product/642101/1785052800/642101_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "6285d5c1",
+    "name": "مياه نستله الصحية",
+    "priceCents": 100,
+    "keyWords": [
+      "زجاجة",
+      "معدنية",
+      "نقية",
+      "شرب"
+    ],
+    "type": "drink",
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/h09/h92/15680464060446/18378_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "110565b4",
+    "name": "دجاج كامل مجمد",
+    "priceCents": 2200,
+    "keyWords": [
+      "مجمد",
+      "طازج",
+      "بروتين",
+      "طبخ"
+    ],
+    "type": "meat",
+    "imageUrl": "https://cdn.mafrservices.com/pim-content/SAU/media/product/681808/1748860203/681808_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "e146b279",
+    "name": "لحم غنم طازج",
+    "priceCents": 6500,
+    "keyWords": [
+      "ضاني",
+      "طازج",
+      "مشاوي",
+      "بروتين"
+    ],
+    "type": "meat",
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/h20/hbb/51509473247262/577094_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "58d9cb9c",
+    "name": "لحم بقري مفروم",
+    "priceCents": 4200,
+    "keyWords": [
+      "مفروم",
+      "طازج",
+      "بروتين",
+      "كباب"
+    ],
+    "type": "meat",
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/h4b/hf4/26516762066974/553261_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "571a7a2d",
+    "name": "كبدة دجاج",
+    "priceCents": 1500,
+    "keyWords": [
+      "أحشاء",
+      "طازج",
+      "بروتين",
+      "مقلي"
+    ],
+    "type": "meat",
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/hbf/hc2/28723578241054/681813_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "58c15ecd",
+    "name": "سجق لحم",
+    "priceCents": 2800,
+    "keyWords": [
+      "مصنع",
+      "مشاوي",
+      "بروتين",
+      "مجمد"
+    ],
+    "type": "meat",
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/h01/h50/32146677628958/681830_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "7a1fc973",
+    "name": "تمر عجوة",
+    "priceCents": 3500,
+    "keyWords": [
+      "مدينة",
+      "فاكهة",
+      "رمضان",
+      "سعودي"
+    ],
+    "type": "fruits/vegetable",
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/h4a/h1b/10225604100126/426800_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "322181db",
+    "name": "تمر سكري",
+    "priceCents": 3000,
+    "keyWords": [
+      "فاكهة",
+      "طبيعي",
+      "قصيم",
+      "سعودي"
+    ],
+    "type": "fruits/vegetable",
+    "discountPercent": 5,
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/h22/h53/9202377752606/571050_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "d872251e",
+    "name": "طماطم",
+    "priceCents": 500,
+    "keyWords": [
+      "خضار",
+      "طازج",
+      "أحمر",
+      "سلطة"
+    ],
+    "type": "fruits/vegetable",
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/hd7/hae/9216715063326/78461_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "31e7aa7a",
+    "name": "خيار",
+    "priceCents": 450,
+    "keyWords": [
+      "خضار",
+      "طازج",
+      "أخضر",
+      "سلطة"
+    ],
+    "type": "fruits/vegetable",
+    "imageUrl": "https://cdn.mafrservices.com/pim-content/SAU/media/product/688338/1775484000/688338_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "d1417568",
+    "name": "ليمون",
+    "priceCents": 400,
+    "keyWords": [
+      "حمضيات",
+      "طازج",
+      "أصفر",
+      "عصير"
+    ],
+    "type": "fruits/vegetable",
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/h66/hc9/9452359516190/77972_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "87c43e83",
+    "name": "مناديل ورقية",
+    "priceCents": 1000,
+    "keyWords": [
+      "ورقية",
+      "علبة",
+      "منزلية",
+      "نظافة"
+    ],
+    "type": "home",
+    "imageUrl": "https://cdn.mafrservices.com/pim-content/SAU/media/product/760269/1773736200/760269_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "60fadca4",
+    "name": "صابون استحمام",
+    "priceCents": 800,
+    "keyWords": [
+      "نظافة",
+      "شخصية",
+      "معطر",
+      "حمام"
+    ],
+    "type": "home",
+    "imageUrl": "https://cdn.mafrservices.com/pim-content/SAU/media/product/295564/1759933806/295564_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "76f7c9af",
+    "name": "منظف تايد",
+    "priceCents": 2200,
+    "keyWords": [
+      "غسيل",
+      "ملابس",
+      "بودرة",
+      "منزلية"
+    ],
+    "type": "home",
+    "discountPercent": 12,
+    "imageUrl": "https://cdn.mafrservices.com/pim-content/SAU/media/product/724075/1774767600/724075_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "5c11d089",
+    "name": "أكياس بلدية",
+    "priceCents": 700,
+    "keyWords": [
+      "بلاستيك",
+      "منزلية",
+      "زبالة",
+      "مطبخ"
+    ],
+    "type": "home",
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/hd9/h01/63422623744030/681860_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "4c7b7343",
+    "name": "معطر جو",
+    "priceCents": 1500,
+    "keyWords": [
+      "رذاذ",
+      "منزلية",
+      "رائحة",
+      "منعش"
+    ],
+    "type": "home",
+    "imageUrl": "https://cdn.mafrservices.com/pim-content/SAU/media/product/443156/1759947004/443156_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "a781f906",
+    "name": "خبز عربي",
+    "priceCents": 300,
+    "keyWords": [
+      "مخبوزات",
+      "طازج",
+      "رقيق",
+      "سفرة"
+    ],
+    "type": "bakery",
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/he6/h6b/49411329785886/676859_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "96cd48c4",
+    "name": "خبز تميس",
+    "priceCents": 500,
+    "keyWords": [
+      "مخبوزات",
+      "طازج",
+      "تنور",
+      "سعودي"
+    ],
+    "type": "bakery",
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/he6/h6b/49411329785886/676859_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "768a1fd1",
+    "name": "كرواسان",
+    "priceCents": 700,
+    "keyWords": [
+      "مخبوزات",
+      "فرنسي",
+      "زبدة",
+      "إفطار"
+    ],
+    "type": "bakery",
+    "imageUrl": "https://cdn.mafrservices.com/pim-content/SAU/media/product/100843/1755181805/100843_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "858ee3a7",
+    "name": "دونات",
+    "priceCents": 600,
+    "keyWords": [
+      "مخبوزات",
+      "محلى",
+      "سكر",
+      "حلويات"
+    ],
+    "type": "bakery",
+    "imageUrl": "https://cdn.mafrservices.com/pim-content/SAU/media/product/740427/1738653603/740427_main.jpg",
+    "unlimitedQuantity": true
+  },
+  {
+    "id": "8e71a77d",
+    "name": "بسكوت أبو ولد",
+    "priceCents": 400,
+    "keyWords": [
+      "مخبوزات",
+      "مقرمش",
+      "تسالي",
+      "أطفال"
+    ],
+    "type": "bakery",
+    "imageUrl": "https://cdn.mafrservices.com/sys-master-root/he5/h36/51636560363550/721734_main.jpg",
+    "unlimitedQuantity": true
+  }
+]

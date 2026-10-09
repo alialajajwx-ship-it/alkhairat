@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Allow: /browse
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /alternatives
+Disallow: /alternatives-sms
+Disallow: /deleted-products
+Disallow: /customer-order
+Disallow: /banner
+Disallow: /delivery-price
+Disallow: /owner-settings
+Disallow: /settings
+Disallow: /checkout
+Disallow: /orders
+Disallow: /tracking
+
+Sitemap: https://alkhairat.com/sitemap.xml

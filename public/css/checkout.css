@@ -1,0 +1,602 @@
+/* ===== Checkout page ===== */
+.checkout-wrap{padding-bottom:60px;}
+
+/* Layout */
+.checkout-grid{
+  display:grid;
+  grid-template-columns:1fr 340px;
+  gap:26px;
+  align-items:start;
+}
+.checkout-main{display:flex;flex-direction:column;gap:20px;}
+/* Side column: payment methods sit ABOVE the summary on wide screens; on
+   narrow screens the whole column stacks under the main column. */
+.side-col{display:flex;flex-direction:column;gap:20px;}
+.panel{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:24px;
+}
+.panel h3{display:flex;align-items:center;gap:8px;font-size:1.05rem;margin-bottom:18px;}
+
+/* cart list — 5th column holds the delete (trash) button.
+   align-items:start keeps the line price + trash button level with the
+   product NAME (top line) instead of drifting down under it. The thumb and
+   quantity control stay vertically centred. */
+.cart-list li{
+  display:grid;
+  grid-template-columns:56px minmax(0,1fr) auto auto auto;
+  align-items:start;
+  gap:16px;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+.cart-list li > .cart-thumb{align-self:center;}
+.cart-list li > .qty{align-self:center;}
+.cart-list li:last-child{border-bottom:none;padding-bottom:0;}
+.cart-thumb{
+  width:56px;height:56px;border-radius:12px;background:var(--sand);color:var(--brick);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.cart-thumb img{width:100%;height:100%;object-fit:cover;}
+.cart-info{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.cart-info h4{font-size:.95rem;font-family:'Cairo',sans-serif;font-weight:700;}
+/* Price text must stay on one line: digits breaking onto stacked lines
+   looked broken. The product name (above) is what wraps instead. */
+.cart-info .cart-price-line{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;white-space:nowrap;}
+.cart-info .cart-discount-tag{
+  background:var(--brick);color:#fff;
+  font-size:.68rem;font-weight:700;
+  padding:2px 8px;border-radius:999px;
+  flex:none;white-space:nowrap;
+}
+.cart-info .cart-price-before{
+  font-size:.8rem;color:var(--muted);text-decoration:line-through;
+}
+.cart-info .cart-price-after{
+  font-size:.95rem;font-weight:800;color:var(--brick);
+}
+.qty{
+  display:flex;align-items:center;gap:10px;
+  background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px 8px;
+}
+.qty button{
+  width:24px;height:24px;border-radius:50%;background:var(--card);
+  display:flex;align-items:center;justify-content:center;color:var(--ink);
+}
+.qty button .material-symbols-outlined{font-size:16px;}
+.qty span{font-weight:700;min-width:14px;text-align:center;}
+.line-price{font-weight:800;color:var(--ink);min-width:70px;text-align:left;align-self:start;}
+
+/* Remove-one-item button (trash) at the end of every cart row */
+.cart-remove-btn{
+  width:30px;height:30px;border-radius:50%;flex:none;
+  background:var(--sand);color:var(--brick);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s ease, color .15s ease;
+}
+.cart-remove-btn:hover{background:var(--brick);color:#fff;}
+.cart-remove-btn .material-symbols-outlined{font-size:17px;}
+
+/* ── Cart loading skeleton rows ──
+   Static placeholders rendered by checkout.ejs inside #cart-items and
+   removed by checkout.js the moment the real cart items are ready. */
+.cart-list li.cart-skeleton{
+  display:grid;
+  grid-template-columns:56px 1fr auto auto;
+  align-items:center;
+  gap:16px;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+.cart-list li.cart-skeleton:last-child{border-bottom:none;padding-bottom:0;}
+.cart-skeleton .skel-thumb{width:56px;height:56px;border-radius:12px;}
+.cart-skeleton .skel-lines{display:flex;flex-direction:column;gap:8px;width:100%;}
+.cart-skeleton .skel-lines .skel-line{margin-bottom:0;}
+.cart-skeleton .skel-qty{width:96px;height:34px;border-radius:999px;}
+.cart-skeleton .skel-total{width:70px;height:14px;margin-bottom:0;}
+@media (max-width:560px){
+  .cart-list li.cart-skeleton{
+    grid-template-columns:44px 1fr auto;
+    grid-template-rows:auto auto;
+    gap:4px 10px;
+    padding:10px 0;
+  }
+  .cart-skeleton .skel-thumb{width:44px;height:44px;}
+  .cart-skeleton .skel-qty{grid-column:2;width:84px;height:26px;justify-self:start;}
+  .cart-skeleton .skel-total{grid-column:3;grid-row:1/3;align-self:center;}
+}
+
+/* Mobile cart rows: thumb | name (top) + qty (below) | price | trash.
+   The price and trash sit at the far left on the NAME's line — never stacked
+   underneath it — while the name is free to wrap inside its own column. */
+@media (max-width:560px){
+  .cart-list li{
+    grid-template-columns:44px minmax(0,1fr) auto auto;
+  }
+  .cart-list li > .cart-thumb{grid-row:1/3;align-self:center;}
+  .cart-list li > .cart-info{grid-column:2;grid-row:1;min-width:0;}
+  .cart-list li > .qty{grid-column:2;grid-row:2;justify-self:start;}
+  .cart-list li > .line-price{grid-column:3;grid-row:1;}
+  .cart-remove-btn{
+    grid-column:4;
+    grid-row:1;
+    align-self:start;
+    width:26px;height:26px;
+  }
+  .cart-remove-btn .material-symbols-outlined{font-size:15px;}
+}
+
+/* Delivery form modal overlay */
+.form-modal-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:200;
+  background:rgba(36,31,28,.5);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+/* JS adds .visible when a popup opens — without this the overlay (and the
+   popup inside it) stays display:none and "اتمام الطلب" looks dead. */
+.form-modal-overlay.visible{display:flex;}
+/* On phones the popup must fill (almost) the whole screen and scroll ITSELF.
+   Centering + 24px padding squeezed the section and left it at auto height,
+   so touch-scrolling bubbled to the page instead. Starting at the top with a
+   small margin gives the section room to grow to max-height and own the
+   scroll gesture. */
+@media (max-width:560px){
+  .form-modal-overlay{
+    align-items:flex-start;
+    /* ~10px breathing room from the body walls on both sides */
+    padding:0 10px;
+  }
+  .form-modal-overlay .delivery-form-section,
+  .form-modal-overlay .confirm-section{
+    max-height:calc(100dvh - 16px);
+    min-height:calc(100dvh - 16px);
+    margin:8px auto;
+    border-radius:var(--radius);
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+  }
+  .phone-edit-section{
+    min-height:0;
+    margin:0;
+  }
+  /* The phone-edit popup is short — keep it centred, not pinned to the top */
+  .phone-edit-overlay{
+    align-items:center;
+  }
+}
+.delivery-form-section{
+  display:none;
+  width:100%;
+  max-width:600px;
+  max-height:85vh;
+  overflow-y:auto;
+  position:relative;
+  overscroll-behavior:contain;
+}
+.delivery-form-section.visible{
+  display:block;
+}
+.form-modal-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+.form-modal-header h3{margin-bottom:0;}
+.form-modal-close{
+  width:36px;height:36px;
+  border-radius:50%;
+  background:var(--sand);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink);
+  flex-shrink:0;
+}
+.form-modal-close:hover{background:var(--line);}
+.form-modal-actions{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:20px;
+}
+
+
+/* Confirmation step */
+.confirm-section{
+  display:none;
+  width:100%;
+  max-width:600px;
+  max-height:85vh;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+}
+.confirm-section.visible{display:block;}
+.confirm-info{
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  margin:16px 0;
+  border:1px solid var(--line);
+  border-radius:var(--radius-sm);
+  overflow:hidden;
+}
+.confirm-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:4px 12px;
+  padding:14px 18px;
+  border-bottom:1px solid var(--line);
+}
+.confirm-row:last-child{border-bottom:none;}
+.confirm-label{color:var(--muted);font-size:.88rem;font-weight:600;}
+.confirm-value{color:var(--ink);font-weight:700;font-size:.95rem;text-align:left;}
+/* Space between the "العنوان" label and the address text the user typed */
+#confirm-address{margin-inline-start:12px;}
+/* The refus-al note shown beside "الموقع الجغرافي: غير مفعل" when the
+   user denied the browser permission and continued anyway */
+.confirm-location-note{
+  flex-basis:100%;
+  font-size:.78rem;
+  color:var(--brick);
+  background:rgba(178,58,46,.07);
+  border-radius:8px;
+  padding:6px 10px;
+  line-height:1.6;
+}
+
+/* Disabled / low opacity button */
+.btn.disabled-btn{
+  opacity:.45;
+  pointer-events:none;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+.form-grid label{display:flex;flex-direction:column;gap:6px;font-size:.85rem;font-weight:700;color:var(--ink);}
+.form-grid label.full{grid-column:1/-1;}
+.form-grid input{
+  padding:12px 14px;border-radius:var(--radius-sm);border:1px solid var(--line);
+  background:var(--paper);font-family:'Cairo',sans-serif;font-size:.9rem;color:var(--ink);
+}
+.form-grid input:focus,
+.form-grid select:focus{
+  outline:none;border-color:var(--brick);
+  box-shadow:0 0 0 3px rgba(178,58,46,.1);
+}
+.form-grid select{
+  /* Extra padding on the physical left keeps the chosen text clear of the
+     arrow (added to .form-grid select, .saved-address-picker select below) */
+  padding:12px 14px 12px 40px;border-radius:var(--radius-sm);border:1px solid var(--line);
+  background-color:var(--paper);font-family:'Cairo',sans-serif;font-size:.9rem;color:var(--ink);
+  cursor:pointer;
+}
+.optional-note{font-size:.72rem;color:var(--muted);font-weight:normal;}
+
+/* ── Phone display field (pen-icon edit) ──
+   Replaces the plain phone input in the delivery form: the number reads as
+   text with a pen icon; editing happens in the dedicated popup. */
+.phone-display-field{display:flex;flex-direction:column;gap:6px;font-size:.85rem;font-weight:700;color:var(--ink);}
+.phone-display{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px 14px;
+  border-radius:var(--radius-sm);
+  border:1px dashed var(--line);
+  background:var(--paper);
+}
+.phone-display-value{font-weight:700;font-size:.95rem;direction:ltr;unicode-bidi:embed;}
+.phone-display-value.empty{color:var(--muted);font-weight:600;}
+.phone-edit-btn{
+  width:30px;height:30px;border-radius:50%;flex:none;
+  background:var(--sand);color:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s ease;
+}
+.phone-edit-btn:hover{background:var(--line);}
+.phone-edit-btn .material-symbols-outlined{font-size:17px;}
+
+/* ── Per-order phone edit popup ── */
+.phone-edit-section{
+  display:none;
+  width:100%;
+  max-width:420px;
+  max-height:85vh;
+  overflow-y:auto;
+}
+.phone-edit-section.visible{display:block;}
+.phone-edit-note{font-size:.8rem;color:var(--muted);margin:0 0 14px;line-height:1.7;}
+.phone-edit-label{display:flex;flex-direction:column;gap:6px;font-size:.85rem;font-weight:700;color:var(--ink);}
+.phone-edit-label input{
+  padding:12px 14px;border-radius:var(--radius-sm);border:1px solid var(--line);
+  background:var(--paper);font-family:'Cairo',sans-serif;font-size:.95rem;color:var(--ink);
+  text-align:left;
+}
+.phone-edit-label input:focus{
+  outline:none;border-color:var(--brick);
+  box-shadow:0 0 0 3px rgba(178,58,46,.1);
+}
+.phone-edit-error{color:#b91c1c;background:#fef2f2;border-radius:8px;padding:8px 12px;font-size:.8rem;font-weight:600;margin-top:10px;}
+
+/* ── Location enable button spinner ── */
+.loc-spinner{
+  width:22px;height:22px;flex:none;align-self:center;
+  border:3px solid rgba(178,58,46,.22);
+  border-top-color:var(--brick);
+  border-radius:50%;
+  animation:loc-spin .8s linear infinite;
+}
+@keyframes loc-spin{to{transform:rotate(360deg);}}
+.location-note-row{gap:10px;}
+
+/* Attention-grabbing shake when حفظ و متابعة is pressed without
+   تفعيل الموقع being clicked first */
+.location-note-row.shake{
+  animation:loc-shake .45s ease;
+}
+@keyframes loc-shake{
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-6px);}
+  40%{transform:translateX(6px);}
+  60%{transform:translateX(-4px);}
+  80%{transform:translateX(4px);}
+}
+
+
+/* Payment */
+.pay-options{display:flex;flex-direction:column;gap:12px;}
+.pay-card{
+  display:flex;align-items:center;gap:14px;
+  padding:16px;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+}
+.pay-card.active{border-color:var(--brick);background:rgba(178,58,46,.04);}
+.pay-card .material-symbols-outlined:first-child{color:var(--brick);font-size:26px;}
+.pay-card h4{font-size:.92rem;font-family:'Cairo',sans-serif;font-weight:700;}
+.pay-card span:not(.material-symbols-outlined){color:var(--muted);font-size:.78rem;}
+.pay-card .check{margin-right:auto;color:var(--brick);}
+
+/* summary */
+.summary{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:24px;
+  position:sticky;top:96px;
+}
+.summary h3{display:flex;align-items:center;gap:8px;font-size:1.05rem;margin-bottom:16px;}
+.sum-row{display:flex;justify-content:space-between;font-size:.9rem;color:var(--muted);padding:7px 0;}
+.sum-divider{height:1px;background:var(--line);margin:10px 0;}
+.sum-row.total{font-size:1.1rem;font-weight:800;color:var(--ink);}
+.summary .btn{margin-top:18px;}
+.secure-note{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-top:14px;color:var(--muted);font-size:.78rem;
+}
+
+@media (max-width:900px){
+  .checkout-grid{grid-template-columns:1fr;}
+  .form-grid{grid-template-columns:1fr;}
+}
+/* Phone shown read-only for logged-in users */
+.phone-readonly{
+  background:#f3f1ec;
+  cursor:not-allowed;
+  color:var(--muted);
+}
+
+@media (max-width:560px){
+  .cart-list li{
+    display:grid;
+    grid-template-columns:44px minmax(0,1fr) auto auto;
+    grid-template-rows:auto auto;
+    gap:6px 8px;
+    padding:10px 0;
+  }
+  .cart-thumb{width:44px;height:44px;}
+  .cart-info h4{font-size:.85rem;line-height:1.4;overflow-wrap:anywhere;}
+  .cart-info .cart-price-line{flex-wrap:wrap;gap:4px;}
+  .cart-info .cart-discount-tag{font-size:.6rem;padding:1px 5px;white-space:nowrap;}
+  .cart-info .cart-price-before{font-size:.7rem;}
+  .cart-info .cart-price-after{font-size:.82rem;}
+  .qty{
+    gap:6px;
+    padding:2px 6px;
+    width:auto;
+  }
+  .line-price{
+    font-size:.85rem;
+    min-width:auto;
+    text-align:left;
+    white-space:nowrap;
+  }
+  .panel{padding:16px;}
+}
+
+/* ── Safwa delivery banner ── */
+.safwa-banner{
+  position:static;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  background:var(--brick);
+  color:#fff;
+  font-weight:800;
+  font-size:1rem;
+  padding:14px 20px;
+  text-align:center;
+  box-shadow:0 4px 14px rgba(36,31,28,.25);
+  animation:banner-in .3s ease;
+  transition:opacity .4s ease, transform .4s ease;
+}
+.safwa-banner .material-symbols-outlined{font-size:20px;}
+.safwa-banner.hidden{
+  opacity:0;
+  transform:translateY(-100%);
+  pointer-events:none;
+}
+
+/* Static version inside the order popup (never disappears) */
+.safwa-banner-static{
+  animation:none;
+  border-radius:var(--radius-sm);
+  margin-bottom:16px;
+  font-size:.95rem;
+  padding:12px 16px;
+  box-shadow:none;
+}
+.safwa-banner-static.hidden{opacity:1;transform:none;pointer-events:auto;}
+
+@keyframes banner-in{
+  from{opacity:0;transform:translateY(-100%);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* Quantity limit popup (middle of the screen, disappears after a moment) */
+.qty-limit-popup{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:var(--ink);
+  color:#fff;
+  font-family:'Cairo',sans-serif;
+  font-weight:700;
+  font-size:1rem;
+  padding:16px 28px;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  z-index:300;
+  animation:qty-limit-fade .25s ease;
+}
+@keyframes qty-limit-fade{
+  from{opacity:0;transform:translate(-50%,-46%);}
+  to{opacity:1;transform:translate(-50%,-50%);}
+}
+
+/* Optional geolocation capture (form + confirm step) */
+.location-note-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  background:var(--sand, #f7f5f0);
+  border:1px dashed #d8d2c4;
+  border-radius:10px;
+  padding:10px 12px;
+  margin-top:12px;
+}
+.location-note-text{
+  font-size:.82rem;
+  color:var(--ink, #222);
+  font-weight:600;
+  flex:1;
+  min-width:180px;
+}
+.location-enable-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:.8rem;
+  padding:7px 12px;
+  white-space:nowrap;
+}
+.location-refused-note{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:#FDF3E4;
+  border:1px solid #EAD3A8;
+  color:#8A6D1F;
+  font-weight:700;
+  font-size:.82rem;
+  border-radius:10px;
+  padding:10px 12px;
+  margin-top:12px;
+}
+.location-refused-note .material-symbols-outlined{font-size:18px;}
+.confirm-value.location-on{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  color:var(--green, #2e7d32);
+  font-weight:700;
+}
+.confirm-value.location-on .material-symbols-outlined{font-size:18px;}
+.confirm-value.location-off{color:var(--muted, #888);}
+
+/* ── Saved addresses quick picker ── */
+.saved-address-picker label{
+  display:flex;flex-direction:column;gap:6px;
+  font-weight:600;font-size:.9rem;color:var(--ink);
+}
+.saved-address-picker select{
+  width:100%;
+  padding:11px 14px 11px 38px;
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  background-color:#fff;
+  font-family:inherit;
+  font-size:.92rem;
+  color:var(--ink);
+}
+.saved-address-picker select:focus{border-color:var(--brick);outline:none;}
+
+/* The dropdown arrow of a native RTL <select> is painted ~5px from the left
+   border and no amount of padding moves it (measured in Chrome), so it looked
+   glued to the edge. Draw the chevron ourselves instead, 12px in from the left
+   border, which is what the left padding above is reserving room for. */
+.form-grid select,
+.saved-address-picker select{
+  -webkit-appearance:none;
+  appearance:none;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%238A7F71' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:left 12px center;
+  background-size:14px 14px;
+}
+
+/* ── Confirmation popup: order items + totals ───────────────── */
+.confirm-items-block{margin-bottom:18px;}
+.confirm-items-title{
+  font-size:.92rem;font-weight:800;color:var(--ink);
+  margin-bottom:10px;
+}
+.confirm-items{list-style:none;padding:0;margin:0;}
+.confirm-item{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 0;
+  border-bottom:1px dashed var(--line);
+  font-size:.9rem;
+}
+.confirm-item:last-child{border-bottom:none;}
+.confirm-item-name{
+  flex:1;min-width:0;
+  color:var(--ink);font-weight:600;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.confirm-item-qty{color:var(--muted);font-weight:700;flex:none;}
+.confirm-item-price{color:var(--muted);font-size:.82rem;flex:none;white-space:nowrap;}
+.confirm-item-before{text-decoration:line-through;opacity:.75;margin-left:5px;}
+.confirm-item-total{color:var(--ink);font-weight:800;flex:none;}
+.confirm-item-empty{color:var(--muted);text-align:center;padding:14px 0;}
+.confirm-totals{
+  border-top:1px solid var(--line);
+  padding-top:10px;
+  margin-bottom:20px;
+}
+
+

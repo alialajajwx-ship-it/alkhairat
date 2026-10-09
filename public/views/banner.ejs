@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>البانرات | الخيرات</title>
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/dashboard.css">
+<link rel="stylesheet" href="/css/owner-tools.css">
+</head>
+<body>
+
+<%- include('partials/header', { activePage: '' }) %>
+
+<main class="container owner-tool-wrap">
+  <div class="owner-tool-head">
+    <h1>بانرات الصفحة الرئيسية</h1>
+    <p class="owner-tool-sub">أضف أكثر من بانر واحفظهم، ثم اختر البانر الظاهر في الصفحة الرئيسية.</p>
+  </div>
+
+  <!-- Add a new banner -->
+  <section class="panel owner-tool-card">
+    <h2 class="tool-title">إضافة بانر جديد</h2>
+    <form id="banner-form">
+      <div class="tool-field">
+        <label for="banner-image">صورة البانر</label>
+        <div class="banner-image-picker">
+          <div class="banner-preview" id="banner-preview">
+            <span class="material-symbols-outlined">image</span>
+          </div>
+          <div class="banner-picker-side">
+            <input type="file" id="banner-image" accept="image/*" hidden>
+            <button type="button" class="btn btn-outline" id="btn-pick-image">
+              <span class="material-symbols-outlined">image</span>
+              اختر صورة جديدة
+            </button>
+            <p class="tool-hint">صيغ مقبولة: JPG أو PNG أو WEBP — بحجم 5MB كحد أقصى.</p>
+          </div>
+          <div class="banner-picker-side">
+            <button type="button" class="btn btn-outline" id="btn-clear-image" style="display:none;">
+              <span class="text">إزالة الصورة</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tool-field">
+        <label for="banner-title">العنوان الرئيسي</label>
+        <input type="text" id="banner-title" maxlength="120" placeholder="مثال: توصيل مجاني لطلبك الأول">
+      </div>
+
+      <div class="tool-field">
+        <label for="banner-subtitle">الوصف (اختياري)</label>
+        <textarea id="banner-subtitle" rows="3" maxlength="200" placeholder="مثال: منتجات بأسعار حلوة، وتوصيل ما يطول عليك."></textarea>
+      </div>
+
+      <div class="tool-field">
+        <label for="banner-link">الرابط عند الضغط على البانر (اختياري)</label>
+        <input type="text" id="banner-link" maxlength="300" dir="ltr" placeholder="/browse">
+      </div>
+
+      <div class="tool-error" id="banner-error"></div>
+
+      <div class="tool-actions">
+        <button type="submit" class="btn btn-primary" id="banner-save">حفظ البانر</button>
+        <a href="/dashboard" class="btn btn-outline">عودة للوحة التحكم</a>
+      </div>
+    </form>
+  </section>
+
+  <!-- Saved banners: activate / delete -->
+  <section class="panel owner-tool-card">
+    <h2 class="tool-title">البانرات المحفوظة</h2>
+    <p class="tool-hint">اختر البانر الذي تريد إظهاره في الصفحة الرئيسية.</p>
+    <div class="banners-grid" id="banners-grid">
+      <!-- Populated by JS -->
+    </div>
+    <div class="empty-state" id="banners-empty" style="display:none;">
+      <span class="material-symbols-outlined">image</span>
+      <h3>لا توجد بانرات محفوظة</h3>
+      <p>أضف بانر جديد من الأعلى ليظهر في الصفحة الرئيسية.</p>
+    </div>
+  </section>
+</main>
+
+<%- include('partials/footer') %>
+
+<script src="/js/scripts/banner.js"></script>
+</body>
+</html>

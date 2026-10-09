@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة المنتجات | الخيرات</title>
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/browse.css">
+<link rel="stylesheet" href="/css/alternatives.css">
+</head>
+<body>
+
+<%- include('partials/header', { activePage: 'alternatives' }) %>
+
+<main class="container alternatives-page">
+
+  <!-- Replacement review banner: the owner is marking a customer's order -->
+  <div class="replacement-banner" id="replacement-banner" style="display:none;">
+    <div class="replacement-banner-text">
+      <strong>وضع مراجعة الطلب</strong>
+      <span>الطلب: <span id="replacement-order-id">-</span></span>
+      <span>حدد حالة كل منتج ثم اضغط التالي لإرسال رسالة البدائل للعميل.</span>
+    </div>
+  </div>
+
+  <!-- Back arrow (replacement mode only) → back to the customer-order page -->
+  <a class="replacement-back" id="replacement-back" href="#" style="display:none;"
+     aria-label="العودة لتفاصيل الطلب">
+    <span class="material-symbols-outlined">arrow_forward</span>
+  </a>
+
+  <!-- Search bar, page actions and filter toggle (same pattern as the browse page) -->
+  <div class="search-row">
+    <div class="search-box">
+      <span class="material-symbols-outlined">search</span>
+      <input type="text" id="search-input" placeholder="ابحث عن منتج...">
+    </div>
+    <div class="page-actions">
+      <a href="/deleted-products" class="deleted-link-btn" id="deleted-link-btn">
+        <span class="material-symbols-outlined">delete_sweep</span> المنتجات المحذوفة
+      </a>
+      <button class="btn btn-primary" id="add-product-btn">
+        <span class="material-symbols-outlined">add</span> إضافة منتج
+      </button>
+      <button class="filter-toggle" id="filter-toggle">
+        <span class="material-symbols-outlined">tune</span> فرز وتصفية
+      </button>
+    </div>
+  </div>
+
+  <!-- عرض الكل / المنتجات المقترحة toggle (replacement mode only).
+       Kept OUTSIDE .browse-grid: it's a direct child of that 2-column grid
+       it would push the results section into the 230px sidebar column and
+       squash every card. -->
+  <div class="search-row replacement-tools" id="replacement-tools" style="display:none;">
+    <button class="show-all-btn active" id="show-all-btn">عرض الكل</button>
+    <button class="show-all-btn" id="suggested-btn">المنتجات المقترحة</button>
+  </div>
+
+  <div class="browse-grid">
+
+    <!-- Sidebar filters -->
+    <aside class="filters" id="filters-panel">
+      <button class="filter-close" id="filter-close">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+      <h3>العروض والخصومات</h3>
+      <ul class="filter-list plain" id="discount-filters">
+        <li data-discount="any"><span class="filter-radio"></span> الكل <span class="count" id="count-discount-any">0</span></li>
+        <li data-discount="on"><span class="filter-radio"></span> عليها خصم <span class="count" id="count-discount-on">0</span></li>
+      </ul>
+
+      <h3 class="mt">حالة المخزون</h3>
+      <ul class="filter-list plain" id="stock-filters">
+        <li data-stock="active" class="active"><span class="filter-radio"></span> متاح <span class="count" id="count-active">0</span></li>
+        <li data-stock="unlimited"><span class="filter-radio"></span> كمية غير محددة <span class="count" id="count-unlimited">0</span></li>
+        <li data-stock="limited"><span class="filter-radio"></span> كمية محددة <span class="count" id="count-limited">0</span></li>
+        <li data-stock="hidden"><span class="filter-radio"></span> مخفي <span class="count" id="count-hidden">0</span></li>
+      </ul>
+
+      <h3 class="mt">السعر</h3>
+      <ul class="filter-list plain" id="price-filters">
+        <li data-price="under10"><span class="filter-radio"></span> اقل من 10 ر.س <span class="count" id="count-price-under10">0</span></li>
+        <li data-price="10to30"><span class="filter-radio"></span> 10 - 30 ر.س <span class="count" id="count-price-10to30">0</span></li>
+        <li data-price="over30"><span class="filter-radio"></span> اكثر من 30 ر.س <span class="count" id="count-price-over30">0</span></li>
+      </ul>
+
+      <!-- «الأقسام» is the last filter section on purpose: the category list
+           is by far the longest one, so keeping it at the bottom leaves the
+           short filters within reach without scrolling. -->
+      <h3 class="mt">الأقسام</h3>
+      <div class="filter-search">
+        <span class="material-symbols-outlined">search</span>
+        <input type="text" id="category-search" placeholder="ابحث عن قسم...">
+      </div>
+      <ul class="filter-list" id="category-filters">
+        <li class="active" data-type="all">جميع المنتجات <span class="count" id="count-all">0</span></li>
+        <% categories.forEach(function (type, i) { %>
+        <li data-type="<%= type %>"><%= type %> <span class="count" id="count-cat-<%= i %>">0</span></li>
+        <% }); %>
+      </ul>
+    </aside>
+
+    <!-- Product results -->
+    <section class="results">
+      <div class="results-head">
+        <span id="results-count">عرض 0 منتج</span>
+      </div>
+
+      <!-- Skeleton placeholders: part of the page itself, so the owner sees
+           the layout instantly instead of an empty area for a few seconds
+           while the catalog loads. The first render replaces them. -->
+      <div class="product-grid is-loading" id="products-grid">
+        <div class="product-card skeleton-card">
+          <div class="product-thumb"><span class="skel skel-block"></span></div>
+          <div class="product-info">
+            <h3><span class="skel skel-line w-80"></span></h3>
+            <span class="skel skel-line w-40"></span>
+            <span class="skel skel-line w-60"></span>
+            <span class="skel skel-line w-100"></span>
+          </div>
+        </div>
+        <div class="product-card skeleton-card">
+          <div class="product-thumb"><span class="skel skel-block"></span></div>
+          <div class="product-info">
+            <h3><span class="skel skel-line w-60"></span></h3>
+            <span class="skel skel-line w-40"></span>
+            <span class="skel skel-line w-80"></span>
+            <span class="skel skel-line w-100"></span>
+          </div>
+        </div>
+        <div class="product-card skeleton-card">
+          <div class="product-thumb"><span class="skel skel-block"></span></div>
+          <div class="product-info">
+            <h3><span class="skel skel-line w-80"></span></h3>
+            <span class="skel skel-line w-40"></span>
+            <span class="skel skel-line w-60"></span>
+            <span class="skel skel-line w-100"></span>
+          </div>
+        </div>
+        <div class="product-card skeleton-card">
+          <div class="product-thumb"><span class="skel skel-block"></span></div>
+          <div class="product-info">
+            <h3><span class="skel skel-line w-60"></span></h3>
+            <span class="skel skel-line w-40"></span>
+            <span class="skel skel-line w-80"></span>
+            <span class="skel skel-line w-100"></span>
+          </div>
+        </div>
+        <div class="product-card skeleton-card">
+          <div class="product-thumb"><span class="skel skel-block"></span></div>
+          <div class="product-info">
+            <h3><span class="skel skel-line w-80"></span></h3>
+            <span class="skel skel-line w-40"></span>
+            <span class="skel skel-line w-60"></span>
+            <span class="skel skel-line w-100"></span>
+          </div>
+        </div>
+        <div class="product-card skeleton-card">
+          <div class="product-thumb"><span class="skel skel-block"></span></div>
+          <div class="product-info">
+            <h3><span class="skel skel-line w-60"></span></h3>
+            <span class="skel skel-line w-40"></span>
+            <span class="skel skel-line w-80"></span>
+            <span class="skel skel-line w-100"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- The catalog can hold thousands of products: only one page is
+           rendered at a time -->
+      <nav class="pager" id="owner-pager" aria-label="التنقل بين صفحات المنتجات" style="display:none;"></nav>
+
+      <div class="empty-state" id="no-results" style="display:none;">
+        <span class="material-symbols-outlined">search_off</span>
+        <h3>لم يتم العثور على نتائج</h3>
+        <p>جرب تغيير كلمات البحث أو الفلاتر</p>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Filter overlay for mobile -->
+<div class="filter-overlay" id="filter-overlay"></div>
+
+<!-- التالي action bar (replacement mode only) -->
+<div class="replacement-next-bar" id="replacement-next-bar" style="display:none;">
+  <button class="btn btn-primary btn-block" id="replacement-next-btn">
+    التالي
+  </button>
+</div>
+
+<!-- ─── Low-quantity modal (replacement mode) ─── -->
+<div class="modal-overlay" id="low-qty-modal">
+  <div class="modal-content small">
+    <h3 class="modal-title">الكمية المتوفرة</h3>
+    <p class="modal-product-name" id="low-qty-product-name"></p>
+    <p class="modal-hint">طلب العميل من هذا المنتج: <strong id="low-qty-ordered"></strong></p>
+    <label class="modal-hint" for="low-qty-input" style="display:block;margin-top:10px;">الكمية المتوفرة الآن:</label>
+    <input type="number" id="low-qty-input" class="quantity-input" min="0" placeholder="0">
+
+    <p class="modal-hint">ستُحدَّد الكمية لجميع العملاء لمدة 24 ساعة، وإذا طلب أحد العملاء كل الكمية المتبقية سيختفي المنتج من المتجر لمدة 24 ساعة.</p>
+
+    <div class="modal-actions">
+      <div class="modal-actions-main">
+        <button class="edit-btn" id="low-qty-save">حفظ</button>
+        <button class="edit-btn" id="low-qty-cancel">إلغاء</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Custom confirm popup (replacement mode) ─── -->
+<div class="modal-overlay" id="review-confirm-modal">
+  <div class="modal-content small">
+    <h3 class="modal-title" id="review-confirm-title"></h3>
+    <p class="modal-hint" id="review-confirm-text" style="margin-bottom:18px;"></p>
+    <div class="modal-actions">
+      <div class="modal-actions-main">
+        <button class="edit-btn" id="review-confirm-yes">نعم</button>
+        <button class="edit-btn" id="review-confirm-no">إلغاء</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Edit product modal ─── -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal-content">
+    <button class="modal-close" id="edit-modal-close">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <h3 class="modal-title" id="edit-modal-title">تعديل المنتج</h3>
+    <p class="modal-product-name" id="edit-product-name"></p>
+
+    <!-- Price section -->
+    <div class="modal-section">
+      <h4>السعر (ر.س)</h4>
+      <input type="number" id="edit-price-input" class="quantity-input" min="0" step="0.01" placeholder="0.00" dir="ltr">
+      <p class="modal-hint">السعر الحالي المعروض للعملاء. الخصم يُحسب منه تلقائياً.</p>
+    </div>
+
+    <!-- Quantity section: two numbers the owner controls separately.
+         «الكمية في المخزون» is the owner's own count (an accepted order
+         never changes it); «المتاح للعملاء» is what a customer may still
+         add to their cart. -->
+    <div class="modal-section">
+      <h4>الكمية والتوفر</h4>
+      <div class="option-row">
+        <label class="option-label">
+          <input type="radio" name="qty-mode" value="limited" checked>
+          <span>كمية محددة</span>
+        </label>
+        <label class="option-label">
+          <input type="radio" name="qty-mode" value="unlimited">
+          <span>غير محددة (غير محدود للعميل)</span>
+        </label>
+      </div>
+      <label class="modal-hint" for="quantity-input" style="display:block;">الكمية في المخزون:</label>
+      <input type="number" id="quantity-input" class="quantity-input" min="0" placeholder="0">
+      <label class="modal-hint" for="available-input" style="display:block;">المتاح للعملاء:</label>
+      <input type="number" id="available-input" class="quantity-input" min="0" placeholder="0">
+      <p class="modal-hint">العميل لن يرى الكمية، لكن سيمنع من طلب أكثر من «المتاح للعملاء». كل طلب يقبله المتجر ينقص «المتاح للعملاء» فقط، أما «الكمية في المخزون» فتبقى كما كتبتها.</p>
+    </div>
+
+    <!-- Visibility section -->
+    <div class="modal-section">
+      <h4>إظهار المنتج للعملاء</h4>
+      <div class="option-row">
+        <label class="option-label">
+          <input type="radio" name="visibility-mode" value="visible" checked>
+          <span>ظاهر</span>
+        </label>
+        <label class="option-label">
+          <input type="radio" name="visibility-mode" value="hidden">
+          <span>مخفي</span>
+        </label>
+      </div>
+
+      <!-- Duration picker: shown only when hidden is selected -->
+      <div id="hide-duration-row" style="display:none;">
+        <div class="option-row">
+          <label class="option-label">
+            <input type="radio" name="hide-duration" value="24" checked>
+            <span>24 ساعة</span>
+          </label>
+          <label class="option-label">
+            <input type="radio" name="hide-duration" value="custom">
+            <span>مدة أخرى</span>
+          </label>
+        </div>
+        <div id="custom-duration-row" style="display:none;">
+          <input type="number" id="hide-hours-input" class="quantity-input small" min="1" placeholder="عدد الساعات">
+          <div class="quick-durations">
+            <button type="button" class="quick-duration-btn" data-hours="72">3 أيام</button>
+            <button type="button" class="quick-duration-btn" data-hours="168">أسبوع</button>
+            <button type="button" class="quick-duration-btn" data-hours="720">شهر</button>
+          </div>
+        </div>
+      </div>
+      <p class="modal-hint" id="hidden-until-hint" style="display:none;"></p>
+    </div>
+
+    <!-- Discount section -->
+    <div class="modal-section">
+      <h4>الخصم</h4>
+      <div class="option-row">
+        <label class="option-label">
+          <input type="radio" name="discount-mode" value="none" checked>
+          <span>بدون خصم</span>
+        </label>
+        <label class="option-label">
+          <input type="radio" name="discount-mode" value="active">
+          <span>خصم</span>
+        </label>
+      </div>
+      <div id="discount-fields" style="display:none;">
+        <input type="number" id="discount-percent-input" class="quantity-input small" min="1" max="99" placeholder="النسبة %" dir="ltr">
+        <div class="option-row">
+          <label class="option-label">
+            <input type="radio" name="discount-duration" value="none" checked>
+            <span>حتى إزالته</span>
+          </label>
+          <label class="option-label">
+            <input type="radio" name="discount-duration" value="custom">
+            <span>مدة محددة</span>
+          </label>
+        </div>
+        <div id="discount-duration-row" style="display:none;">
+          <input type="number" id="discount-hours-input" class="quantity-input small" min="1" placeholder="عدد الساعات" dir="ltr">
+          <div class="quick-durations">
+            <button type="button" class="quick-duration-btn" data-discount-hours="24">يوم</button>
+            <button type="button" class="quick-duration-btn" data-discount-hours="168">أسبوع</button>
+            <button type="button" class="quick-duration-btn" data-discount-hours="720">شهر</button>
+          </div>
+        </div>
+      </div>
+      <p class="modal-hint" id="discount-until-hint" style="display:none;"></p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-danger-text" id="edit-delete-btn">حذف المنتج</button>
+      <div class="modal-actions-main">
+        <button class="btn btn-secondary" id="edit-cancel-btn">إلغاء</button>
+        <button class="btn btn-primary" id="edit-save-btn">حفظ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Add product modal ─── -->
+<div class="modal-overlay" id="add-modal">
+  <div class="modal-content">
+    <button class="modal-close" id="add-modal-close">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <h3 class="modal-title">إضافة منتج جديد</h3>
+    <p class="modal-product-name">سيتم إضافة المنتج إلى المتجر مباشرة بعد الحفظ.</p>
+
+    <!-- Product name -->
+    <div class="modal-section add-section">
+      <h4>اسم المنتج</h4>
+      <input type="text" id="add-name-input" class="add-text-input" maxlength="100" placeholder="مثال: حليب المراعي">
+    </div>
+
+    <!-- Image upload -->
+    <div class="modal-section add-section">
+      <h4>صورة المنتج</h4>
+      <label class="image-drop" id="image-drop">
+        <input type="file" id="add-image-input" accept="image/*" hidden>
+        <span class="material-symbols-outlined">image</span>
+        <span id="image-drop-text">اختر صورة</span>
+      </label>
+      <div class="image-preview" id="image-preview" style="display:none;">
+        <img id="preview-img" alt="معاينة الصورة">
+        <button type="button" class="image-remove" id="image-remove-btn">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Price -->
+    <div class="modal-section add-section">
+      <h4>السعر (ر.س)</h4>
+      <input type="number" id="add-price-input" class="add-text-input" min="0" step="0.01" placeholder="0.00" dir="ltr">
+    </div>
+
+    <!-- Category -->
+    <div class="modal-section add-section">
+      <h4>القسم</h4>
+      <select id="add-type-select" class="add-text-input">
+        <% categories.forEach(function (type) { %>
+        <option value="<%= type %>"><%= type %></option>
+        <% }); %>
+      </select>
+    </div>
+
+    <!-- Keywords -->
+    <div class="modal-section add-section">
+      <h4>كلمات البحث (اختياري)</h4>
+      <div id="add-keywords-list"></div>
+      <button type="button" class="add-keyword-add" id="add-keyword-btn">
+        <span class="material-symbols-outlined">add</span>
+        <span>إضافة كلمة</span>
+      </button>
+      <p class="modal-hint">اكتب كلمة واحدة ثم اضغط + لإضافة كلمة أخرى. الحقول الفارغة لا تُحفظ.</p>
+    </div>
+
+    <!-- Discount -->
+    <div class="modal-section add-section">
+      <h4>الخصم (اختياري)</h4>
+      <input type="number" id="add-discount-input" class="add-text-input" min="1" max="99" placeholder="النسبة % مثال: 15" dir="ltr">
+      <div id="add-discount-duration-row" style="display:none;">
+        <input type="number" id="add-discount-hours-input" class="quantity-input small" min="1" placeholder="عدد الساعات (اختياري)" dir="ltr">
+        <div class="quick-durations">
+          <button type="button" class="quick-duration-btn" data-add-discount-hours="24">يوم</button>
+          <button type="button" class="quick-duration-btn" data-add-discount-hours="168">أسبوع</button>
+          <button type="button" class="quick-duration-btn" data-add-discount-hours="720">شهر</button>
+        </div>
+      </div>
+      <p class="modal-hint">اتركه فارغاً لمنتج بدون خصم.</p>
+    </div>
+
+    <!-- Quantity -->
+    <div class="modal-section add-section">
+      <h4>الكمية المتوفرة</h4>
+      <div class="option-row">
+        <label class="option-label">
+          <input type="radio" name="add-qty-mode" value="unlimited" checked>
+          <span>غير محددة (غير محدود للعميل)</span>
+        </label>
+        <label class="option-label">
+          <input type="radio" name="add-qty-mode" value="limited">
+          <span>كمية محددة</span>
+        </label>
+      </div>
+      <input type="number" id="add-quantity-input" class="quantity-input" min="0" placeholder="0" disabled>
+      <p class="modal-hint">العميل لن يرى الكمية، لكن سيمنع من طلب أكثر منها عند إتمام الطلب.</p>
+    </div>
+
+    <div class="modal-actions">
+      <div class="modal-actions-main">
+        <button class="btn btn-secondary" id="add-cancel-btn">إلغاء</button>
+        <button class="btn btn-primary" id="add-save-btn">حفظ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Delete confirm popup ─── -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal-content small">
+    <h3 class="modal-title">حذف المنتج</h3>
+    <p class="delete-text" id="delete-product-name"></p>
+    <p class="modal-hint">ينتقل المنتج إلى صفحة المنتجات المحذوفة ويمكن استرجاعه لاحقاً.</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="delete-cancel-btn">إلغاء</button>
+      <button class="btn btn-danger" id="delete-confirm-btn">حذف</button>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<script type="module" src="/js/scripts/owner-browsing.js"></script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>layout-check</title>
+<!--
+  Regression harness for the alternatives page in «وضع مراجعة الطلب»
+  (scripts/layout-check.html). Loads the real stylesheets, rebuilds the page
+  skeleton, then measures:
+    • whether the fixed التالي bar covers the last filter option or the footer
+    • whether a card carrying the «متاح للعملاء» badge grows taller than its
+      neighbours (every badge row must be the same height), and
+    • whether every stock-status tag stays inside its own card.
+  Run it with:
+
+    chrome --headless=new --disable-gpu --window-size=1280,800 \
+      --virtual-time-budget=3000 --dump-dom \
+      "file:///<abs path>/scripts/layout-check.html"
+
+  Append ?fix=off to simulate the state BEFORE the fix (no reserved space) —
+  that run is expected to report the covered elements. The result is written
+  into the document title:  RESULT {"...":...}
+-->
+<link rel="stylesheet" href="../public/css/common.css">
+<link rel="stylesheet" href="../public/css/browse.css">
+<link rel="stylesheet" href="../public/css/alternatives.css">
+</head>
+<body class="review-mode">
+
+<main class="container alternatives-page">
+
+  <div class="replacement-banner">
+    <div class="replacement-banner-text">
+      <strong>وضع مراجعة الطلب</strong>
+      <span>الطلب: <span id="replacement-order-id">ORD-260926010525</span></span>
+      <span>حدد حالة كل منتج ثم اضغط التالي لإرسال رسالة البدائل للعميل.</span>
+    </div>
+  </div>
+
+  <div class="search-row replacement-tools" id="replacement-tools">
+    <button class="show-all-btn active" id="show-all-btn">عرض الكل</button>
+    <button class="show-all-btn" id="suggested-btn">المنتجات المقترحة</button>
+  </div>
+
+  <div class="browse-grid">
+
+    <aside class="filters" id="filters-panel">
+      <h3>العروض والخصومات</h3>
+      <ul class="filter-list plain" id="discount-filters">
+        <li data-discount="any"><span class="filter-radio"></span> الكل</li>
+        <li data-discount="on"><span class="filter-radio"></span> عليها خصم</li>
+      </ul>
+
+      <h3 class="mt">الأقسام</h3>
+      <ul class="filter-list" id="category-filters">
+        <li>جميع المنتجات</li>
+        <li>ألبان</li>
+        <li>عناية منزلية</li>
+        <li>فواكه وخضار</li>
+        <li>لحوم</li>
+        <li>مخبوزات</li>
+        <li>مشروبات</li>
+      </ul>
+
+      <h3 class="mt">حالة المخزون</h3>
+      <ul class="filter-list plain" id="stock-filters">
+        <li>متاح</li>
+        <li>كمية غير محددة</li>
+        <li>كمية محددة</li>
+        <li id="last-filter">مخفي</li>
+      </ul>
+    </aside>
+
+    <section class="results">
+      <div class="results-head"><span id="results-count">عرض 8 منتج</span></div>
+      <div class="product-grid" id="products-grid">
+        <article class="product-card"><div class="product-thumb"></div><div class="product-info"><h3>منتج 1</h3><div class="stock-row"><span class="stock-badge limited">5 في المخزون</span><span class="stock-badge available">2 متاح للعملاء</span></div></div></article>
+        <article class="product-card"><div class="product-thumb"></div><div class="product-info"><h3>منتج 2</h3><div class="stock-row"><span class="stock-badge limited">5 في المخزون</span></div></div></article>
+        <article class="product-card"><div class="product-thumb"></div><div class="product-info"><h3>منتج 3</h3><div class="stock-row"><span class="stock-badge unlimited">كمية غير محددة</span></div></div></article>
+        <article class="product-card"><div class="product-thumb"></div><div class="product-info"><h3>منتج 4</h3><div class="stock-row"><span class="stock-badge limited">5 في المخزون</span><span class="stock-badge hidden">مخفي للعملاء لمدة 24 ساعة</span></div></div></article>
+        <article class="product-card"><div class="product-thumb"></div><div class="product-info"><h3>منتج 5</h3><div class="stock-row"><span class="stock-badge limited">12 في المخزون</span></div></div></article>
+        <article class="product-card"><div class="product-thumb"></div><div class="product-info"><h3>منتج 6</h3><div class="stock-row"><span class="stock-badge unlimited">كمية غير محددة</span></div></div></article>
+        <article class="product-card"><div class="product-thumb"></div><div class="product-info"><h3>منتج 7</h3><div class="stock-row"><span class="stock-badge limited">1000 في المخزون</span><span class="stock-badge available">1000 متاح للعملاء</span></div></div></article>
+        <article class="product-card"><div class="product-thumb"></div><div class="product-info"><h3>منتج 8</h3><div class="stock-row"><span class="stock-badge limited">3 في المخزون</span></div></div></article>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<div class="filter-overlay" id="filter-overlay"></div>
+
+<div class="replacement-next-bar" id="replacement-next-bar">
+  <button class="btn btn-primary btn-block" id="replacement-next-btn">التالي</button>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-bottom" id="footer-bottom">
+      <span>&copy; 2026 الخيرات. جميع الحقوق محفوظة.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Mirrors syncNextBarSpacing() in public/js/scripts/owner-browsing.js
+const bar = document.getElementById('replacement-next-bar');
+const params = new URLSearchParams(window.location.search);
+const WITH_FIX = params.get('fix') !== 'off';
+
+if (WITH_FIX) {
+  const height = Math.ceil(bar.getBoundingClientRect().height);
+  document.documentElement.style.setProperty('--replacement-bar-h', height + 'px');
+} else {
+  document.documentElement.style.setProperty('--replacement-bar-h', '0px');
+  // …and undo the reserved badge line, the state BEFORE the card-height fix
+  const style = document.createElement('style');
+  style.textContent =
+    '.stock-row{min-height:0;} .stock-badge{line-height:1.6;white-space:normal;}';
+  document.head.appendChild(style);
+}
+
+// html{scroll-behavior:smooth} would make every scroll below asynchronous
+// and the measurements would be taken mid-flight
+document.documentElement.style.scrollBehavior = 'auto';
+
+const mobile = window.innerWidth <= 860;
+const filters = document.getElementById('filters-panel');
+const lastFilter = document.getElementById('last-filter');
+const footerBottomEl = document.getElementById('footer-bottom');
+
+let filtersResult;
+if (mobile) {
+  // The mobile filters drawer is off-canvas: open it like filter-toggle does
+  filters.classList.add('open');
+  document.getElementById('filter-overlay').classList.add('open');
+  filters.scrollTop = filters.scrollHeight;
+  filtersResult = {
+    lastFilterBottom: round(lastFilter.getBoundingClientRect().bottom),
+    barTop: round(bar.getBoundingClientRect().top),
+    ok: lastFilter.getBoundingClientRect().bottom <= bar.getBoundingClientRect().top + 0.5
+  };
+} else {
+  // Desktop: the sidebar is sticky under the header. Scroll the page first
+  // (like the owner does) so it is stuck, then scroll the sidebar to its end
+  window.scrollTo(0, 400);
+  filters.scrollTop = filters.scrollHeight;
+  filtersResult = {
+    lastFilterBottom: round(lastFilter.getBoundingClientRect().bottom),
+    barTop: round(bar.getBoundingClientRect().top),
+    ok: lastFilter.getBoundingClientRect().bottom <= bar.getBoundingClientRect().top + 0.5
+  };
+}
+
+// Footer: scroll the page all the way down and check the last line of the
+// footer clears the bar
+window.scrollTo(0, document.documentElement.scrollHeight);
+const footerResult = {
+  footerBottom: round(footerBottomEl.getBoundingClientRect().bottom),
+  barTop: round(bar.getBoundingClientRect().top),
+  ok: footerBottomEl.getBoundingClientRect().bottom <= bar.getBoundingClientRect().top + 0.5
+};
+
+// Cards: the badge row must be the SAME height on every card, whatever badges
+// it shows. A short (one-badge) row next to a wrapped two-badge row is exactly
+// the jump the owner reported: grid stretching hides it inside one row of
+// cards, but the row itself grows and pushes the grid around.
+const cards = Array.from(document.getElementById('products-grid').children);
+const cardHeights = cards.map((card) => round(card.getBoundingClientRect().height));
+const badgeRows = cards.map((card) => round(card.querySelector('.stock-row').getBoundingClientRect().height));
+const cardSpread = round(Math.max(...cardHeights) - Math.min(...cardHeights));
+const badgeRowSpread = round(Math.max(...badgeRows) - Math.min(...badgeRows));
+
+// Every badge must sit inside the card that owns it (no overflow to the right)
+const overflow = cards.filter((card) => {
+  const cardRect = card.getBoundingClientRect();
+  return Array.from(card.querySelectorAll('.stock-badge')).some((badge) => {
+    const badgeRect = badge.getBoundingClientRect();
+    return badgeRect.right > cardRect.right + 0.5 || badgeRect.left < cardRect.left - 0.5;
+  });
+}).length;
+
+const cardsResult = {
+  heights: cardHeights,
+  badgeRows,
+  badgeRowSpread,
+  spread: cardSpread,
+  overflowingBadges: overflow,
+  ok: badgeRowSpread === 0 && cardSpread === 0 && overflow === 0
+};
+
+function round(n) { return Math.round(n * 100) / 100; }
+
+const result = {
+  viewport: window.innerWidth + 'x' + window.innerHeight,
+  mode: mobile ? 'mobile' : 'desktop',
+  fix: WITH_FIX,
+  barHeight: round(bar.getBoundingClientRect().height),
+  filters: filtersResult,
+  footer: footerResult,
+  cards: cardsResult,
+  debug: {
+    barVar: getComputedStyle(document.documentElement).getPropertyValue('--replacement-bar-h'),
+    bodyPaddingBottom: getComputedStyle(document.body).paddingBottom,
+    filtersPaddingBottom: getComputedStyle(filters).paddingBottom,
+    scrollY: window.scrollY,
+    scrollHeight: document.documentElement.scrollHeight,
+    bodyScrollHeight: document.body.scrollHeight,
+    innerHeight: window.innerHeight,
+    filtersScrollTop: filters.scrollTop,
+    filtersScrollHeight: filters.scrollHeight,
+    filtersClientHeight: filters.clientHeight,
+    filtersMaxScroll: filters.scrollHeight - filters.clientHeight,
+    filtersRectTop: round(filters.getBoundingClientRect().top),
+    filtersRectBottom: round(filters.getBoundingClientRect().bottom),
+    lastFilterRectTop: round(lastFilter.getBoundingClientRect().top)
+  },
+  pass: filtersResult.ok && footerResult.ok && cardsResult.ok
+};
+
+document.title = 'RESULT ' + JSON.stringify(result);
+</script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+/* ===== Browse page ===== */
+.browse-layout{padding:30px 12px 20px;}
+
+.search-row{
+  display:flex;
+  gap:12px;
+  margin-bottom:26px;
+}
+.search-box{
+  flex:1;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:12px 18px;
+  color:var(--muted);
+}
+.search-box input{
+  border:none;background:transparent;outline:none;
+  font-family:'Cairo',sans-serif;font-size:.95rem;color:var(--ink);flex:1;
+}
+.search-box input::placeholder{color:var(--muted);}
+
+.browse-grid{
+  display:grid;
+  grid-template-columns:230px 1fr;
+  gap:30px;
+  align-items:start;
+}
+
+/* Filters sidebar */
+.filters{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:22px;
+  position:sticky;
+  top:96px;
+  /* Keep every filter reachable on short viewports: the sidebar scrolls
+     internally instead of getting clipped by the bottom of the screen */
+  max-height:calc(100vh - 120px);
+  max-height:calc(100dvh - 120px);
+  overflow-y:auto;
+}
+.filters .filter-close{display:none;}
+.filters h3{
+  display:flex;align-items:center;gap:8px;
+  font-size:1rem;margin-bottom:14px;
+}
+.filters h3.mt{margin-top:26px;}
+
+/* Search bar above the category list: filters the categories themselves */
+.filter-search{
+  display:flex;align-items:center;gap:8px;
+  background:var(--sand);border:1px solid var(--line);
+  border-radius:999px;padding:7px 14px;margin-bottom:10px;color:var(--muted);
+}
+.filter-search .material-symbols-outlined{font-size:18px;}
+.filter-search input{
+  border:none;background:transparent;outline:none;flex:1;min-width:0;
+  font-family:'Cairo',sans-serif;font-size:.85rem;color:var(--ink);
+}
+.filter-search input::placeholder{color:var(--muted);}
+
+.filter-list li{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 8px;
+  border-radius:var(--radius-sm);
+  font-size:.88rem;font-weight:600;color:var(--ink);
+  cursor:pointer;
+  transition:background .15s ease;
+}
+.filter-list li:hover{background:var(--sand);}
+.filter-list li.active{background:var(--sand);color:var(--brick);}
+.filter-list li .count{margin-right:auto;color:var(--muted);font-size:.78rem;font-weight:600;}
+
+/* Price filter radio buttons */
+.filter-list.plain li{
+  cursor:pointer;
+}
+.filter-radio{
+  width:16px;height:16px;border-radius:50%;
+  border:2px solid var(--line);flex-shrink:0;
+  transition:border-color .15s ease;
+}
+.filter-list li.active .filter-radio{
+  border-color:var(--brick);
+  background:var(--brick);
+  box-shadow:inset 0 0 0 3px var(--card);
+}
+
+.results-head{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:18px;
+  color:var(--muted);font-size:.85rem;font-weight:600;
+}
+.results-head .sort{display:flex;align-items:center;gap:6px;color:var(--ink);}
+
+.pagination{
+  display:flex;justify-content:center;gap:8px;margin-top:34px;
+}
+.page-btn{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--card);border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;color:var(--ink);
+}
+.page-btn.active{background:var(--brick);color:#fff;border-color:var(--brick);}
+
+/* Mobile filter toggle button */
+.filter-toggle{
+  display:none;
+  align-items:center;gap:6px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:10px 18px;
+  font-weight:700;font-size:.9rem;color:var(--ink);
+}
+
+/* Filter overlay for mobile */
+.filter-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(36,31,28,.5);
+  z-index:100;
+}
+.filter-overlay.open{display:block;}
+
+/* Mobile responsive */
+@media (max-width:860px){
+  .browse-grid{grid-template-columns:1fr;}
+
+  .filter-toggle{display:inline-flex;}
+
+  .filters{
+    position:fixed;
+    top:0;
+    right:-300px;
+    width:280px;
+    /* iOS Safari's 100vh is TALLER than the visible area — it includes the
+       strip behind the bottom toolbar — so the last price filter
+       (أكثر من 30 ريال) sat underneath that toolbar with no way to reach it.
+       dvh tracks the VISIBLE viewport; 100vh stays above as the fallback for
+       browsers without dvh support. */
+    height:100vh;
+    height:100dvh;
+    border-radius:0;
+    z-index:101;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+    max-height:none;
+    transition:right .3s ease;
+    padding-top:20px;
+    /* Scrolling is the primary escape hatch (the whole drawer scrolls), and
+       this padding clears the home indicator for the last row on top of it */
+    padding-bottom:calc(32px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Slightly tighter headers on phones so every filter fits above the fold
+     without a scroll in the common case; the rows themselves keep their
+     full tap size. */
+  .filters h3{margin-bottom:10px;}
+  .filters h3.mt{margin-top:18px;}
+  .filters.open{right:0;}
+  .filters .filter-close{
+    display:flex;
+    position:absolute;
+    top:12px;left:12px;
+    width:32px;height:32px;border-radius:50%;
+    background:var(--sand);
+    align-items:center;justify-content:center;
+    color:var(--ink);
+  }
+}
+
+@media (max-width:520px){
+  .search-row{flex-direction:column;}
+}
+
+/* ── Suggested items (alternatives SMS link) ────────────────── */
+.suggested-divider{
+  grid-column:1 / -1;
+  display:flex;align-items:center;gap:12px;
+  margin:6px 0 2px;
+}
+.suggested-divider::before,
+.suggested-divider::after{
+  content:'';flex:1;height:1px;background:var(--line);
+}
+.suggested-divider span{
+  font-weight:800;font-size:.95rem;color:var(--brick);
+  white-space:nowrap;
+}
+.product-card.suggested-card{
+  border-color:var(--brick);
+  box-shadow:0 0 0 1px var(--brick);
+}
+
+/* ── Pagination bar ─────────────────────────────────────────── */
+/* The catalog is served one page at a time, so this bar is the way through
+   the rest of it. It wraps instead of overflowing on narrow screens, and the
+   buttons keep their full tap size on touch devices. */
+.pager{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  margin:26px 0 6px;
+}
+.pager-num,
+.pager-step{
+  min-width:40px;
+  height:40px;
+  padding:0 12px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--ink);
+  font:inherit;
+  font-weight:700;
+  cursor:pointer;
+  transition:background .15s ease, color .15s ease, border-color .15s ease;
+}
+.pager-num:hover,
+.pager-step:hover:not(:disabled){
+  border-color:var(--brick);
+  color:var(--brick);
+}
+.pager-num.active{
+  background:var(--brick,#8e2e24);
+  border-color:var(--brick,#8e2e24);
+  color:#fff;
+  cursor:default;
+}
+.pager-step:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+.pager-gap{
+  min-width:24px;
+  text-align:center;
+  color:var(--muted);
+}
+
+@media (max-width:520px){
+  /* Only the neighbouring pages are useful on a phone — the gap markers keep
+     the bar from turning into a wall of buttons. */
+  .pager{gap:4px;}
+  .pager-num,
+  .pager-step{min-width:36px;height:36px;padding:0 9px;font-size:.9rem;}
+}
+

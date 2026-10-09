@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سياسة الخصوصية | الخيرات</title>
+<link rel="stylesheet" href="/css/common.css">
+<style>
+.legal-page {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 32px 24px;
+  background: #fff;
+  border-radius: var(--radius, 12px);
+  border: 1px solid var(--line, #e6ded3);
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0,0,0,0.04));
+  line-height: 1.8;
+}
+.legal-page h1 {
+  font-size: 1.8rem;
+  color: var(--brick, #8e2e24);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--sand, #f7f3ec);
+}
+.legal-page h2 {
+  font-size: 1.25rem;
+  margin: 24px 0 12px;
+  color: var(--ink, #241f1c);
+}
+.legal-page p, .legal-page li {
+  color: #444;
+  font-size: 0.95rem;
+}
+.legal-page ul {
+  padding-right: 20px;
+  margin-bottom: 16px;
+}
+.legal-page li {
+  margin-bottom: 8px;
+}
+</style>
+</head>
+<body>
+
+<%- include('partials/header') %>
+
+<main class="container">
+  <article class="legal-page">
+    <h1>سياسة الخصوصية</h1>
+    <p>في بقالة الخيرات، نولي سرية وأمان بيانات عملائنا أهمية قصوى. توضح هذه السياسة كيف نقوم بجمع واستخدام وحماية معلوماتكم الشخصية:</p>
+
+    <h2>1. البيانات التي نجمعها</h2>
+    <ul>
+      <li>الاسم ورقم الهاتف: لإنشاء الحساب والتواصل بخصوص حالة الطلبات.</li>
+      <li>العنوان وموقع التوصيل: لتوصيل الطلبات بدقة إلى عنوانكم.</li>
+      <li>سجل الطلبات: لمساعدتكم في تتبع مشترياتكم وتسهيل إعادة الطلب.</li>
+    </ul>
+
+    <h2>2. حماية وتشفير البيانات</h2>
+    <ul>
+      <li>يتم تشفير البيانات الحساسة مثل أرقام الهواتف والعناوين المخزنة وفق أفضل معايير الأمان والتشفير (AES-256).</li>
+      <li>كلمات المرور مشفرة بواسطة خوارزميات غير قابلة للعكس (Bcrypt).</li>
+      <li>بيانات البطاقات الائتمانية تتم معالجتها بأمان عبر بوابات دفع مرخصة ولا نقوم بحفظ تفاصيل بطاقتك البنكية في خوادمنا.</li>
+    </ul>
+
+    <h2>3. مشاركة البيانات</h2>
+    <p>لا نقوم ببيع أو مشاركة بياناتكم مع أي أطراف ثالثة لأغراض تسويقية، ونقتصر على استخدامها فقط لتقديم خدمة التوصيل بكفاءة.</p>
+
+    <h2>4. حقوقكم والتحكم في الحساب</h2>
+    <p>يمكنكم في أي وقت تعديل بياناتكم الشخصية وعناوينكم المحفوظة من صفحة إعدادات الحساب أو طلب حذف حسابكم بالتواصل معنا.</p>
+  </article>
+</main>
+
+<%- include('partials/footer') %>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رسالة البدائل | الخيرات</title>
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/costumer-order.css">
+<link rel="stylesheet" href="/css/alternatives-sms.css">
+</head>
+<body class="od-body">
+
+<%- include('partials/header', { activePage: '', hideDashboard: true }) %>
+
+<main class="container alt-sms-wrap">
+  <div class="od-title-row">
+    <span class="od-title-group">
+      <a id="alt-back-link" href="#" class="back-link" aria-label="العودة لمراجعة المنتجات">
+        <span class="material-symbols-outlined">arrow_forward</span>
+      </a>
+      <h1>رسالة إشعار العميل</h1>
+    </span>
+  </div>
+
+  <section class="panel alt-sms-panel">
+    <div class="alt-sms-order">
+      <span class="s-label">الطلب</span>
+      <span class="s-value" id="alt-order-id">-</span>
+    </div>
+
+    <div class="sms-message-box alt-preview-box">
+      <div class="sms-msg-actions">
+        <button class="icon-btn" id="alt-edit-btn" aria-label="تعديل الرسالة">
+          <span class="material-symbols-outlined">edit</span>
+        </button>
+        <button class="text-btn" id="alt-reset-btn" style="display:none;">الرسالة الإفتراضية</button>
+      </div>
+      <p class="sms-message-preview" id="alt-message-preview"></p>
+      <textarea class="sms-message-edit" id="alt-message-edit" rows="7" style="display:none;"></textarea>
+      <button class="btn btn-primary btn-sm" id="alt-done-btn" style="display:none;">تم</button>
+    </div>
+
+    <div class="alt-sms-actions">
+      <button class="btn btn-primary" id="alt-send-btn">
+        <span class="material-symbols-outlined">send</span> إرسال الرسالة وتحديث الطلب
+      </button>
+      <button class="btn btn-danger" id="alt-cancel-btn" style="display:none;">
+        إلغاء الطلب
+      </button>
+    </div>
+
+    <div class="alt-cancel-hint" id="alt-cancel-hint" style="display:none;">
+      يحتوي هذا الطلب على منتجات غير متوفرة أو ناقصة الكمية. عند إرسال الرسالة سيتم إلغاء الطلب
+      وإرجاع المنتجات المتوفرة تلقائياً إلى سلة العميل، وسيظهر الطلب كملغي في صفحة الطلبات وصفحة التتبع.
+    </div>
+  </section>
+</main>
+
+<%- include('partials/footer') %>
+
+<!-- Confirm popup (send / cancel) -->
+<div class="modal-overlay" id="alt-confirm-overlay">
+  <div class="sms-modal">
+    <h3 id="alt-confirm-title">هل تريد إرسال هذه الرسالة؟</h3>
+    <div class="sms-message-box">
+      <p class="sms-message-preview" id="alt-confirm-preview"></p>
+    </div>
+    <div class="sms-modal-actions">
+      <button class="btn btn-primary" id="alt-confirm-yes">نعم</button>
+      <button class="btn btn-outline" id="alt-confirm-no">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/js/scripts/alternatives-sms.js"></script>
+</body>
+</html>

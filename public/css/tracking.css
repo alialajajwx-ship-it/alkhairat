@@ -1,0 +1,192 @@
+/* ===== Tracking page ===== */
+.tracking-wrap{padding-bottom:70px;}
+
+/* Quick actions under the order details (عرض طلباتي / تصفح المنتجات) */
+.tracking-actions{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  margin-top:22px;
+}
+@media (max-width:560px){
+  .tracking-actions{flex-direction:column;}
+  .tracking-actions .btn{width:100%;}
+}
+
+.panel{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:24px;
+}
+.panel h3{display:flex;align-items:center;gap:8px;font-size:1.05rem;margin-bottom:18px;}
+
+/* ── Timeline Panel (horizontal, on top) ── */
+.timeline-panel{margin-top:20px;}
+
+.timeline{
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  gap:0;
+  position:relative;
+}
+
+.timeline li{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+  flex:1;
+  position:relative;
+}
+
+/* Connector line between dots (RTL: lines go leftward) */
+.timeline li::before{
+  content:"";
+  position:absolute;
+  top:21px;
+  right:calc(50% + 22px);
+  left:calc(-50% + 22px);
+  height:3px;
+  background:var(--line);
+  z-index:0;
+}
+.timeline li:last-child::before{display:none;}
+.timeline li.done::before{background:var(--green);}
+
+.dot{
+  width:44px;height:44px;flex:none;border-radius:50%;
+  background:var(--sand);color:var(--muted);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1;
+  flex-shrink:0;
+}
+.timeline li.done .dot{background:var(--green);color:#fff;}
+.timeline li.delivered-green .dot{background:var(--green);color:#fff;}
+.timeline li.active .dot{background:var(--brick);color:#fff;box-shadow:0 0 0 6px rgba(178,58,46,.12);}
+
+.t-label{font-size:.9rem;font-family:'Cairo',sans-serif;font-weight:700;color:var(--ink);text-align:center;white-space:nowrap;}
+.timeline li:not(.done):not(.active) .t-label{color:var(--muted);}
+
+/* ── Order Details Panel (wide, below timeline) ── */
+.order-details-panel{margin-top:24px;}
+
+.sum-row{display:flex;justify-content:space-between;font-size:.88rem;color:var(--muted);padding:7px 0;}
+.sum-divider{height:1px;background:var(--line);margin:8px 0;}
+.sum-row.total{font-size:1.05rem;font-weight:800;color:var(--ink);}
+
+/* Order items list in tracking */
+.tracking-items-list{
+  list-style:none;padding:0;margin:0;
+}
+.tracking-items-list li{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 0;
+  border-bottom:1px solid var(--line);
+}
+.tracking-items-list li:last-child{border-bottom:none;}
+.tracking-item-img{
+  width:44px;height:44px;border-radius:8px;overflow:hidden;
+  background:var(--sand);border:1px solid var(--line);flex-shrink:0;
+  /* An ordered product that left the customer catalog (sold out → hidden,
+     deleted, …) still gets its row — with an icon instead of the photo */
+  display:flex;align-items:center;justify-content:center;
+}
+.tracking-item-img img{width:100%;height:100%;object-fit:cover;}
+.tracking-item-img .material-symbols-outlined{font-size:22px;color:var(--muted);}
+.tracking-item-info{flex:1;min-width:0;}
+/* line-height gives a long item name room to breathe instead of its lines
+   squashing into each other; overflow-wrap breaks a single very long word. */
+.tracking-item-info h4{font-size:.9rem;font-family:'Cairo',sans-serif;font-weight:700;line-height:1.5;overflow-wrap:anywhere;}
+.tracking-item-info span{font-size:.82rem;color:var(--muted);line-height:1.5;}
+.tracking-item-price-after{font-weight:800;font-size:.9rem;color:var(--ink);}
+/* Prices/discount always sit as a self-contained block on the FAR LEFT of
+   the row (flex:none + auto inline-start margin) so they never crowd the
+   name into overlapping lines. */
+.tracking-item-prices{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  flex:none;margin-inline-start:auto;
+}
+.tracking-item-price-before{text-decoration:line-through;color:var(--muted);font-size:.8rem;}
+.tracking-item-price-after{font-weight:800;font-size:.9rem;color:var(--ink);}
+.tracking-discount-tag{background:var(--brick);color:#fff;font-size:.65rem;padding:2px 6px;border-radius:6px;font-weight:700;white-space:nowrap;}
+
+/* ── Order confirmation status tag ── */
+.confirm-tag{
+  width:fit-content;
+  margin:18px auto 0;
+  font-weight:800;
+  font-size:.9rem;
+  padding:9px 20px;
+  border-radius:999px;
+  white-space:nowrap;
+}
+.confirm-tag.confirmed{background:rgba(60,122,84,.14);color:var(--green);}
+.confirm-tag.review{background:rgba(192,138,46,.16);color:var(--amber);}
+/* The tag follows the owner's delivery stage, so it needs the same colours
+   the other pages use for «قيد التوصيل» / «تم التوصيل» */
+.confirm-tag.on-way{background:rgba(59,130,246,.14);color:#3B82F6;}
+.confirm-tag.delivered{background:rgba(60,122,84,.14);color:var(--green);}
+
+/* ── Responsive ── */
+@media (max-width:600px){
+  .timeline{flex-wrap:nowrap;gap:0;}
+  .timeline li{gap:8px;}
+  .dot{width:38px;height:38px;}
+  .dot .material-symbols-outlined{font-size:20px;}
+  .t-label{font-size:.75rem;}
+  .panel{padding:18px;}
+
+  /* Long discounted names: let the row wrap and give the prices their own
+     full-width line pushed to the far left, instead of squeezing the name. */
+  .tracking-items-list li{
+    flex-wrap:wrap;
+    row-gap:6px;
+    align-items:flex-start;
+  }
+  .tracking-item-info{flex:1 1 auto;}
+  .tracking-item-prices{
+    width:100%;
+    margin-inline-start:0;
+    justify-content:flex-start;
+  }
+  .tracking-item-price-after,
+  .tracking-item-price-before{text-align:left;}
+}
+
+/* ── Review notice (same design as the confirmed page) ── */
+.review-notice{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  background:var(--paper, #fdf8ef);
+  border:1px solid var(--amber, #c08a2e);
+  border-radius:12px;
+  padding:18px 20px;
+  margin:18px auto 0;
+  max-width:860px;
+  text-align:right;
+}
+.review-notice .material-symbols-outlined{color:var(--amber, #c08a2e);font-size:24px;flex:none;}
+.review-notice .notice-text{color:var(--ink, #241f1c);font-size:.92rem;line-height:1.8;}
+.review-notice .notice-text strong{display:block;margin-bottom:4px;}
+
+/* ── Cancelled order tag + notice ─────────────────────────── */
+.confirm-tag.cancelled {
+  background: rgba(178, 58, 46, 0.1);
+  color: var(--brick);
+}
+
+.notice-box.cancel-notice {
+  background: rgba(178, 58, 46, 0.06);
+  border: 1px solid rgba(178, 58, 46, 0.35);
+}
+
+.notice-box.cancel-notice .material-symbols-outlined {
+  color: var(--brick);
+}
+
+.notice-box.cancel-notice .notice-text strong {
+  color: var(--brick);
+}

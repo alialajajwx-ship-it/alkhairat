@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الخيرات | البقالة إلى بابك</title>
+<meta name="description" content="بقالة الخيرات في صفوى - منتجات طازجة ومواد غذائية بأسعار مميزة وتوصيل سريع حتى باب بيتك.">
+<meta property="og:title" content="الخيرات | البقالة إلى بابك">
+<meta property="og:description" content="بقالة الخيرات في صفوى - منتجات طازجة ومواد غذائية بأسعار مميزة وتوصيل سريع حتى باب بيتك.">
+<meta property="og:image" content="/images/logo.webp">
+<link rel="icon" type="image/webp" href="/images/logo.webp">
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/homepage.css">
+</head>
+<body>
+
+<%- include('partials/header', { activePage: 'home' }) %>
+
+<main>
+  <!-- Hero Banner -->
+  <section class="hero">
+    <div class="container">
+      <% const heroBanner = typeof banner !== 'undefined' && banner ? banner : { imageUrl: '', title: '', subtitle: '', link: '' }; %>
+      <% if (heroBanner.link) { %>
+      <a class="hero-band" href="<%= heroBanner.link %>">
+      <% } else { %>
+      <div class="hero-band">
+      <% } %>
+        <div class="hero-media">
+          <img src="<%= heroBanner.imageUrl || '/images/banner-image.webp' %>" alt="">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-text">
+          <div class="eyebrow light"><span class="diamond light"></span> عرض لفترة محدودة</div>
+          <h1><%= heroBanner.title || 'توصيل مجاني لطلبك الأول من الموقع' %></h1>
+          <% if (heroBanner.subtitle) { %>
+          <p><%= heroBanner.subtitle %></p>
+          <% } %>
+          <!-- On wide screens the button sits here, right under the headline
+               and vertically centered between it and the banner's bottom
+               edge; on phones it straddles the banner's bottom edge. -->
+          <a href="/browse" class="hero-shop-now hero-shop-now-inline">تسوَّق الآن</a>
+        </div>
+      <% if (heroBanner.link) { %>
+      </a>
+      <% } else { %>
+      </div>
+      <% } %>
+      <!-- Phones only: straddles the banner's bottom edge. It lives OUTSIDE
+           the band because the band clips (overflow:hidden) anything poking
+           past its edges — that is what hid the button's lower half before. -->
+      <a href="/browse" class="hero-shop-now hero-shop-now-edge">تسوَّق الآن</a>
+    </div>
+  </section>
+
+  <!-- Featured discount products -->
+  <section class="container">
+    <div class="section-head">
+      <h2><span class="diamond"></span> العروض</h2>
+      <a href="/browse" class="link-more">عرض الكل <span class="material-symbols-outlined">chevron_left</span></a>
+    </div>
+    <div class="product-grid" id="home-products">
+      <!-- Populated by JS -->
+    </div>
+  </section>
+
+</main>
+
+<%- include('partials/footer') %>
+
+<script type="module" src="/js/data/products.js"></script>
+<script type="module" src="/js/data/cart.js"></script>
+<script type="module" src="/js/scripts/home.js"></script>
+<!-- Load Clerk JS via Script Tag -->
+  <script
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_d2VsY29tZWQtbGFiLTgyNjYuY2xlcmsuYWNjb3VudHMuZGV2JA"
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"
+    type="text/javascript"
+  ></script>
+</body>
+</html>

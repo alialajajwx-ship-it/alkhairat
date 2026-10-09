@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اتمام الطلب | الخيرات</title>
+<meta name="description" content="إتمام الطلب واختيار عنوان التوصيل وطريقة الدفع في بقالة الخيرات.">
+<link rel="icon" type="image/webp" href="/images/logo.webp">
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/checkout.css">
+<link rel="stylesheet" href="/css/paygate.css">
+<!-- Moyasar Web SDK (real payment mode; unused in mock mode) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/moyasar-payment-form@2.2.13/dist/moyasar.css">
+<script src="https://cdn.jsdelivr.net/npm/moyasar-payment-form@2.2.13/dist/moyasar.umd.min.js"></script>
+</head>
+<body>
+
+<%- include('partials/header', { activePage: 'checkout' }) %>
+
+<main class="container checkout-wrap">
+  <!-- Safwa delivery banner (stays visible for the whole checkout session) -->
+  <div class="safwa-banner" id="safwa-banner">
+    <span class="material-symbols-outlined">info</span>
+    تنبيه: التوصيل حاليا فقط في مدينة صفوى
+  </div>
+
+  <div class="page-hero">
+    <h1>اتمام الطلب</h1>
+    <p>راجع طلبك وادرج بيانات التوصيل قبل التاكيد</p>
+  </div>
+
+  <div class="checkout-grid">
+    <div class="checkout-main">
+      <!-- Cart items -->
+      <section class="panel">
+        <h3><span class="diamond"></span> منتجات السلة (<span id="cart-count">0</span>)</h3>
+        <ul class="cart-list" id="cart-items">
+          <!-- Skeleton rows: shown while the cart loads, removed by checkout.js once items render -->
+          <li class="cart-skeleton" aria-hidden="true">
+            <div class="skel skel-thumb"></div>
+            <div class="skel-lines"><span class="skel skel-line w-40"></span><span class="skel skel-line w-30"></span></div>
+            <div class="skel skel-qty"></div>
+            <div class="skel skel-total"></div>
+          </li>
+          <li class="cart-skeleton" aria-hidden="true">
+            <div class="skel skel-thumb"></div>
+            <div class="skel-lines"><span class="skel skel-line w-60"></span><span class="skel skel-line w-30"></span></div>
+            <div class="skel skel-qty"></div>
+            <div class="skel skel-total"></div>
+          </li>
+          <li class="cart-skeleton" aria-hidden="true">
+            <div class="skel skel-thumb"></div>
+            <div class="skel-lines"><span class="skel skel-line w-40"></span><span class="skel skel-line w-30"></span></div>
+            <div class="skel skel-qty"></div>
+            <div class="skel skel-total"></div>
+          </li>
+        </ul>
+        <div class="empty-state" id="empty-cart" style="display:none;">
+          <span class="material-symbols-outlined">shopping_cart</span>
+          <h3>السلة فارغة</h3>
+          <p>اضف منتجات من صفحة التصفح</p>
+          <a href="/browse" class="btn btn-primary btn-sm">تصفح المنتجات</a>
+        </div>
+      </section>
+
+      <!-- Delivery form modal overlay - hidden by default -->
+      <div class="form-modal-overlay" id="form-modal-overlay">
+      <section class="panel delivery-form-section" id="delivery-form-section">
+        <div class="safwa-banner safwa-banner-static">
+          <span class="material-symbols-outlined">info</span>
+          تنبيه: التوصيل حاليا فقط في مدينة صفوى
+        </div>
+        <div class="form-modal-header">
+          <h3><span class="diamond"></span> عنوان التوصيل</h3>
+          <button class="form-modal-close" id="form-modal-close" aria-label="الغاء">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="form-grid">
+          <label>الاسم الكامل<input type="text" id="input-name" placeholder="ادخل اسمك"></label>
+          <div id="phone-field-wrap" style="display:none;">
+            <label>رقم الجوال<input type="text" id="input-phone" placeholder="05xxxxxxxx"></label>
+          </div>
+          <div class="phone-display-field" id="phone-display-field">
+            <span class="phone-label">رقم الجوال</span>
+            <div class="phone-display">
+              <span class="phone-display-value empty" id="phone-display-value">أدخل رقم الجوال</span>
+              <button type="button" class="phone-edit-btn" id="btn-edit-phone" aria-label="تعديل رقم الجوال">
+                <span class="material-symbols-outlined">edit</span>
+              </button>
+            </div>
+          </div>
+          <label class="full">العنوان التفصيلي<input type="text" id="input-address" placeholder="المدينة، الحي، الشارع"></label>
+          <div class="full saved-address-picker" id="saved-address-picker" style="display:none;">
+            <label>اختر عنواناً محفوظاً <span class="optional-note">(اختياري)</span>
+              <select id="saved-address-select" class="form-control"></select>
+            </label>
+          </div>
+          <label class="full">نوع العنوان <span class="optional-note">(اختياري — يُحفظ في العناوين المحفوظة)</span>
+            <select id="input-address-type" class="form-control">
+              <option value="">بدون نوع</option>
+              <option value="المنزل">المنزل</option>
+              <option value="العمل">العمل</option>
+              <option value="__custom__">آخر...</option>
+            </select>
+          </label>
+          <label class="full" id="address-type-custom-wrap" style="display:none;">
+            اسم نوع العنوان<input type="text" id="input-address-type-custom" maxlength="40" placeholder="مثال: بيت الجدة">
+          </label>
+        </div>
+
+        <!-- Geolocation helper — clicking تفعيل الموقع is required before
+             حفظ و متابعة (unless the browser refuses the permission) -->
+        <div class="location-note-row" id="location-note-row">
+          <span class="location-note-text">الرجاء تفعيل الموقع الجغرافي لسهولة التعرف على مكانك</span>
+          <button type="button" class="btn btn-outline location-enable-btn" id="btn-enable-location">
+            <span class="material-symbols-outlined">location_on</span> تفعيل الموقع
+          </button>
+          <span class="loc-spinner" id="loc-spinner" style="display:none;" aria-hidden="true"></span>
+        </div>
+        <div class="location-refused-note" id="location-refused-note" style="display:none;">
+          <span class="material-symbols-outlined">location_off</span>
+          ملاحظ: الموقع الجغرافي غير مفعل، يمكنك تفعيل الموقع الجغرافي عن طريق إعدادات المتصفح أو إعدادات جهازك لسهولة التعرف على موقعك الجغرافي
+        </div>
+        <div class="location-success-note" id="location-success-note" style="display:none;">
+          <span class="material-symbols-outlined">check_circle</span>
+          تم تحديد موقعك الجغرافي بنجاح
+        </div>
+
+        <div class="form-modal-actions">
+          <button class="btn btn-primary btn-block disabled-btn" id="btn-submit-order">حفظ و متابعة</button>
+          <button class="btn btn-outline btn-block" id="btn-cancel-order">الغاء</button>
+        </div>
+      </section>
+      </div><!-- end form-modal-overlay -->
+
+      <!-- Confirmation step overlay -->
+      <div class="form-modal-overlay" id="confirm-overlay">
+        <section class="panel confirm-section" id="confirm-section">
+          <div class="form-modal-header">
+            <button class="btn btn-outline" id="btn-back-to-form">
+              <span class="material-symbols-outlined">arrow_forward</span>
+              عودة للخلف
+            </button>
+          </div>
+          <h3><span class="diamond"></span> تأكيد بيانات التوصيل</h3>
+          <div class="confirm-info" style="margin-bottom: 18px">
+            <div class="confirm-row">
+              <span class="confirm-label">الاسم</span>
+              <span class="confirm-value" id="confirm-name">-</span>
+            </div>
+            <div class="confirm-row">
+              <span class="confirm-label">رقم الجوال</span>
+              <span class="confirm-value" id="confirm-phone">-</span>
+            </div>
+            <div class="confirm-row">
+              <span class="confirm-label">العنوان</span>
+              <span class="confirm-value" id="confirm-address">-</span>
+            </div>
+            <div class="confirm-row" id="confirm-address-type-row" style="display:none;">
+              <span class="confirm-label">نوع العنوان</span>
+              <span class="confirm-value" id="confirm-address-type">-</span>
+            </div>
+            <div class="confirm-row" id="confirm-location-row" style="display:none;">
+              <span class="confirm-label">الموقع الجغرافي</span>
+              <span class="confirm-value location-on">
+                <span class="material-symbols-outlined">location_on</span>
+                تم تفعيل الموقع الجغرافي
+              </span>
+            </div>
+            <div class="confirm-row" id="confirm-location-off-row" style="display:none;">
+              <span class="confirm-label">الموقع الجغرافي</span>
+              <span class="confirm-value location-off">غير مفعل</span>
+              <span class="confirm-location-note" id="confirm-location-note" style="display:none;">الرجاء تفعيل الموقع الجغرافي لسهولة التعرف على مكانك</span>
+            </div>
+            <div class="confirm-row">
+              <span class="confirm-label">طريقة الدفع</span>
+              <span class="confirm-value" id="confirm-payment">-</span>
+            </div>
+          </div>
+
+          <!-- The items the user is ordering -->
+          <div class="confirm-items-block">
+            <h4 class="confirm-items-title">المنتجات المطلوبة</h4>
+            <ul class="confirm-items" id="confirm-items"></ul>
+          </div>
+
+          <!-- Order totals -->
+          <div class="confirm-totals" id="confirm-totals">
+            <div class="sum-row"><span>المجموع الفرعي</span><span id="confirm-subtotal">-</span></div>
+            <div class="sum-row"><span>رسوم التوصيل</span><span id="confirm-delivery">-</span></div>
+            <div class="sum-row total"><span>الاجمالي</span><span id="confirm-total">-</span></div>
+          </div>
+          <div class="form-modal-actions">
+            <button class="btn btn-primary btn-block" id="btn-confirm-order">انهاء الطلب</button>
+          </div>
+        </section>
+      </div><!-- end confirm-overlay -->
+
+      <!-- Per-order phone edit popup (opened from the pen icon). The number
+           saved here is used for THIS order only — it never changes the
+           account's phone or the guest's saved default. -->
+      <div class="form-modal-overlay phone-edit-overlay" id="phone-edit-overlay">
+        <section class="panel phone-edit-section" id="phone-edit-section">
+          <div class="form-modal-header">
+            <h3><span class="diamond"></span> تعديل رقم الجوال</h3>
+            <button class="form-modal-close" id="phone-edit-close" aria-label="الغاء">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+          <p class="phone-edit-note">هذا الرقم سيُستخدم لهذا الطلب فقط ولن يتم تغيير رقم حسابك</p>
+          <label class="phone-edit-label">رقم الجوال لهذا الطلب
+            <input type="tel" id="input-order-phone" placeholder="05xxxxxxxx" maxlength="10" inputmode="numeric" dir="ltr">
+          </label>
+          <div class="phone-edit-error" id="phone-edit-error" style="display:none;"></div>
+          <div class="form-modal-actions">
+            <button class="btn btn-primary btn-block" id="btn-save-phone">حفظ</button>
+            <button class="btn btn-outline btn-block" id="btn-cancel-phone">الغاء</button>
+          </div>
+        </section>
+      </div>
+
+    </div>
+
+    <!-- Side column: payment methods ABOVE the summary on wide screens,
+         stacked under the main column on narrow ones -->
+    <div class="side-col">
+    <section class="panel pay-panel">
+      <h3><span class="diamond"></span> طريقة الدفع</h3>
+      <div class="pay-options">
+        <div class="pay-card active">
+          <span class="material-symbols-outlined">credit_card</span>
+          <div><h4>بطاقة ائتمانية</h4><span>مدى، فيزا، ماستركارد</span></div>
+          <span class="material-symbols-outlined check">check_circle</span>
+        </div>
+        <div class="pay-card">
+          <span class="material-symbols-outlined">payments</span>
+          <div><h4>الدفع عند الاستلام</h4></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Order summary -->
+    <aside class="summary">
+      <h3><span class="diamond"></span> ملخص الطلب</h3>
+      <div class="sum-row"><span>المجموع الفرعي</span><span id="sum-subtotal">0 ر.س</span></div>
+      <div class="sum-row"><span>رسوم التوصيل</span><span id="sum-delivery">7.00 ر.س</span></div>
+      <div class="sum-divider"></div>
+      <div class="sum-row total"><span>الاجمالي</span><span id="sum-total">0 ر.س</span></div>
+      <button class="btn btn-primary btn-block" id="btn-complete-order">اتمام الطلب</button>
+
+      <p class="secure-note"><span class="material-symbols-outlined">lock</span> عملية دفع امنة ومشفرة بالكامل</p>
+    </aside>
+    </div><!-- end side-col -->
+  </div>
+</main>
+
+<!-- ═══ Payment Gateway Modal (NEW — fully self-contained) ═══
+     Mock mode → simulated gateway form · Real mode → Moyasar SDK mounts in #pg-moyasar-mount -->
+<div id="pg-overlay">
+  <div id="pg-card">
+    <div id="pg-head">
+      <span id="pg-title">بيانات البطاقة البنكية</span>
+      <button type="button" id="pg-close" aria-label="الغاء"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div id="pg-hold-note">سيتم حجز مبلغ الطلب على بطاقتك الآن، ولن يتم سحبه إلا بعد موافقة المتجر على طلبك.</div>
+
+    <!-- Mock mode: simulated gateway form -->
+    <form id="pg-mock-form" novalidate>
+      <div class="pg-field">
+        <label for="pg-number">رقم البطاقة</label>
+        <input type="text" id="pg-number" inputmode="numeric" autocomplete="cc-number"
+               placeholder="0000 0000 0000 0000" maxlength="23" dir="ltr" />
+      </div>
+      <div class="pg-field">
+        <label for="pg-holder">اسم حامل البطاقة</label>
+        <input type="text" id="pg-holder" autocomplete="cc-name" dir="ltr"
+               placeholder="الاسم كما يظهر على البطاقة" />
+      </div>
+      <div id="pg-split">
+        <div class="pg-field">
+          <label for="pg-month">شهر الانتهاء</label>
+          <input type="text" id="pg-month" inputmode="numeric" autocomplete="cc-exp-month"
+                 placeholder="MM" maxlength="2" dir="ltr" />
+        </div>
+        <div class="pg-field">
+          <label for="pg-year">سنة الانتهاء</label>
+          <input type="text" id="pg-year" inputmode="numeric" autocomplete="cc-exp-year"
+                 placeholder="YY" maxlength="4" dir="ltr" />
+        </div>
+        <div class="pg-field">
+          <label for="pg-cvv">رمز CVV</label>
+          <input type="password" id="pg-cvv" inputmode="numeric" autocomplete="cc-csc"
+                 placeholder="•••" maxlength="4" dir="ltr" />
+        </div>
+      </div>
+      <div id="pg-error"></div>
+      <button type="submit" id="pg-pay">ادفع الآن</button>
+    </form>
+
+    <!-- Real mode: official Moyasar form mounts here -->
+    <div id="pg-moyasar-mount"></div>
+
+    <div id="pg-secure"><span class="material-symbols-outlined">lock</span> عملية دفع امنة ومشفرة بالكامل</div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<script type="module" src="/js/data/products.js"></script>
+<script type="module" src="/js/data/cart.js"></script>
+<script type="module" src="/js/scripts/checkout.js"></script>
+</body>
+</html>

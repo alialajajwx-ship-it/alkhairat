@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إعدادات المتجر | الخيرات</title>
+  <link rel="stylesheet" href="/css/common.css">
+  <link rel="stylesheet" href="/css/settings.css">
+</head>
+<body>
+
+<%- include('partials/header', { activePage: 'settings' }) %>
+
+  <main class="container settings-page">
+
+    <!-- عنوان الصفحة -->
+    <div class="settings-header">
+      <h1>إعدادات المتجر</h1>
+    </div>
+
+    <div class="settings-wrapper">
+
+      <!-- القائمة الجانبية للتبويبات -->
+      <aside class="settings-sidebar" id="mobile-sidebar">
+        <button class="tab-link active" data-tab="profile">
+          <span class="material-symbols-outlined">person</span>
+          بيانات الحساب
+        </button>
+        <button class="tab-link" data-tab="addresses">
+          <span class="material-symbols-outlined">location_on</span>
+          العناوين المحفوظة
+        </button>
+        <button class="tab-link" data-tab="notifications">
+          <span class="material-symbols-outlined">notifications</span>
+          الإشعارات
+        </button>
+        <button class="tab-link" data-tab="maintenance">
+          <span class="material-symbols-outlined">storefront</span>
+          توقيف الطلبات
+        </button>
+        <div class="owner-tools-divider">
+          <span>أدوات المتجر</span>
+        </div>
+        <a class="tab-link owner-tool-link" href="/banner">
+          <span class="material-symbols-outlined">photo</span>
+          تعديل بانر الرئيسية
+        </a>
+        <a class="tab-link owner-tool-link" href="/delivery-price">
+          <span class="material-symbols-outlined">local_shipping</span>
+          سعر التوصيل
+        </a>
+      </aside>
+
+      <!-- محتوى الإعدادات -->
+      <div class="settings-content" id="mobile-content">
+
+        <!-- زر الرجوع للقائمة -->
+        <button class="mobile-back-btn" id="mobile-back-btn">
+          <span class="material-symbols-outlined">arrow_forward</span>
+          العودة لقائمة الإعدادات
+        </button>
+
+        <!-- 1. تبويب الحساب -->
+        <div id="profile" class="tab-content active">
+          <h2 class="tab-title">بيانات الحساب</h2>
+
+          <!-- تاريخ التسجيل + عدد الطلبات -->
+          <div class="info-badges-row">
+            <div class="info-badge">
+              <span class="material-symbols-outlined">calendar_today</span>
+              <div>
+                <small>تاريخ التسجيل</small>
+                <strong id="stat-registered-at">—</strong>
+              </div>
+            </div>
+            <div class="info-badge">
+              <span class="material-symbols-outlined">shopping_bag</span>
+              <div>
+                <small>عدد الطلبات</small>
+                <strong id="stat-orders-count">—</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- نموذج تعديل البيانات -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>الاسم الكامل</label>
+              <input type="text" class="form-control" id="input-name" maxlength="60" placeholder="ادخل اسمك">
+            </div>
+            <div class="form-group">
+              <label>رقم الجوال <span class="muted-note">(غير قابل للتعديل)</span></label>
+              <input type="tel" class="form-control" id="input-phone" dir="ltr" disabled readonly>
+            </div>
+          </div>
+
+          <div class="settings-actions">
+            <button class="btn btn-primary" id="btn-save-profile">حفظ التغييرات</button>
+            <button class="btn btn-danger-outline" id="btn-settings-logout">
+              <span class="material-symbols-outlined">logout</span>
+              تسجيل الخروج
+            </button>
+          </div>
+
+          <!-- تغيير كلمة المرور -->
+          <div class="password-change-box">
+            <h3 class="password-change-title">تغيير كلمة المرور</h3>
+            <div class="form-row">
+              <div class="form-group password-field-group">
+                <label>كلمة المرور الحالية</label>
+                <input type="password" class="form-control" id="input-current-password" autocomplete="current-password">
+                <button type="button" class="password-eye" data-target="input-current-password" aria-label="إظهار كلمة المرور">
+                  <span class="material-symbols-outlined">visibility</span>
+                </button>
+              </div>
+              <div class="form-group password-field-group">
+                <label>كلمة المرور الجديدة</label>
+                <input type="password" class="form-control" id="input-new-password" autocomplete="new-password">
+                <button type="button" class="password-eye" data-target="input-new-password" aria-label="إظهار كلمة المرور">
+                  <span class="material-symbols-outlined">visibility</span>
+                </button>
+              </div>
+            </div>
+            <div class="settings-actions">
+              <button class="btn btn-primary" id="btn-change-password">تغيير كلمة المرور</button>
+              <button type="button" class="auth-switch-link forgot-link" id="forgot-from-settings">نسيت كلمة المرور؟</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. تبويب العناوين -->
+        <div id="addresses" class="tab-content">
+          <div class="tab-header-flex">
+            <h2 class="tab-title" style="margin-bottom: 0; border: none;">العناوين المحفوظة</h2>
+            <button class="btn btn-outline btn-sm" id="btn-add-address" style="padding: 6px 12px;">
+              <span class="material-symbols-outlined" style="font-size: 18px;">add</span> إضافة عنوان
+            </button>
+          </div>
+
+          <div class="addresses-grid" id="addresses-grid">
+            <!-- Filled by JS -->
+          </div>
+
+          <div class="empty-state" id="addresses-empty" style="display:none;">
+            <span class="material-symbols-outlined">location_off</span>
+            <h3>لا توجد عناوين محفوظة</h3>
+            <p>اضف عنوانك الأول ليسهل عليك إتمام الطلبات</p>
+          </div>
+        </div>
+
+        <!-- 3. تبويب الإشعارات -->
+        <div id="notifications" class="tab-content">
+          <h2 class="tab-title">إعدادات الإشعارات</h2>
+
+          <div class="toggle-switch">
+            <div>
+              <span class="toggle-label">حالة الطلبات عبر (SMS)</span>
+              <span class="toggle-desc">استلام الفواتير وتفاصيل الطلب عبر رقم الجوال</span>
+            </div>
+            <input type="checkbox" class="toggle-input" id="toggle-sms">
+          </div>
+
+        </div>
+
+        <!-- 4. وضع الصيانة (المالك فقط) -->
+        <div id="maintenance" class="tab-content">
+          <h2 class="tab-title">توقيف الطلبات مؤقتاً</h2>
+
+          <div class="mm-toggle-switch">
+            <div class="mm-toggle-text">
+              <strong>إيقاف الطلبات في الموقع بالكامل</strong>
+              <span>عند التشغيل يُغلق المتجر مؤقتاً ويستطيع الزوار التصفح وإنشاء حساب فقط</span>
+            </div>
+            <input type="checkbox" class="mm-switch" id="mm-toggle" aria-label="إيقاف الطلبات">
+          </div>
+
+          <p class="modal-hint">عند إيقاف المتجر: لا يستطيع أحد إضافة منتجات إلى السلة أو إتمام الطلب، وتظهر رسالة تنبيه أعلى كل صفحة تخبر الزوار بأن المتجر مغلق مؤقتاً.</p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+<%- include('partials/footer') %>
+
+  <!-- Address form popup (add / edit) -->
+  <div class="settings-modal-overlay" id="address-modal-overlay">
+    <div class="settings-modal" role="dialog" aria-modal="true">
+      <div class="settings-modal-header">
+        <h3 id="address-modal-title">إضافة عنوان</h3>
+        <button class="settings-modal-close" id="address-modal-close" aria-label="إغلاق">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="settings-modal-body">
+        <div class="form-group">
+          <label>اسم العنوان</label>
+          <input type="text" class="form-control" id="address-label" maxlength="40" placeholder="مثال: المنزل">
+        </div>
+        <div class="form-group">
+          <label>العنوان التفصيلي</label>
+          <input type="text" class="form-control" id="address-text" maxlength="300" placeholder="المدينة، الحي، الشارع">
+        </div>
+        <label class="address-default-check">
+          <input type="checkbox" id="address-is-default">
+          تعيين كعنوان افتراضي
+        </label>
+
+        <!-- Optional geolocation helper -->
+        <div class="location-note-row" id="modal-location-note-row">
+          <span class="location-note-text">ملاحظة: يمكنك تفعيل الموقع الجغرافي لسهولة التعرف على مكانك</span>
+          <button type="button" class="btn btn-outline location-enable-btn" id="btn-enable-location-modal">
+            <span class="material-symbols-outlined">location_on</span> تفعيل الموقع
+          </button>
+        </div>
+        <div class="modal-location-success" id="modal-location-success" style="display:none;">
+          <span class="material-symbols-outlined">check_circle</span>
+          تم الحصول على موقعك الجغرافي بنجاح
+        </div>
+        <div class="modal-location-blocked" id="modal-location-blocked" style="display:none;">
+          <span class="material-symbols-outlined">location_off</span>
+          ملاحظ: الموقع الجغرافي غير مفعل، يمكنك تفعيل الموقع الجغرافي عن طريق إعدادات المتصفح أو إعدادات جهازك لسهولة التعرف على موقعك الجغرافي
+        </div>
+      </div>
+      <div class="settings-modal-actions">
+        <button class="btn btn-outline" id="address-modal-cancel">إلغاء</button>
+        <button class="btn btn-primary" id="address-modal-save">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout confirmation popup -->
+  <div class="settings-modal-overlay" id="logout-overlay">
+    <div class="settings-modal settings-modal-sm" role="dialog" aria-modal="true">
+      <div class="settings-modal-body">
+        <p class="logout-confirm-text">هل أنت متأكد أنك تريد تسجيل الخروج؟</p>
+      </div>
+      <div class="settings-modal-actions">
+        <button class="btn btn-outline" id="logout-cancel">إلغاء</button>
+        <button class="btn btn-danger" id="logout-confirm">تسجيل الخروج</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/scripts/settings.js"></script>
+</body>
+</html>

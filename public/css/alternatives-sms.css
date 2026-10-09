@@ -1,0 +1,74 @@
+/* Alternatives SMS page (owner) — builds on costumer-order.css panels */
+
+.alt-sms-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.alt-sms-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+}
+
+.alt-sms-order {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.alt-preview-box {
+  min-height: 120px;
+}
+
+.alt-sms-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.alt-sms-actions .btn {
+  flex: 1;
+  min-width: 200px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Amber explanation of what sending will do when items are missing */
+.alt-cancel-hint {
+  background: rgba(192, 138, 46, 0.1);
+  border: 1px solid rgba(192, 138, 46, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-size: 0.88rem;
+  color: var(--ink);
+  line-height: 1.7;
+}
+
+/* The suggested-items link inside the message body is a real anchor now, so
+   it has to READ as one in the preview and in the confirm popup */
+.sms-message-preview a {
+  color: var(--brick);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  /* The link is the longest unbroken run in the message — let it wrap
+     instead of widening the box */
+  word-break: break-all;
+}
+
+.sms-message-preview a:hover {
+  text-decoration: none;
+}
+
+/* Breathing room under the header: the title row and the back arrow were
+   touching the header with zero space */
+.alt-sms-wrap {
+  padding-top: 28px;
+}
+.alt-sms-wrap .od-title-row {
+  padding-top: 6px;
+}

@@ -1,0 +1,628 @@
+/* ===== Alternatives (owner product management) + deleted products ===== */
+
+.alternatives-page{padding:30px 12px 40px;}
+
+/* Page actions next to the search bar */
+.page-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.page-actions .btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 18px;font-size:.88rem;
+}
+.page-actions .btn .material-symbols-outlined{font-size:19px;}
+
+.deleted-link-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 16px;
+  border:1.5px solid var(--line);
+  border-radius:var(--radius-sm);
+  background:var(--card);
+  color:var(--ink);
+  font-family:'Cairo',sans-serif;
+  font-size:.88rem;font-weight:700;
+  text-decoration:none;
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+.deleted-link-btn .material-symbols-outlined{font-size:19px;}
+.deleted-link-btn:hover{background:var(--sand);border-color:var(--brick);color:var(--brick);}
+
+/* On phones the three page actions share one row. The «المنتجات المحذوفة»
+   label is the longest of them and used to wrap onto two stacked lines; the
+   label is kept on ONE line now (nowrap + a slightly smaller font/padding)
+   and «فرز وتصفية» moves to its own full-width row so the first two buttons
+   have room to breathe. */
+@media (max-width:720px){
+  .page-actions{width:100%;gap:8px;}
+  .page-actions .btn,
+  .deleted-link-btn{
+    flex:1 1 0;
+    min-width:0;
+    justify-content:center;
+    white-space:nowrap;
+    font-size:.82rem;
+    padding:9px 10px;
+  }
+  .page-actions .btn .material-symbols-outlined,
+  .deleted-link-btn .material-symbols-outlined{font-size:17px;}
+  /* The filter toggle is only shown on phones — give it the full second row */
+  .page-actions .filter-toggle{flex-basis:100%;justify-content:center;}
+}
+
+/* Back button on the deleted-products page (owner pages only) */
+.page-back-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 16px;
+  margin-bottom:16px;
+  border:1.5px solid var(--line);
+  border-radius:var(--radius-sm);
+  background:var(--card);
+  color:var(--ink);
+  font-family:'Cairo',sans-serif;
+  font-size:.88rem;font-weight:700;
+  text-decoration:none;
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+.page-back-btn .material-symbols-outlined{font-size:19px;}
+.page-back-btn:hover{background:var(--sand);border-color:var(--brick);color:var(--brick);}
+
+/* Stock status badges on the cards. A capped product shows two badges:
+   «N في المخزون» (the owner's count) and either «M متاح للعملاء» or the
+   «مخفي للعملاء لمدة …» window, while an unlimited (or count-less hidden)
+   product shows only one. The badges can also wrap onto a second line on
+   narrow cards.
+
+   The row therefore always reserves room for TWO badge lines, so a card that
+   gains the «متاح للعملاء» badge grows no taller than its neighbours and the
+   whole grid row keeps its height. Keep min-height in sync with the badge
+   box: 2 × (12px × 1.25 + 8px padding) + 6px gap = 52px. */
+.stock-row{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:flex-start;
+  gap:6px;
+  min-height:52px;
+  margin:10px 0 12px;
+}
+.stock-badge{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:.75rem;
+  font-weight:700;
+  line-height:1.25;
+  /* The label must never break inside a pill: «مخفي للعملاء لمدة 24 ساعة»
+     would otherwise grow to two text lines on a narrow card and push the
+     row past the reserved height. A pill that is too wide for the card
+     simply wraps onto the next (already reserved) badge line. */
+  white-space:nowrap;
+}
+.stock-badge.limited{background:var(--sand);color:var(--ink);}
+.stock-badge.available{background:#E8EFF9;color:#1565C0;}
+.stock-badge.unlimited{background:#E3EFE7;color:var(--green);}
+.stock-badge.hidden{background:#F7E9D8;color:var(--amber);}
+.stock-badge.deleted{background:var(--sand);color:var(--muted);}
+.discount-badge{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:.75rem;
+  font-weight:700;
+  background:#FDE8E8;
+  color:#C0392B;
+  margin-right:6px;
+}
+
+/* Card buttons */
+.edit-btn,
+.restore-btn{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:9px 12px;
+  border:none;
+  border-radius:var(--radius-sm);
+  background:var(--sand);
+  color:var(--ink);
+  font-family:'Cairo',sans-serif;
+  font-weight:700;
+  font-size:.88rem;
+  cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+.edit-btn .material-symbols-outlined,
+.restore-btn .material-symbols-outlined{font-size:18px;}
+.edit-btn:hover{background:var(--brick);color:#fff;}
+.restore-btn:hover{background:var(--green);color:#fff;}
+
+.product-card.deleted{opacity:.75;}
+
+/* ===== Modals ===== */
+.modal-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(36,31,28,.5);
+  z-index:200;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+.modal-overlay.active{display:flex;}
+
+.modal-content{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:26px;
+  width:100%;
+  max-width:440px;
+  max-height:90vh;
+  overflow-y:auto;
+  position:relative;
+  box-shadow:var(--shadow);
+}
+.modal-content.small{max-width:360px;text-align:center;}
+
+.modal-close{
+  position:absolute;
+  top:14px;
+  left:14px;
+  width:32px;height:32px;
+  border:none;
+  border-radius:50%;
+  background:var(--sand);
+  color:var(--ink);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+}
+.modal-close .material-symbols-outlined{font-size:20px;}
+
+.modal-title{font-size:1.1rem;margin-bottom:4px;}
+.modal-product-name{
+  color:var(--muted);
+  font-size:.9rem;
+  font-weight:600;
+  margin-bottom:18px;
+}
+.modal-hint{
+  color:var(--muted);
+  font-size:.78rem;
+  line-height:1.6;
+  margin-top:8px;
+}
+.delete-text{font-weight:700;margin-bottom:6px;}
+
+.modal-section{
+  border-top:1px solid var(--line);
+  padding-top:16px;
+  margin-top:16px;
+}
+.modal-section h4{font-size:.92rem;margin-bottom:12px;}
+
+/* Radio option rows */
+.option-row{
+  display:flex;
+  gap:18px;
+  margin-bottom:12px;
+  flex-wrap:wrap;
+}
+.option-label{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:.86rem;
+  font-weight:600;
+  cursor:pointer;
+}
+.option-label input{accent-color:var(--brick);width:16px;height:16px;cursor:pointer;}
+
+/* Quantity input */
+.quantity-input{
+  width:100%;
+  max-width:140px;
+  padding:10px;
+  font-family:'Cairo',sans-serif;
+  font-size:1rem;
+  font-weight:700;
+  color:var(--ink);
+  border:1.5px solid var(--line);
+  border-radius:var(--radius-sm);
+  outline:none;
+  direction:ltr;
+  text-align:center;
+  display:block;
+}
+.quantity-input:focus{border-color:var(--brick);}
+.quantity-input:disabled{opacity:.4;cursor:not-allowed;background:var(--paper);}
+.quantity-input.small{max-width:120px;}
+/* Two stacked quantity inputs in the edit modal (in stock / available) */
+.modal-section .quantity-input{margin-bottom:6px;}
+
+/* Quick hide-duration buttons */
+.quick-durations{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.quick-duration-btn{
+  padding:7px 14px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:var(--card);
+  color:var(--ink);
+  font-family:'Cairo',sans-serif;
+  font-size:.8rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:background .15s ease,border-color .15s ease;
+}
+.quick-duration-btn:hover{background:var(--sand);border-color:var(--brick);}
+
+#hide-duration-row,
+#custom-duration-row{margin-top:6px;}
+
+/* Modal footer: delete on one side, cancel/save on the other */
+.modal-actions{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:22px;
+}
+.modal-content.small .modal-actions{justify-content:center;}
+.modal-actions-main{display:flex;gap:10px;}
+.btn-danger-text{
+  background:none;
+  border:none;
+  color:var(--brick);
+  font-family:'Cairo',sans-serif;
+  font-weight:700;
+  font-size:.88rem;
+  cursor:pointer;
+  padding:8px 4px;
+}
+.btn-danger-text:hover{text-decoration:underline;}
+
+.btn:disabled{opacity:.6;cursor:not-allowed;}
+
+/* ===== Add product form ===== */
+.add-section{margin-top:0;padding-top:14px;border-top:none;}
+.add-section:first-of-type{border-top:1px solid var(--line);}
+
+.add-text-input{
+  width:100%;
+  padding:10px 12px;
+  font-family:'Cairo',sans-serif;
+  font-size:.92rem;
+  color:var(--ink);
+  background:var(--paper);
+  border:1.5px solid var(--line);
+  border-radius:var(--radius-sm);
+  outline:none;
+  transition:border-color .15s ease;
+}
+.add-text-input:focus{border-color:var(--brick);background:var(--card);}
+select.add-text-input{cursor:pointer;}
+
+/* Keyword rows: one keyword per input, + to add, X to remove */
+.add-keyword-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.add-keyword-row .add-text-input{flex:1;}
+.add-keyword-remove{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:34px;
+  height:34px;
+  padding:0;
+  border:none;
+  border-radius:50%;
+  background:var(--paper);
+  color:var(--muted);
+  cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+.add-keyword-remove:hover{background:var(--brick);color:#fff;}
+.add-keyword-remove:disabled{opacity:.35;cursor:not-allowed;}
+.add-keyword-remove:disabled:hover{background:var(--paper);color:var(--muted);}
+.add-keyword-remove .material-symbols-outlined{font-size:18px;}
+.add-keyword-add{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:2px;
+  padding:8px 14px;
+  font-family:'Cairo',sans-serif;
+  font-weight:700;
+  font-size:.85rem;
+  color:var(--brick);
+  background:var(--paper);
+  border:1.5px dashed var(--line);
+  border-radius:var(--radius-sm);
+  cursor:pointer;
+  transition:border-color .15s ease,background .15s ease;
+}
+.add-keyword-add:hover{border-color:var(--brick);background:var(--card);}
+.add-keyword-add .material-symbols-outlined{font-size:18px;}
+
+/* Image picker + preview */
+.image-drop{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:16px;
+  border:1.5px dashed var(--line);
+  border-radius:var(--radius-sm);
+  background:var(--paper);
+  color:var(--muted);
+  font-size:.85rem;font-weight:600;
+  cursor:pointer;
+  transition:border-color .15s ease,color .15s ease;
+}
+.image-drop:hover{border-color:var(--brick);color:var(--brick);}
+.image-drop .material-symbols-outlined{font-size:22px;}
+
+.image-preview{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:var(--radius-sm);
+  background:var(--paper);
+}
+.image-preview img{
+  max-width:100%;
+  max-height:150px;
+  border-radius:var(--radius-sm);
+  object-fit:contain;
+}
+.image-remove{
+  position:absolute;
+  top:8px;
+  left:8px;
+  width:28px;height:28px;
+  border:none;
+  border-radius:50%;
+  background:var(--brick);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
+.image-remove .material-symbols-outlined{font-size:18px;}
+
+/* ── Owner price display on product cards ── */
+.owner-price-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:4px 0 8px;
+}
+.owner-price{
+  font-weight:700;
+  color:var(--brick);
+  font-size:.95rem;
+}
+.owner-price-before{
+  color:var(--muted);
+  text-decoration:line-through;
+  font-size:.85rem;
+}
+
+/* ────────────────────────────────────────────────────────────
+   Replacement review mode (مراجعة توفر المنتجات)
+   The owner marks each ordered item as available / low / unavailable,
+   then presses التالي to go to the alternatives-SMS page.
+   ──────────────────────────────────────────────────────────── */
+
+/* Context banner above the search row */
+.replacement-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: rgba(192, 138, 46, 0.1);
+  border: 1px solid rgba(192, 138, 46, 0.35);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  margin-bottom: 14px;
+}
+
+.replacement-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.replacement-banner-text strong {
+  font-family: 'Tajawal', sans-serif;
+  color: var(--amber);
+}
+
+/* Back arrow to the order page */
+.replacement-back {
+  width: 42px;
+  height: 42px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  margin-bottom: 14px;
+  transition: border-color .2s, color .2s;
+}
+
+.replacement-back:hover {
+  border-color: var(--brick);
+  color: var(--brick);
+}
+
+/* عرض الكل / المنتجات المقترحة toggle */
+.replacement-tools {
+  margin-bottom: 14px;
+  gap: 10px;
+}
+
+.show-all-btn {
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  font: inherit;
+  font-weight: 700;
+  padding: 9px 20px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color .2s, color .2s, background .2s;
+}
+
+.show-all-btn.active {
+  border-color: var(--brick);
+  color: var(--brick);
+  background: rgba(178, 58, 46, 0.06);
+}
+
+/* The three availability buttons on each card */
+.replacement-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.repl-btn {
+  flex: 1;
+  min-width: 0;
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 8px 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
+  white-space: nowrap;
+}
+
+.repl-btn:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.repl-btn.available.active {
+  border-color: var(--green);
+  background: rgba(60, 122, 84, 0.1);
+  color: var(--green);
+}
+
+.repl-btn.low.active {
+  border-color: var(--amber);
+  background: rgba(192, 138, 46, 0.12);
+  color: var(--amber);
+}
+
+.repl-btn.unavailable.active {
+  border-color: var(--brick);
+  background: rgba(178, 58, 46, 0.08);
+  color: var(--brick);
+}
+
+/* One-click undo on a marked card (المنتجات المقترحة view) */
+.repl-clear-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  align-self: flex-end;
+  margin-top: 2px;
+  border: 1.5px dashed var(--line);
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
+}
+
+.repl-clear-btn:hover {
+  border-color: var(--brick);
+  color: var(--brick);
+  background: rgba(178, 58, 46, 0.06);
+}
+
+.repl-clear-btn .material-symbols-outlined {
+  font-size: 16px;
+}
+
+/* The ordered/available hint line under the buttons */
+.replacement-marked-info {
+  margin-top: 7px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* Reserve room for the fixed التالي bar so it never covers the last filter
+   options, the results or the bottom of the footer. The bar height is
+   published as --replacement-bar-h by owner-browsing.js (12px of breathing
+   room on top of it). */
+body.review-mode {
+  padding-bottom: calc(var(--replacement-bar-h, 0px) + 12px);
+}
+
+.filters {
+  padding-bottom: calc(22px + var(--replacement-bar-h, 0px));
+}
+
+/* Sticky التالي bar */
+.replacement-next-bar {
+  position: fixed;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -6px 18px -12px rgba(36, 31, 28, 0.3);
+  padding: 12px max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left));
+  z-index: 150;
+}
+
+@media (min-width: 1024px) {
+  .replacement-next-bar {
+    right: 0;
+    left: 0;
+    padding: 12px 40px;
+  }
+}
+
+/* The التالي bar is fixed on top of the page bottom (z-index 150) — exactly
+   where the profile drawer and the mobile nav end, so their last buttons were
+   buried under it while the bar also punched through their dimming overlay.
+   In review mode lift both drawers (and their overlays) above the bar and
+   keep the drawer content clear of it. */
+body.review-mode .profile-overlay,
+body.review-mode .mobile-nav-overlay {
+  z-index: 160;
+}
+body.review-mode .profile-panel,
+body.review-mode .mobile-nav {
+  z-index: 170;
+  padding-bottom: calc(var(--replacement-bar-h, 0px) + 12px);
+}
+
+/* Review mode: availability buttons stacked vertically on the card */
+.replacement-btns {
+  flex-direction: column;
+}
+.repl-btn {
+  width: 100%;
+}

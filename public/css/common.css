@@ -1,0 +1,784 @@
+/* ===== Common styles ===== */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800&family=Cairo:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@24,400,0');
+
+:root{
+  --brick:#B23A2E;
+  --brick-dark:#8E2E24;
+  --ink:#241F1C;
+  --paper:#FAF5EE;
+  --card:#FFFFFF;
+  --sand:#EFE6D8;
+  --line:#E6DACB;
+  --muted:#8A7F71;
+  --green:#3C7A54;
+  --amber:#C08A2E;
+  --radius:18px;
+  --radius-sm:10px;
+  --shadow:0 8px 24px -12px rgba(36,31,28,.18);
+  --shadow-sm:0 4px 12px -6px rgba(36,31,28,.14);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  direction:rtl;
+  text-align:right;
+  background:#F3F5FA;
+  color:var(--ink);
+  font-family:'Cairo',sans-serif;
+  line-height:1.6;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+ul{margin:0;padding:0;list-style:none;}
+h1,h2,h3{font-family:'Tajawal',sans-serif;margin:0;font-weight:800;}
+button{font-family:inherit;cursor:pointer;border:none;}
+
+/* Touch handling on iOS Safari: double-tapping a control made the viewport
+   zoom in (the checkout quantity +/− buttons were the worst offender, since
+   they get tapped rapidly). `manipulation` keeps panning and pinch-zoom but
+   drops the double-tap-to-zoom gesture on real controls, so nothing has to be
+   turned into a <div> and accessibility stays intact. */
+button,
+.btn,
+[role="button"],
+input,
+select,
+textarea,
+label{
+  touch-action:manipulation;
+}
+.material-symbols-outlined{
+  font-variation-settings:'FILL' 0,'wght' 400,'opsz' 24;
+  font-size:22px;
+  vertical-align:middle;
+  line-height:1;
+}
+
+.container{
+  width:100%;
+  max-width:1120px;
+  margin:0 auto;
+  padding:0 24px;
+}
+
+/* diamond signature mark */
+.diamond{
+  display:inline-block;
+  width:9px;height:9px;
+  border:2px solid var(--brick);
+  transform:rotate(45deg);
+  border-radius:2px;
+  flex:none;
+}
+.eyebrow{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--brick);
+  font-weight:700;
+  font-size:.9rem;
+  letter-spacing:.3px;
+  margin-bottom:8px;
+}
+
+/* ---------- Header ---------- */
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(250,245,238,.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.site-header .container{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:76px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.brand img{height:42px;width:auto;}
+.brand span{
+  font-family:'Tajawal',sans-serif;
+  font-weight:800;
+  font-size:1.35rem;
+  color:var(--ink);
+}
+.main-nav ul{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.main-nav a{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:9px 16px;
+  border-radius:999px;
+  font-weight:600;
+  color:var(--ink);
+  font-size:.95rem;
+  transition:background .15s ease, color .15s ease;
+}
+.main-nav a:hover{background:var(--sand);}
+.main-nav a.active{background:var(--brick);color:#fff;}
+.header-actions{display:flex;align-items:center;gap:10px;}
+.icon-btn{
+  width:42px;height:42px;
+  border-radius:50%;
+  background:var(--card);
+  border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink);
+}
+.icon-btn.filled{background:var(--brick);color:#fff;border-color:var(--brick);}
+
+/* Cart badge */
+.cart-link{position:relative;}
+.cart-badge{
+  position:absolute;
+  top:-4px;
+  left:-4px;
+  min-width:18px;
+  height:18px;
+  background:#fff;
+  color:var(--brick);
+  font-size:.65rem;
+  font-weight:800;
+  border-radius:999px;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 4px;
+  line-height:1;
+  box-shadow:0 2px 6px rgba(0,0,0,.15);
+  transition:transform .2s ease;
+}
+.cart-badge.bump{animation:badgeBump .3s ease;}
+@keyframes badgeBump{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.3);}
+  100%{transform:scale(1);}
+}
+.cart-badge:empty,.cart-badge[data-count="0"]{display:none;}
+
+/* Hamburger button - hidden on desktop */
+.hamburger-btn{
+  display:none;
+  width:42px;height:42px;
+  border-radius:50%;
+  background:var(--card);
+  border:1px solid var(--line);
+  flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:5px;
+  padding:0;
+}
+.hamburger-line{
+  display:block;
+  width:18px;height:2px;
+  background:var(--ink);
+  border-radius:2px;
+  transition:transform .25s ease, opacity .25s ease;
+}
+.hamburger-btn.open .hamburger-line:nth-child(1){
+  transform:translateY(7px) rotate(45deg);
+}
+.hamburger-btn.open .hamburger-line:nth-child(2){
+  opacity:0;
+}
+.hamburger-btn.open .hamburger-line:nth-child(3){
+  transform:translateY(-7px) rotate(-45deg);
+}
+
+/* ---------- Mobile nav ---------- */
+.mobile-nav-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(36,31,28,.5);
+  z-index:99;
+}
+.mobile-nav-overlay.open{display:block;}
+
+.mobile-nav{
+  position:fixed;
+  top:0;
+  right:-300px;
+  width:280px;
+  /* dvh (with a vh fallback) keeps the drawer inside the VISIBLE viewport on
+     iOS Safari, where 100vh extends under the bottom toolbar */
+  height:100vh;
+  height:100dvh;
+  background:var(--card);
+  z-index:100;
+  box-shadow:-4px 0 20px rgba(36,31,28,.15);
+  transition:right .3s ease;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+}
+.mobile-nav.open{right:0;}
+
+.mobile-nav-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 20px;
+  border-bottom:1px solid var(--line);
+}
+.mobile-nav-header .brand span{
+  font-family:'Tajawal',sans-serif;
+  font-weight:800;
+  font-size:1.2rem;
+  color:var(--ink);
+}
+.mobile-nav-header .brand img{height:36px;width:auto;}
+.mobile-nav-close{
+  width:36px;height:36px;
+  border-radius:50%;
+  background:var(--sand);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink);
+}
+.mobile-nav-close .material-symbols-outlined{font-size:20px;}
+
+.mobile-nav-links{
+  padding:12px 0;
+}
+.mobile-nav-links li a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 20px;
+  font-weight:600;
+  font-size:.95rem;
+  color:var(--ink);
+  transition:background .15s ease;
+}
+.mobile-nav-links li a:hover{background:var(--sand);}
+.mobile-nav-links li a.active{background:var(--brick);color:#fff;}
+.mobile-nav-links li a .material-symbols-outlined{font-size:20px;}
+
+/* ---------- Profile panel (mirrors mobile nav, left side) ---------- */
+.profile-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(36,31,28,.5);
+  z-index:99;
+}
+.profile-overlay.open{display:block;}
+
+.profile-panel{
+  position:fixed;
+  top:0;
+  left:-300px;
+  width:280px;
+  height:100vh;
+  height:100dvh;
+  background:var(--card);
+  z-index:100;
+  box-shadow:4px 0 20px rgba(36,31,28,.15);
+  transition:left .3s ease;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+}
+.profile-panel.open{left:0;}
+
+@media (max-width:720px){
+  .profile-panel{
+    left:auto;
+    right:-300px;
+  }
+  .profile-panel.open{right:0;}
+}
+
+.profile-panel-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 20px;
+  border-bottom:1px solid var(--line);
+}
+.profile-panel-title{
+  font-family:'Tajawal',sans-serif;
+  font-weight:800;
+  font-size:1.1rem;
+  color:var(--ink);
+}
+.profile-panel-close{
+  width:36px;height:36px;
+  border-radius:50%;
+  background:var(--sand);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink);
+}
+.profile-panel-close .material-symbols-outlined{font-size:20px;}
+
+.profile-panel-body{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:32px 20px 24px;
+  border-bottom:1px solid var(--line);
+}
+.profile-avatar{
+  width:80px;height:80px;
+  border-radius:50%;
+  background:var(--sand);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:14px;
+}
+.profile-avatar .material-symbols-outlined{font-size:48px;color:var(--muted);}
+.profile-name{
+  font-family:'Tajawal',sans-serif;
+  font-weight:800;
+  font-size:1.1rem;
+  color:var(--ink);
+  margin-bottom:4px;
+}
+.profile-email{
+  color:var(--muted);
+  font-size:.88rem;
+}
+
+.profile-panel-actions{
+  display:flex;
+  flex-direction:column;
+  padding:12px 0;
+  margin-top:auto;
+}
+
+/* On phones the action buttons sit right under the profile info instead of
+   being pushed to the very bottom of the panel */
+@media (max-width:720px){
+  .profile-panel-actions{
+    margin-top:0;
+  }
+}
+.profile-action-btn{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 20px;
+  font-weight:600;
+  font-size:.95rem;
+  color:var(--ink);
+  transition:background .15s ease;
+  border:none;
+  background:none;
+  width:100%;
+  text-align:right;
+  cursor:pointer;
+}
+.profile-action-btn:hover{background:var(--sand);}
+.profile-action-btn .material-symbols-outlined{font-size:22px;color:var(--muted);}
+.profile-logout{color:var(--brick);}
+.profile-logout .material-symbols-outlined{color:var(--brick);}
+
+
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:13px 26px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:.95rem;
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.btn-primary{background:var(--brick);color:#fff;box-shadow:var(--shadow-sm);}
+.btn-primary:hover{background:var(--brick-dark);}
+.btn-outline{background:transparent;color:var(--ink);border:1.5px solid var(--line);}
+.btn-outline:hover{border-color:var(--brick);color:var(--brick);}
+.btn-block{width:100%;}
+.btn-sm{padding:9px 16px;font-size:.85rem;}
+.btn-danger{background:var(--brick);color:#fff;box-shadow:var(--shadow-sm);}
+.btn-danger:hover{background:var(--brick-dark);}
+
+/* ---------- Section title ---------- */
+.section-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  margin-bottom:22px;
+  gap:16px;
+}
+.section-head h2{font-size:1.6rem;}
+.section-head .link-more{
+  display:flex;align-items:center;gap:4px;
+  color:var(--brick);font-weight:700;font-size:.9rem;flex:none;
+}
+
+/* ---------- Product card ---------- */
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+.product-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  transition:box-shadow .15s ease, transform .15s ease;
+  position:relative;
+}
+.product-card:hover{box-shadow:var(--shadow);transform:translateY(-3px);}
+.product-thumb{
+  aspect-ratio:1/1;
+  background:var(--sand);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--brick);
+  position:relative;
+  overflow:hidden;
+}
+.product-thumb img{
+  width:100%;height:100%;object-fit:cover;
+}
+.product-thumb .placeholder-icon{font-size:44px;}
+
+/* ── Image loading spinner ──
+   Spins in the middle of the thumb until the photo finishes loading,
+   then the image fades in and the spinner disappears. */
+.product-thumb .img-spinner{
+  position:absolute;
+  top:50%;left:50%;
+  width:30px;height:30px;
+  margin:-15px 0 0 -15px;
+  border:3px solid rgba(178,58,46,.22);
+  border-top-color:var(--brick);
+  border-radius:50%;
+  animation:img-spin .8s linear infinite;
+  z-index:1;
+}
+@keyframes img-spin{to{transform:rotate(360deg);}}
+.product-thumb img.thumb-img{opacity:0;transition:opacity .25s ease;}
+.product-card.img-loaded .thumb-img{opacity:1;}
+.product-card.img-loaded .img-spinner,
+.product-card.img-failed .img-spinner{display:none;}
+.product-card.img-failed .thumb-img{display:none;}
+.badge{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:var(--brick);
+  color:#fff;
+  font-size:.72rem;
+  font-weight:700;
+  padding:4px 10px;
+  border-radius:999px;
+  z-index:2;
+}
+.product-info{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1;}
+.product-info .p-cat{color:var(--muted);font-size:.78rem;font-weight:600;}
+.product-info h3{font-size:1rem;font-family:'Cairo',sans-serif;font-weight:700;}
+
+/* Price display */
+.p-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;}
+.price-area{display:flex;flex-direction:column;gap:2px;}
+.price{font-weight:800;color:var(--brick);font-size:1.05rem;}
+.price small{font-weight:600;color:var(--muted);font-size:.75rem;}
+.price-before{
+  font-size:.82rem;
+  color:var(--muted);
+  text-decoration:line-through;
+  font-weight:600;
+}
+
+/* Add to cart / Remove buttons */
+.add-btn{
+  width:38px;height:38px;
+  border-radius:50%;
+  background:var(--ink);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.remove-btn{
+  width:38px;height:38px;
+  border-radius:50%;
+  background:var(--brick);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+
+/* ── "مضاف إلى السلة" tag ──
+   Every card permanently reserves a band for this tag at the bottom of its
+   info area, so showing/hiding it NEVER changes the card height (no rows
+   jumping taller when a product is added). The band is empty on cards that
+   are not in the cart; the tag is toggled with visibility so it keeps
+   occupying its reserved space either way. white-space:nowrap keeps it on
+   a single line. */
+.in-cart-tag{
+  display:flex;
+  visibility:hidden;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  margin-top:10px;
+  align-self:stretch;
+  background:#1f9d55;
+  color:#fff;
+  font-size:.75rem;
+  font-weight:700;
+  padding:5px 10px;
+  border-radius:999px;
+  white-space:nowrap;
+}
+.product-card.in-cart .in-cart-tag{visibility:visible;animation:fadeInUp .25s ease;}
+.in-cart-tag .material-symbols-outlined{font-size:15px;}
+
+/* Add to cart message overlay */
+.cart-message{
+  position:absolute;
+  inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(36,31,28,.7);
+  color:#fff;
+  font-weight:700;
+  font-size:.9rem;
+  text-align:center;
+  padding:12px;
+  z-index:5;
+  animation:fadeInUp .3s ease;
+}
+@keyframes fadeInUp{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ---------- Empty state ---------- */
+.empty-state{
+  text-align:center;
+  padding:60px 20px;
+  color:var(--muted);
+  /* JS may set display:flex on empty states — keep the contents stacked */
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+}
+.empty-state .material-symbols-outlined{
+  font-size:64px;
+  margin-bottom:16px;
+  color:var(--line);
+}
+.empty-state h3{
+  font-size:1.2rem;
+  color:var(--ink);
+  margin-bottom:8px;
+}
+
+/* ---------- Footer ---------- */
+.site-footer{
+  margin-top:70px;
+  background:var(--ink);
+  color:#EFE6D8;
+  padding:46px 0 22px;
+}
+.footer-grid{
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1fr 1.1fr;
+  gap:30px;
+  padding-bottom:30px;
+  border-bottom:1px solid rgba(239,230,216,.15);
+}
+.footer-grid .brand span{color:#fff;}
+.footer-grid p{color:#B9AE9C;font-size:.88rem;margin-top:10px;}
+.footer-col h4{font-family:'Tajawal',sans-serif;font-size:.95rem;margin-bottom:14px;color:#fff;}
+.footer-col ul li{margin-bottom:10px;}
+.footer-col a{color:#B9AE9C;font-size:.88rem;}
+.footer-col a:hover{color:#fff;}
+.footer-bottom{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:20px;color:#8A7F71;font-size:.82rem;
+}
+.social{display:flex;gap:10px;}
+.social a{
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(239,230,216,.08);
+  display:flex;align-items:center;justify-content:center;
+  color:#EFE6D8;
+}
+
+/* ---------- Generic page hero band ---------- */
+.page-hero{
+  padding:40px 0 8px;
+}
+.page-hero h1{font-size:2rem;}
+.page-hero p{color:var(--muted);margin-top:6px;}
+
+/* ---------- Responsive ---------- */
+@media (max-width:960px){
+  .product-grid{grid-template-columns:repeat(3,1fr);}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:720px){
+  .main-nav{display:none;}
+  .hamburger-btn{display:flex;}
+  #profile-btn{display:none;}
+  .product-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media (max-width:520px){
+  .footer-grid{grid-template-columns:1fr;}
+}
+
+:focus-visible{outline:2.5px solid var(--brick);outline-offset:2px;}
+
+/* ── Header logout confirmation popup ── */
+.header-logout-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -46%);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  padding: 24px;
+  width: min(340px, calc(100vw - 32px));
+  z-index: 3000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.header-logout-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+
+.header-logout-text {
+  font-weight: 700;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.header-logout-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.header-logout-actions .btn {
+  flex: 1;
+  /* Keep the label on a single line even on narrow screens — the long
+     تسجيل الخروج text was wrapping into two stacked words */
+  white-space: nowrap;
+  padding-left: 14px;
+  padding-right: 14px;
+  font-size: 0.9rem;
+}
+
+/* Buttons need clearly visible borders everywhere (owner request: the thin
+   default outline was barely visible) */
+.btn-outline {
+  border-width: 2px;
+}
+
+/* ---------- Skeleton loading placeholders ---------- */
+.skel{
+  display:block;
+  background:var(--sand);
+  border-radius:8px;
+  animation:skel-pulse 1.4s ease-in-out infinite;
+}
+@keyframes skel-pulse{
+  0%, 100%{opacity:1;}
+  50%{opacity:.45;}
+}
+.skel-block{width:100%;height:100%;}
+.skel-line{height:12px;margin-bottom:8px;}
+.skel-line.w-30{width:30%;}
+.skel-line.w-40{width:40%;}
+.skel-line.w-60{width:60%;}
+.skel-line.w-80{width:80%;}
+.skel-line.w-100{width:100%;}
+.skel-circle{width:42px;height:42px;border-radius:50%;flex:none;}
+.skel-thumb{width:64px;height:64px;border-radius:12px;flex:none;}
+.skel-inline{display:inline-block;width:70px;height:12px;border-radius:8px;background:var(--sand);animation:skel-pulse 1.4s ease-in-out infinite;}
+.product-card.skeleton-card .product-thumb{height:170px;background:var(--sand);border-radius:14px;padding:0;}
+.product-card.skeleton-card .product-info{padding-top:12px;}
+.order-card.skeleton-card{padding:18px;}
+.tracking-skeleton-item{display:flex;gap:14px;align-items:center;padding:12px 0;}
+.tracking-skeleton-item .ts-lines{flex:1;}
+
+/* ---------- Maintenance mode ---------- */
+/* Full-width banner under the header while the store is paused */
+.maintenance-banner{
+  background:var(--amber);
+  color:#fff;
+  font-weight:700;
+  text-align:center;
+  padding:10px 16px;
+  font-size:.95rem;
+  display:none;
+}
+.maintenance-banner.show{display:block;}
+
+/* Disabled add-to-cart buttons while the store is paused */
+body.maintenance-mode .add-btn,
+body.maintenance-mode .qty-plus,
+body.maintenance-mode .qty-minus{
+  opacity:.4;
+  pointer-events:none;
+}
+
+/* Dashboard-style toggle (used on the owner settings page) */
+.mm-toggle-switch{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px 18px;
+  margin-bottom:14px;
+}
+.mm-toggle-text strong{display:block;font-size:1rem;}
+.mm-toggle-text span{font-size:.85rem;color:var(--muted);}
+.mm-switch{
+  position:relative;
+  width:52px;height:28px;
+  flex:none;
+  -webkit-appearance:none;
+  appearance:none;
+  background:var(--line);
+  border-radius:999px;
+  outline:none;
+  transition:background .2s ease;
+  cursor:pointer;
+}
+.mm-switch::before{
+  content:'';
+  position:absolute;
+  top:3px;right:3px;
+  width:22px;height:22px;
+  background:#fff;
+  border-radius:50%;
+  transition:transform .2s ease;
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+.mm-switch:checked{background:var(--amber);}
+.mm-switch:checked::before{transform:translateX(-24px);}
+
+/* Generic disabled button state */
+.btn-disabled{
+  opacity:.5;
+  pointer-events:none;
+}

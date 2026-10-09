@@ -1,0 +1,849 @@
+/* ===== Settings Page ===== */
+
+body, html {
+  overflow-x: hidden;
+}
+
+.settings-page {
+  padding: 40px 0 80px;
+}
+
+.settings-header {
+  margin-bottom: 32px;
+}
+
+.settings-header h1 {
+  font-size: 1.8rem;
+  color: var(--ink);
+}
+
+.settings-header p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: 6px;
+}
+
+/* Layout Wrapper */
+.settings-wrapper {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+/* Sidebar Navigation (Desktop) */
+.settings-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  padding: 12px 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.tab-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: right;
+  padding: 14px 20px;
+  background: transparent;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--muted);
+  border-right: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.tab-link.active {
+  color: var(--brick);
+  background: rgba(178, 58, 46, 0.05);
+  border-right-color: var(--brick);
+}
+
+.tab-link .material-symbols-outlined {
+  font-size: 22px;
+}
+
+/* Main Content Area */
+.settings-content {
+  flex: 1;
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+  min-height: 480px;
+}
+
+.tab-content {
+  display: none;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-title {
+  font-size: 1.3rem;
+  margin-bottom: 24px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+}
+
+.tab-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+}
+
+/* ── Info Badges ── */
+.info-badges-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.info-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  flex: 1;
+  min-width: 200px;
+}
+
+.info-badge .material-symbols-outlined {
+  color: var(--muted);
+  font-size: 28px;
+}
+
+.info-badge div {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-badge small {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.info-badge strong {
+  color: var(--ink);
+  font-size: 1rem;
+  font-family: 'Tajawal', sans-serif;
+}
+
+/* Forms Styling */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.95rem;
+  background: var(--paper);
+  color: var(--ink);
+  transition: all 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--brick);
+  background: var(--card);
+  box-shadow: 0 0 0 3px rgba(178, 58, 46, 0.1);
+}
+
+/* Disabled Input Styling */
+.form-control:disabled,
+.form-control[readonly] {
+  background: var(--sand);
+  color: var(--muted);
+  cursor: not-allowed;
+  border-color: var(--line);
+  opacity: 0.8;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.settings-actions {
+  margin-top: 32px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ── Addresses Tab Styling ── */
+.addresses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.address-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s;
+}
+
+.default-address {
+  border-color: var(--brick);
+  background: rgba(178, 58, 46, 0.03);
+}
+
+.address-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: var(--brick);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.address-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.address-header .material-symbols-outlined {
+  color: var(--muted);
+  font-size: 22px;
+}
+
+.default-address .address-header .material-symbols-outlined {
+  color: var(--brick);
+}
+
+.address-header h4 {
+  font-family: 'Tajawal', sans-serif;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.address-text {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+.address-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: auto;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
+.text-btn {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: transparent;
+  padding: 0;
+}
+
+.edit-btn { color: var(--brick); }
+.delete-btn { color: #d32f2f; }
+.default-btn { color: var(--muted); }
+
+/* ── Toggle Switch (الإشعارات) ── */
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+  gap: 16px;
+}
+
+.toggle-label {
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.toggle-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  display: block;
+  margin-top: 4px;
+}
+
+input[type="checkbox"].toggle-input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 48px;
+  height: 26px;
+  background: var(--line);
+  border-radius: 999px;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.3s;
+  flex-shrink: 0;
+}
+
+input[type="checkbox"].toggle-input::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+input[type="checkbox"].toggle-input:checked {
+  background: var(--green);
+}
+
+input[type="checkbox"].toggle-input:checked::after {
+  transform: translateX(-22px);
+}
+
+/* ── Mobile Back Button ── */
+.mobile-back-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 12px 20px;
+  margin-bottom: 24px;
+  cursor: pointer;
+  width: 100%;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.mobile-back-btn:active {
+  background: var(--line);
+}
+
+.mobile-back-btn .material-symbols-outlined {
+  font-size: 20px;
+  color: var(--brick);
+}
+
+/* ── Hover Effects (Desktop Only) ── */
+@media (hover: hover) {
+  .tab-link:hover {
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .address-card:hover {
+    border-color: var(--muted);
+  }
+
+  .text-btn:hover {
+    text-decoration: underline;
+  }
+}
+
+/* ── Responsive (الجوال) ── */
+@media (max-width: 800px) {
+  .settings-page {
+    padding: 24px 20px 80px; 
+  }
+
+  .settings-wrapper {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .settings-sidebar {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+  
+  .settings-sidebar.hidden-on-mobile {
+    display: none;
+  }
+
+  .tab-link {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    justify-content: flex-start;
+    padding: 16px 20px;
+    font-size: 1rem;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .tab-link.active {
+    color: var(--muted);
+    background: var(--card);
+    border: 1px solid var(--line);
+  }
+
+  .settings-content {
+    display: none; 
+    width: 100%;
+    padding: 24px 16px;
+  }
+
+  .settings-content.active-on-mobile {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .mobile-back-btn {
+    display: flex;
+  }
+}
+
+@media (min-width: 801px) {
+  .settings-sidebar {
+    display: block !important;
+  }
+  .settings-content {
+    display: block !important;
+  }
+  .mobile-back-btn {
+    display: none !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .info-badge {
+    max-width: 100% !important;
+    width: 100%;
+  }
+
+  .form-row, .info-badges-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .settings-actions {
+    justify-content: center;
+  }
+
+  .settings-actions .btn {
+    width: 100%;
+  }
+
+  .tab-header-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .toggle-switch {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .toggle-switch .btn {
+    width: 100%;
+  }
+}
+/* ── Muted inline note (phone field hint) ── */
+.muted-note {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-weight: normal;
+}
+
+/* ── Danger outline (تسجيل الخروج in the actions row) ── */
+.btn-danger-outline {
+  background: transparent;
+  color: #d32f2f;
+  border: 1.5px solid #d32f2f;
+}
+
+.btn-danger-outline:hover {
+  background: rgba(211, 47, 47, 0.06);
+}
+
+.settings-actions {
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ── Address default checkbox in the modal ── */
+.address-default-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.address-default-check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brick);
+  cursor: pointer;
+}
+
+/* ── Settings Modals (address form + logout confirm) ── */
+.settings-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.settings-modal-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.settings-modal {
+  background: var(--card);
+  border-radius: var(--radius);
+  width: min(440px, calc(100vw - 32px));
+  /* dvh keeps the modal inside the VISIBLE viewport on iOS Safari, where
+     100vh extends under the bottom toolbar */
+  max-height: calc(100vh - 48px);
+  max-height: calc(100dvh - 48px);
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  transform: translateY(14px);
+  transition: transform 0.2s ease;
+}
+
+.settings-modal-overlay.open .settings-modal {
+  transform: translateY(0);
+}
+
+.settings-modal-sm {
+  width: min(360px, calc(100vw - 32px));
+}
+
+.settings-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 0;
+}
+
+.settings-modal-header h3 {
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+.settings-modal-close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 4px;
+  display: flex;
+}
+
+.settings-modal-close:hover {
+  color: var(--ink);
+}
+
+.settings-modal-body {
+  padding: 20px 24px;
+}
+
+.settings-modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 0 24px 24px;
+}
+
+.logout-confirm-text {
+  font-weight: 700;
+  color: var(--ink);
+  font-size: 1rem;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .settings-modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .settings-modal-actions .btn {
+    width: 100%;
+  }
+}
+
+/* ── Owner tools in the settings sidebar ── */
+.owner-tools-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.owner-tools-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+a.owner-tool-link {
+  text-decoration: none;
+}
+
+a.owner-tool-link .material-symbols-outlined {
+  color: var(--brick);
+}
+
+@media (max-width: 800px) {
+  .owner-tools-divider {
+    padding: 6px 4px 2px;
+  }
+}
+
+/* ── Change password section ── */
+.password-change-box {
+  margin-top: 28px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
+.password-change-title {
+  font-family: 'Tajawal', sans-serif;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.password-field-group {
+  position: relative;
+}
+
+.password-field-group .form-control {
+  width: 100%;
+  padding-left: 44px;
+}
+
+.password-eye {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.password-eye:hover {
+  background: var(--sand);
+  color: var(--ink);
+}
+
+.password-eye .material-symbols-outlined {
+  font-size: 20px;
+}
+
+/* ── Location note inside the address modal ── */
+.settings-modal .location-note-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  margin-top: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--sand);
+}
+
+.settings-modal .location-note-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.settings-modal .location-enable-btn {
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  border: 2px solid var(--brick);
+  color: var(--brick);
+  background: #fff;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.settings-modal .location-enable-btn:hover {
+  background: var(--brick);
+  color: #fff;
+}
+
+.modal-location-success,
+.modal-location-blocked {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.modal-location-success {
+  border: 1px solid #bfe3c8;
+  background: #eef8f0;
+  color: #1e6b34;
+}
+
+.modal-location-blocked {
+  border: 1px solid #efd8b4;
+  background: #fdf6ea;
+  color: #8a5a12;
+}
+
+.modal-location-success .material-symbols-outlined,
+.modal-location-blocked .material-symbols-outlined {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.modal-location-blocked .material-symbols-outlined {
+  color: #b97a14;
+}
+
+.modal-location-success .material-symbols-outlined {
+  color: #2c8c48;
+}
+
+/* ── «نسيت كلمة المرور؟» next to تغيير كلمة المرور ───────────────
+   The button borrows the login page's .auth-switch-link, but the settings
+   page loads common.css + settings.css only — auth.css is not among them,
+   so it rendered as a raw browser button. It gets its own quiet "link"
+   treatment here, with the reset icon the login page's version has. */
+.settings-actions .forgot-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 42px;
+  padding: 0 4px;
+  background: transparent;
+  border: none;
+  color: var(--brick);
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.settings-actions .forgot-link::before {
+  content: 'lock_reset';
+  font-family: 'Material Symbols Outlined';
+  font-size: 18px;
+  font-weight: normal;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'opsz' 24;
+}
+
+.settings-actions .forgot-link:hover {
+  color: var(--brick-dark);
+  text-decoration: none;
+}
+
+.settings-actions .forgot-link:active {
+  opacity: 0.7;
+}
+
+.settings-actions .forgot-link:focus-visible {
+  outline: none;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 3px rgba(178, 58, 46, 0.1);
+}
+
+@media (max-width: 600px) {
+  .settings-actions .forgot-link {
+    width: 100%;
+  }
+}

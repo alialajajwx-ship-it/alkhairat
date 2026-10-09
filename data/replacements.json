@@ -1,0 +1,96 @@
+{
+  "ORD-260926010525": {
+    "orderId": "ORD-260926010525",
+    "replacements": [
+      {
+        "productId": "6eb2dc2c",
+        "name": "حليب المراعي",
+        "state": "unavailable",
+        "ordered": 1,
+        "available": 0,
+        "unlimitedUntil": null
+      },
+      {
+        "productId": "9d83227c",
+        "name": "جبنة كيري",
+        "state": "unavailable",
+        "ordered": 1,
+        "available": 0,
+        "unlimitedUntil": null
+      }
+    ],
+    "markedAt": "2026-09-27T21:07:10.529Z"
+  },
+  "ORD-260928190237": {
+    "orderId": "ORD-260928190237",
+    "replacements": [],
+    "markedAt": "2026-09-28T16:06:57.214Z"
+  },
+  "ORD-260928152212": {
+    "orderId": "ORD-260928152212",
+    "replacements": [],
+    "markedAt": "2026-09-28T16:11:20.503Z"
+  },
+  "ORD-260928191425": {
+    "orderId": "ORD-260928191425",
+    "replacements": [
+      {
+        "productId": "20589c87",
+        "name": "لبن زبادي",
+        "state": "available",
+        "ordered": 0,
+        "available": 0,
+        "unlimitedUntil": null
+      }
+    ],
+    "markedAt": "2026-09-28T16:32:04.199Z"
+  },
+  "ORD-260928193329": {
+    "orderId": "ORD-260928193329",
+    "replacements": [
+      {
+        "productId": "20589c87",
+        "name": "لبن زبادي",
+        "state": "low",
+        "ordered": 8,
+        "available": 4,
+        "unlimitedUntil": null
+      },
+      {
+        "productId": "9d83227c",
+        "name": "جبنة كيري",
+        "state": "available",
+        "ordered": 0,
+        "available": 0,
+        "unlimitedUntil": null
+      },
+      {
+        "productId": "ededae23",
+        "name": "لبنة",
+        "state": "available",
+        "ordered": 0,
+        "available": 0,
+        "unlimitedUntil": null
+      },
+      {
+        "productId": "6eb2dc2c",
+        "name": "حليب المراعي",
+        "state": "available",
+        "ordered": 0,
+        "available": 0,
+        "unlimitedUntil": null
+      }
+    ],
+    "markedAt": "2026-09-28T16:34:45.214Z"
+  },
+  "ORD-260929140206": {
+    "orderId": "ORD-260929140206",
+    "replacements": [],
+    "markedAt": "2026-09-29T18:10:46.199Z"
+  },
+  "ORD-260929223706": {
+    "orderId": "ORD-260929223706",
+    "replacements": [],
+    "markedAt": "2026-09-29T19:49:51.707Z"
+  }
+}

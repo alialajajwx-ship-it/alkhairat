@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تم تاكيد الطلب | الخيرات</title>
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/confirmed.css">
+</head>
+<body>
+
+<%- include('partials/header', { activePage: '' }) %>
+
+<main class="container confirmed-wrap">
+  <div class="confirmed-card">
+    <div class="success-icon"><span class="material-symbols-outlined">check</span></div>
+    <div class="eyebrow center"><span class="diamond"></span> تم استلام طلبك</div>
+    <h1>شكراً لك، تم استلام طلبك بنجاح</h1>
+
+    <div class="notice-box">
+      <span class="material-symbols-outlined">sms</span>
+      <div class="notice-text">
+        <strong>ملاحظة مهمة:</strong>
+        طلبك الآن قيد المراجعة من قبل المتجر وليس مؤكد. ستصلك رسالة إلى رقم جوالك تأكد لك استلام الطلب وإبلاغك إذا كان الطلب في الطريق إليك أو لا. يرجى الانتظار ومتابعة رسائل جوالك بشكل مستمر.
+      </div>
+    </div>
+
+    <!-- Card orders only: the amount is HELD on the card now, the actual
+         withdrawal waits for the store's approval. Filled in by confirmed.js. -->
+    <div class="notice-box hold-notice" id="card-hold-notice" style="display:none;">
+      <span class="material-symbols-outlined">credit_card</span>
+      <div class="notice-text">
+        سيتم حجز مبلغ الطلب (<strong id="card-hold-amount">0.00 ر.س</strong>) على بطاقتك الآن، ولن يتم سحبه إلا بعد موافقة المتجر على طلبك.
+      </div>
+    </div>
+
+    <div class="order-meta" id="confirmed-meta">
+      <div><span>رقم الطلب</span><strong id="c-order-id">#-</strong></div>
+      <div><span>اجمالي الطلب</span><strong id="c-total">0 ر.س</strong></div>
+    </div>
+
+    <div class="confirmed-actions">
+      <a href="/orders" class="btn btn-primary">عرض طلباتي</a>
+      <a href="/browse" class="btn btn-outline">تصفح المنتجات</a>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+
+<script type="module" src="/js/scripts/confirmed.js"></script>
+</body>
+</html>

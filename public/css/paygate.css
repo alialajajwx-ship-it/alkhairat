@@ -1,0 +1,189 @@
+/* ══════════════════════════════════════════════════════════════
+   paygate.css — Payment gateway modal (checkout page)
+   Built from scratch. Uses ONLY the pg-* namespace — it shares
+   no class with any other stylesheet on the site, so nothing can
+   override or hide it.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Fullscreen overlay (the modal lives directly in <body>) ── */
+#pg-overlay {
+  display: none;                 /* closed by default — JS adds .pg-open */
+  position: fixed;
+  inset: 0;
+  z-index: 9999;                 /* above everything on the page */
+  background: rgba(20, 16, 14, 0.62);
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  /* Safety net: if the card ever exceeds the viewport, the overlay scrolls
+     rather than letting the checkout page behind it move. */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* The single switch the JS uses: no display:none fights, no
+   inline styles, just one class toggled on/off. */
+#pg-overlay.pg-open {
+  display: flex;
+}
+
+/* ── The modal card ──
+   The card owns its scroll. max-height is capped to the overlay's inner
+   height (viewport minus the 18px padding on each side) so on short screens
+   the FORM scrolls internally instead of the page behind it. dvh tracks the
+   mobile URL bar; the vh line is the fallback for older browsers. */
+#pg-card {
+  width: 100%;
+  max-width: 420px;
+  max-height: 92vh;
+  max-height: calc(100dvh - 36px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 22px 22px 18px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+  direction: rtl;
+  box-sizing: border-box;
+}
+
+/* ── Header ── */
+#pg-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+#pg-title {
+  font-family: 'Cairo', sans-serif;
+  font-weight: 800;
+  font-size: 1.02rem;
+  color: #241f1c;
+}
+#pg-close {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #f3f1ec;
+  color: #241f1c;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+#pg-close:hover { background: #e4e0d8; }
+#pg-close .material-symbols-outlined { font-size: 18px; }
+
+/* ── Hold notice (explains the authorization-only hold) ── */
+#pg-hold-note {
+  font-size: 0.83rem;
+  line-height: 1.75;
+  color: #3d3630;
+  background: #f6f4ef;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+
+/* ── Mock gateway form ── */
+#pg-mock-form { text-align: right; }
+
+.pg-field { margin-bottom: 13px; }
+
+.pg-field label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #3d3630;
+  margin-bottom: 6px;
+}
+
+.pg-field input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #ddd8cf;
+  border-radius: 10px;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.95rem;
+  background: #fff;
+  color: #241f1c;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.pg-field input:focus {
+  border-color: #b23a2e;
+  box-shadow: 0 0 0 3px rgba(178, 58, 46, 0.12);
+}
+
+/* Card name/number are written in Latin — keep them LTR and left-aligned
+   even though the page itself is RTL. */
+#pg-holder,
+#pg-number {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Expiry + CVV side by side (stack on narrow screens) */
+#pg-split {
+  display: flex;
+  gap: 12px;
+}
+#pg-split .pg-field { flex: 1; }
+
+/* ── Validation error box ── */
+#pg-error {
+  display: none;                 /* JS fills + unhides it */
+  color: #b91c1c;
+  background: #fef2f2;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  margin: 0 0 14px;
+}
+
+/* ── Pay button ── */
+#pg-pay {
+  width: 100%;
+  padding: 13px 16px;
+  border: none;
+  border-radius: 10px;
+  background: #b23a2e;
+  color: #fff;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+#pg-pay:hover { opacity: 0.92; }
+#pg-pay:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Small secure-payment note under the form ── */
+#pg-secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 14px;
+  color: #8a8178;
+  font-size: 0.76rem;
+}
+
+/* ── Real mode: Moyasar SDK mount ── */
+#pg-moyasar-mount { text-align: right; }
+
+/* ── Mobile ── */
+@media (max-width: 520px) {
+  #pg-card { padding: 18px 16px 14px; }
+  #pg-split { flex-direction: column; gap: 0; }
+}

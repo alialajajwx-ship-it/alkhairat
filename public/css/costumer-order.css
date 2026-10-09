@@ -1,0 +1,409 @@
+/* ===== Order details page (standalone, no header/footer) ===== */
+.od-body{
+  background:#F3F5FA;
+}
+
+.order-details-wrap{
+  max-width:1220px;
+  padding:34px 24px 70px;
+}
+
+/* Title row */
+.od-title-row{
+  padding-bottom:20px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:26px;
+}
+.od-title-group{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+}
+.od-title-row h1{
+  font-size:clamp(1.15rem,3vw,1.7rem);
+  color:var(--ink);
+  white-space:nowrap;
+}
+.order-code{color:var(--brick);}
+.back-link{
+  flex:none;
+  width:40px;height:40px;
+  border-radius:50%;
+  background:var(--card);
+  border:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink);
+}
+.back-link:hover{border-color:var(--brick);color:var(--brick);}
+
+/* Layout */
+.od-grid{
+  display:grid;
+  grid-template-columns:1fr 380px;
+  gap:24px;
+  align-items:start;
+}
+.od-main{display:flex;flex-direction:column;gap:20px;min-width:0;}
+.od-side{display:flex;flex-direction:column;gap:20px;min-width:0;}
+
+.panel{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:22px 26px;
+  min-width:0;
+}
+.panel h3{
+  display:flex;align-items:center;gap:8px;
+  font-size:1.05rem;
+  margin-bottom:20px;
+  color:var(--ink);
+}
+.panel h3 .material-symbols-outlined{color:var(--brick);font-size:20px;}
+
+/* Status bar */
+.status-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  padding:22px 26px;
+}
+.status-cell{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  min-width:110px;
+}
+.s-label{color:var(--muted);font-size:.8rem;font-weight:600;}
+.s-value{font-family:'Tajawal',sans-serif;font-weight:700;font-size:1rem;color:var(--ink);}
+.s-value.amount{font-size:1.5rem;color:var(--ink);}
+.status-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  width:fit-content;
+  background:rgba(60,122,84,.14);
+  color:var(--green);
+  font-weight:700;
+  font-size:.85rem;
+  padding:8px 16px;
+  border-radius:999px;
+}
+.status-pill .material-symbols-outlined{font-size:18px;}
+
+/* Items list */
+.items-panel h3{margin-bottom:4px;padding-bottom:18px;border-bottom:1px solid var(--line);}
+.items-list li{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:18px 0;
+  border-bottom:1px solid var(--line);
+}
+.items-list li:last-child{border-bottom:none;padding-bottom:0;}
+
+.item-thumb{
+  flex:none;
+  width:68px;height:68px;
+  border-radius:12px;
+  overflow:hidden;
+  background:var(--sand);
+  /* An ordered product that left the customer catalog (sold out → hidden,
+     deleted, …) still gets its row — with an icon instead of the photo */
+  display:flex;align-items:center;justify-content:center;
+}
+.item-thumb img{
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+}
+.item-thumb .material-symbols-outlined{
+  font-size:26px;
+  color:var(--muted);
+}
+
+.item-info{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  align-items:flex-start;
+  text-align:right;
+  flex:1;
+  min-width:0;
+}
+.item-info h4{
+  font-size:1rem;
+  font-family:'Cairo',sans-serif;
+  font-weight:700;
+  color:var(--ink);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:100%;
+}
+.item-qty{color:var(--muted);font-size:.85rem;}
+.item-price-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.item-price{color:var(--brick);font-weight:700;font-size:.88rem;}
+.item-price-before{color:var(--muted);font-size:.8rem;text-decoration:line-through;}
+.item-discount-tag{background:var(--brick);color:#fff;font-size:.65rem;padding:2px 6px;border-radius:6px;font-weight:700;white-space:nowrap;}
+
+.item-total{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  flex:none;
+  min-width:80px;
+  align-items:flex-start;
+  margin-left:auto;
+}
+.item-total .s-value{font-size:1rem;color:var(--ink);}
+
+/* Side: customer card */
+.customer-name{
+  font-family:'Cairo',sans-serif;
+  font-weight:700;
+  font-size:1.05rem;
+  color:var(--ink);
+  margin-bottom:10px;
+}
+.customer-phone{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:var(--muted);
+  font-size:.88rem;
+}
+.customer-phone .material-symbols-outlined{font-size:17px;color:var(--muted);}
+.side-divider{height:1px;background:var(--line);margin:18px 0;}
+.field-label{font-weight:700;font-size:.92rem;color:var(--ink);margin-bottom:6px;}
+.field-value{color:var(--muted);font-size:.88rem;}
+
+/* Side: financial summary */
+.sum-row{display:flex;justify-content:space-between;font-size:.92rem;color:var(--ink);padding:8px 0;}
+.sum-divider{height:1px;background:var(--line);margin:8px 0;}
+.sum-row.total{font-size:1.1rem;font-weight:800;}
+.sum-row.total span:last-child{color:var(--brick);}
+
+/* ── Owner: stage update panel ── */
+.owner-stage-panel h3{margin-bottom:14px;}
+.stage-buttons{display:flex;gap:10px;flex-wrap:wrap;}
+.stage-btn{
+  flex:1;
+  min-width:110px;
+  padding:11px 16px;
+  border-radius:var(--radius-sm);
+  border:1px solid var(--line);
+  background:var(--card);
+  color:var(--muted);
+  font-family:'Cairo',sans-serif;
+  font-weight:700;
+  font-size:.9rem;
+  cursor:pointer;
+  transition:all .2s ease;
+}
+.stage-btn:hover{border-color:var(--brick);color:var(--brick);}
+.stage-btn.active{
+  background:var(--brick);
+  border-color:var(--brick);
+  color:#fff;
+}
+
+/* ── Owner: confirm order panel ── */
+.owner-confirm-panel h3{margin-bottom:10px;}
+.owner-confirm-hint{color:var(--muted);font-size:.85rem;margin-bottom:16px;line-height:1.7;}
+.owner-confirm-done{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(60,122,84,.12);
+  color:var(--green);
+  font-weight:700;
+  font-size:.9rem;
+  padding:12px 14px;
+  border-radius:var(--radius-sm);
+}
+.owner-confirm-done .material-symbols-outlined{font-size:20px;}
+
+/* ── Owner: SMS popups ── */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(36,31,28,.5);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1200;
+  padding:20px;
+}
+.modal-overlay.visible{display:flex;}
+.sms-modal{
+  background:var(--card);
+  border-radius:16px;
+  padding:26px;
+  width:100%;
+  max-width:480px;
+  box-shadow:0 20px 50px rgba(36,31,28,.3);
+}
+.sms-modal h3{
+  font-size:1.05rem;
+  color:var(--ink);
+  margin-bottom:16px;
+  line-height:1.6;
+}
+.sms-message-box{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:var(--radius-sm);
+  padding:14px 16px;
+  margin-bottom:18px;
+}
+.sms-msg-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:10px;
+  margin-bottom:8px;
+}
+.icon-btn{
+  width:32px;height:32px;
+  border-radius:8px;
+  border:1px solid var(--line);
+  background:var(--card);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  color:var(--ink);
+}
+.icon-btn:hover{border-color:var(--brick);color:var(--brick);}
+.icon-btn .material-symbols-outlined{font-size:17px;}
+.text-btn{
+  background:none;
+  border:none;
+  color:var(--brick);
+  font-family:'Cairo',sans-serif;
+  font-weight:700;
+  font-size:.8rem;
+  cursor:pointer;
+  text-decoration:underline;
+}
+.sms-message-preview{
+  color:var(--ink);
+  font-size:.9rem;
+  line-height:1.9;
+  word-break:break-word;
+  /* The preview must show the SMS exactly as it will arrive: the message is
+     built from blocks separated by blank lines, and a collapsed <p> would
+     paste the link onto the sentence above it */
+  white-space:pre-wrap;
+}
+.sms-message-edit{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:var(--radius-sm);
+  padding:10px 12px;
+  font-family:'Cairo',sans-serif;
+  font-size:.9rem;
+  line-height:1.8;
+  resize:vertical;
+  background:var(--card);
+  color:var(--ink);
+}
+.sms-message-edit:focus{outline:none;border-color:var(--brick);}
+.sms-done-btn{margin-top:10px;}
+.sms-modal-actions{
+  display:flex;
+  gap:10px;
+}
+.sms-modal-actions .btn{flex:1;}
+
+@media (max-width:560px){
+  .sms-modal{padding:20px;}
+  .stage-btn{min-width:100%;}
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width:900px){
+  .od-grid{grid-template-columns:1fr;}
+  .od-side{order:2;}
+  .od-main{order:1;}
+}
+
+@media (max-width:560px){
+  .order-details-wrap{padding:24px 16px 50px;}
+  .od-title-row h1{font-size:1.05rem;white-space:normal;}
+  .status-bar{flex-direction:column;align-items:stretch;gap:16px;padding:18px;}
+  .status-cell{min-width:0;flex-direction:row;justify-content:space-between;align-items:center;}
+  .panel{padding:18px;}
+  .items-list li{flex-wrap:wrap;}
+  .item-total{
+    order:3;flex-direction:row;justify-content:space-between;align-items:center;
+    width:100%;min-width:0;margin-left:0;padding-top:10px;border-top:1px dashed var(--line);
+  }
+  .item-info{order:2;flex:1 1 auto;min-width:0;}
+  .item-thumb{order:1;}
+  .sms-modal-actions{flex-direction:column;}
+}
+/* Customer shared location map */
+.customer-map{
+  width:100%;
+  aspect-ratio:16/10;
+  border-radius:10px;
+  overflow:hidden;
+  border:1px solid var(--sand, #eee);
+  margin-bottom:10px;
+}
+.customer-map iframe{
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+}
+.map-open-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  text-decoration:none;
+  font-size:.85rem;
+}
+
+/* Stage buttons are locked until the order is confirmed by SMS */
+.stage-btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+.stage-lock-hint{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(192,138,46,.12);
+  color:var(--amber);
+  border-radius:var(--radius-sm);
+  padding:10px 14px;
+  font-size:.88rem;
+  font-weight:600;
+  margin-bottom:14px;
+}
+.stage-lock-hint .material-symbols-outlined{font-size:18px;}
+
+/* ---------- Loading skeleton (the order is still being fetched) ---------- */
+.od-skeleton{pointer-events:none;}
+.od-skel-bar{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+.od-skel-cell{min-width:0;}
+.od-skel-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:12px 0;
+  border-top:1px solid var(--line);
+}
+.od-skel-item:first-of-type{border-top:none;}
+.od-skel-item-info{flex:1;min-width:0;}
+@media (max-width:560px){
+  .od-skel-bar{grid-template-columns:1fr;}
+}
