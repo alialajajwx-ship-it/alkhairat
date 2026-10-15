@@ -1,0 +1,278 @@
+/* ===== Contact («تواصل معنا») + owner customer messages ===== */
+
+.contact-page{padding:24px 12px 48px;}
+
+.contact-hero{
+  text-align:center;
+  margin:8px auto 22px;
+  max-width:560px;
+}
+.contact-hero .material-symbols-outlined{
+  font-size:40px;
+  color:var(--brick);
+  display:block;
+  margin-bottom:6px;
+}
+.contact-hero h1{font-size:1.9rem;}
+.contact-hero p{color:var(--muted);margin:8px 0 0;font-size:.95rem;}
+
+.contact-card{
+  max-width:720px;
+  margin:0 auto;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:26px 22px;
+}
+
+.contact-form{display:block;}
+.contact-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+.contact-field{margin-bottom:16px;}
+.contact-field label{
+  display:block;
+  margin-bottom:6px;
+  font-size:.9rem;
+  font-weight:700;
+  color:var(--ink);
+}
+.required-star{color:var(--brick);}
+.optional-note{color:var(--muted);font-weight:500;font-size:.82rem;}
+
+.contact-input{
+  width:100%;
+  padding:11px 13px;
+  font-family:'Cairo',sans-serif;
+  font-size:.94rem;
+  color:var(--ink);
+  background:var(--paper);
+  border:1.5px solid var(--line);
+  border-radius:var(--radius-sm);
+  outline:none;
+  transition:border-color .15s ease,background .15s ease;
+}
+.contact-input:focus{border-color:var(--brick);background:var(--card);}
+.contact-textarea{resize:vertical;min-height:150px;line-height:1.8;}
+.contact-counter{
+  text-align:left;
+  font-size:.76rem;
+  color:var(--muted);
+  margin-top:4px;
+  direction:ltr;
+}
+.contact-actions{display:flex;justify-content:flex-start;}
+.contact-actions .btn{display:inline-flex;align-items:center;gap:8px;}
+
+.contact-success{
+  text-align:center;
+  padding:22px 8px;
+}
+.contact-success .material-symbols-outlined{
+  font-size:52px;
+  color:var(--green);
+  display:block;
+  margin-bottom:8px;
+}
+.contact-success h2{margin-bottom:6px;}
+.contact-success p{color:var(--muted);margin:4px 0;}
+.contact-success .btn{margin-top:14px;}
+
+/* ---------- Customer's own message history ---------- */
+
+.contact-history{
+  max-width:720px;
+  margin:28px auto 0;
+}
+.contact-history-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+.contact-history-head .material-symbols-outlined{
+  font-size:26px;
+  color:var(--brick);
+}
+.contact-history-head h2{font-size:1.15rem;}
+.contact-history-count{font-size:.82rem;color:var(--muted);}
+
+.history-list{display:flex;flex-direction:column;gap:12px;}
+
+.history-item{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-sm);
+  padding:14px 16px;
+}
+.history-item-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:6px;
+}
+.history-topic{
+  background:var(--sand);
+  color:var(--brick);
+  font-size:.78rem;
+  font-weight:700;
+  padding:3px 12px;
+  border-radius:999px;
+}
+.history-label{font-size:.8rem;font-weight:700;color:var(--muted);}
+.history-date{font-size:.76rem;color:var(--muted);white-space:nowrap;}
+.history-body{
+  margin:0;
+  font-size:.92rem;
+  line-height:1.9;
+  color:var(--ink);
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+/* ---------- Owner: customer messages ---------- */
+
+.messages-page{padding:24px 12px 48px;}
+
+.messages-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+.messages-title{display:flex;align-items:center;gap:12px;}
+.messages-title .material-symbols-outlined{
+  font-size:34px;
+  color:var(--brick);
+}
+.messages-title h1{font-size:1.5rem;}
+.messages-title p{margin:2px 0 0;color:var(--muted);font-size:.88rem;}
+.messages-head .btn{display:inline-flex;align-items:center;gap:6px;}
+
+.messages-toolbar{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:16px;
+}
+.messages-search{
+  flex:1 1 260px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 14px;
+  background:var(--card);
+  border:1.5px solid var(--line);
+  border-radius:999px;
+}
+.messages-search .material-symbols-outlined{font-size:20px;color:var(--muted);}
+.messages-search input{
+  flex:1;
+  min-width:0;
+  border:none;
+  outline:none;
+  background:transparent;
+  font-family:'Cairo',sans-serif;
+  font-size:.92rem;
+  color:var(--ink);
+}
+.messages-count{font-size:.85rem;color:var(--muted);white-space:nowrap;}
+
+.messages-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:16px;
+}
+
+.message-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-sm);
+  padding:16px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.message-card-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+}
+.message-who{display:flex;align-items:center;gap:10px;min-width:0;}
+.message-avatar{
+  width:38px;height:38px;
+  border-radius:50%;
+  background:var(--sand);
+  color:var(--brick);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+  flex:0 0 auto;
+}
+.message-name{display:block;font-size:.98rem;}
+.message-phone{display:block;font-size:.82rem;color:var(--muted);}
+.message-date{font-size:.76rem;color:var(--muted);white-space:nowrap;}
+.message-topic{
+  align-self:flex-start;
+  background:var(--sand);
+  color:var(--brick);
+  font-size:.78rem;
+  font-weight:700;
+  padding:4px 12px;
+  border-radius:999px;
+}
+.message-body{
+  margin:0;
+  font-size:.92rem;
+  line-height:1.9;
+  color:var(--ink);
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.message-actions{display:flex;gap:10px;margin-top:auto;}
+.message-wa{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:7px 14px;
+  border:1.5px solid var(--line);
+  border-radius:var(--radius-sm);
+  background:var(--paper);
+  font-size:.82rem;
+  font-weight:700;
+  color:var(--green);
+  transition:background .15s ease,border-color .15s ease;
+}
+.message-wa:hover{background:var(--sand);border-color:var(--green);}
+.message-wa .material-symbols-outlined{font-size:18px;}
+
+.messages-loading{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:40px 0;
+  color:var(--muted);
+  font-size:.92rem;
+}
+.messages-loading .material-symbols-outlined{
+  animation:contact-spin 1s linear infinite;
+}
+@keyframes contact-spin{to{transform:rotate(360deg);}}
+
+@media (max-width:640px){
+  .contact-row{grid-template-columns:1fr;gap:0;}
+  .contact-card{padding:20px 16px;}
+  .contact-hero h1{font-size:1.6rem;}
+  .messages-list{grid-template-columns:1fr;}
+}

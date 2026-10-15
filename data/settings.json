@@ -1,0 +1,16 @@
+{
+  "deliveryFee": 7,
+  "maintenanceMode": false,
+  "orderingHours": {
+    "enabled": false,
+    "days": [
+      { "day": 0, "open": false, "from": "16:00", "to": "20:00" },
+      { "day": 1, "open": false, "from": "16:00", "to": "20:00" },
+      { "day": 2, "open": false, "from": "16:00", "to": "20:00" },
+      { "day": 3, "open": false, "from": "16:00", "to": "20:00" },
+      { "day": 4, "open": false, "from": "16:00", "to": "20:00" },
+      { "day": 5, "open": false, "from": "16:00", "to": "20:00" },
+      { "day": 6, "open": false, "from": "16:00", "to": "20:00" }
+    ]
+  }
+}

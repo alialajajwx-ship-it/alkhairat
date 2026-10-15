@@ -1,0 +1,234 @@
+/* Login / signup page */
+
+.auth-page{
+  min-height:calc(100vh - 64px);
+  /* iOS Safari: 100vh reaches under the bottom toolbar, so the login form
+     could sit slightly too low; dvh tracks the visible viewport */
+  min-height:calc(100dvh - 64px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:32px 16px;
+}
+
+.auth-card{
+  width:100%;
+  max-width:420px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:36px 28px;
+  box-shadow:0 4px 24px rgba(0,0,0,.06);
+}
+
+.auth-title{
+  font-size:1.5rem;
+  font-weight:800;
+  text-align:center;
+  margin:0 0 4px;
+}
+
+.auth-page-subtitle{
+  text-align:center;
+  color:var(--muted);
+  font-size:.9rem;
+  margin:0 0 24px;
+}
+
+/* Shared pieces (also used by the checkout modal) */
+.auth-error{
+  color:#c0392b;
+  font-size:.85rem;
+  font-weight:700;
+  min-height:20px;
+  margin:4px 0 8px;
+  text-align:center;
+}
+
+.auth-field{
+  display:block;
+  margin-bottom:14px;
+}
+
+.auth-field label{
+  display:block;
+  font-size:.85rem;
+  font-weight:700;
+  margin-bottom:6px;
+}
+
+.auth-field input{
+  width:100%;
+  padding:11px 14px;
+  border:1.5px solid var(--line);
+  border-radius:var(--radius-sm,8px);
+  font-size:.95rem;
+  font-family:'Cairo',sans-serif;
+  background:var(--paper);
+}
+
+.auth-field input:focus{
+  outline:none;
+  border-color:var(--brick);
+}
+
+/* Password input with an eye toggle (shared with the checkout modal) */
+.password-wrap{
+  position:relative;
+}
+
+.password-wrap input{
+  width:100%;
+  padding-left:44px;
+}
+
+.password-toggle{
+  position:absolute;
+  left:6px;
+  top:50%;
+  transform:translateY(-50%);
+  width:34px;
+  height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:none;
+  border:none;
+  cursor:pointer;
+  color:var(--muted);
+  border-radius:var(--radius-sm,8px);
+  padding:0;
+}
+
+.password-toggle:hover{
+  color:var(--ink);
+  background:var(--line);
+}
+
+.password-toggle .material-symbols-outlined{
+  font-size:20px;
+}
+
+.auth-checkbox{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:.85rem;
+  margin:4px 0 12px;
+  cursor:pointer;
+}
+
+/* Two consent checkboxes (terms + privacy) sit as a tight group */
+.auth-consent{
+  margin:4px 0 0;
+}
+.auth-consent .auth-checkbox{
+  margin:0 0 8px;
+}
+
+/* Make «الشروط والأحكام» / «سياسة الخصوصية» look like the real links they are */
+.auth-policy-link{
+  color:var(--brick);
+  text-decoration:underline;
+  text-underline-offset:2px;
+  font-weight:700;
+}
+.auth-policy-link:hover{
+  color:var(--brick-dark, #6f221a);
+}
+
+.auth-checkbox input{
+  width:16px;
+  height:16px;
+  accent-color:var(--brick);
+}
+
+.forgot-link{
+  display:block;
+  margin:10px auto 0;
+}
+
+.auth-switch{
+  text-align:center;
+  font-size:.85rem;
+  color:var(--muted);
+  margin:16px 0 0;
+}
+
+.auth-switch-link{
+  background:none;
+  border:none;
+  color:var(--brick);
+  font-weight:700;
+  cursor:pointer;
+  font-size:.85rem;
+  font-family:'Cairo',sans-serif;
+  padding:0;
+  text-decoration:none;
+}
+
+.auth-switch-link:hover{
+  text-decoration:underline;
+}
+
+.otp-fields{
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  margin:24px 0 16px;
+}
+
+.otp-digit{
+  width:48px;
+  height:56px;
+  text-align:center;
+  font-size:1.4rem;
+  font-weight:800;
+  border:2px solid var(--line);
+  border-radius:var(--radius-sm,8px);
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Cairo',sans-serif;
+}
+
+.otp-digit:focus{
+  outline:none;
+  border-color:var(--brick);
+}
+
+.resend-wrap{
+  text-align:center;
+  margin-top:10px;
+}
+
+/* "تغيير رقم الجوال" under the OTP fields sits centered, not on the right */
+#page-otp-back{
+  display:block;
+  margin:10px auto 0;
+}
+
+.resend-timer{
+  font-size:.8rem;
+  color:var(--muted);
+  margin:4px 0 0;
+}
+
+.auth-success-icon{
+  display:block;
+  text-align:center;
+  font-size:64px;
+  color:#27ae60;
+  margin:12px 0;
+}
+
+@media (max-width:480px){
+  .auth-card{
+    padding:28px 18px;
+  }
+
+  .otp-digit{
+    width:42px;
+    height:50px;
+    font-size:1.2rem;
+  }
+}

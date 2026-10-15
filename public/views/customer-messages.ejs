@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رسائل العملاء | الخيرات</title>
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/contact.css">
+</head>
+<body>
+
+<%- include('partials/header', { activePage: 'messages' }) %>
+
+<main class="container messages-page">
+
+  <div class="messages-head">
+    <div class="messages-title">
+      <span class="material-symbols-outlined">forum</span>
+      <div>
+        <h1>رسائل العملاء</h1>
+        <p>كل الرسائل الواردة من صفحة «تواصل معنا».</p>
+      </div>
+    </div>
+    <a href="/dashboard" class="btn btn-outline">
+      <span class="material-symbols-outlined">dashboard</span>
+      لوحة التحكم
+    </a>
+  </div>
+
+  <div class="messages-toolbar">
+    <div class="messages-search">
+      <span class="material-symbols-outlined">search</span>
+      <input type="text" id="messages-search-input" placeholder="ابحث بالاسم أو الرقم أو نص الرسالة...">
+    </div>
+    <span class="messages-count" id="messages-count"></span>
+  </div>
+
+  <div class="messages-list" id="messages-list">
+    <!-- Filled by JS -->
+  </div>
+
+  <div class="messages-loading" id="messages-loading">
+    <span class="material-symbols-outlined spinning">progress_activity</span>
+    جاري تحميل الرسائل...
+  </div>
+
+  <div class="empty-state" id="messages-empty" style="display:none;">
+    <span class="material-symbols-outlined">inbox</span>
+    <h3>لا توجد رسائل بعد</h3>
+    <p>ستظهر رسائل العملاء هنا بمجرد إرسالهم من صفحة «تواصل معنا».</p>
+  </div>
+
+</main>
+
+<%- include('partials/footer') %>
+
+<script type="module" src="/js/scripts/customer-messages.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المنتجات المحذوفة | الخيرات</title>
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/browse.css">
+<link rel="stylesheet" href="/css/alternatives.css">
+</head>
+<body>
+
+<%- include('partials/header', { activePage: 'alternatives' }) %>
+
+<main class="container alternatives-page">
+
+  <!-- Back to the owner product management page (this page is reached
+       from the «المنتجات المحذوفة» link there) -->
+  <a class="page-back-btn" href="/alternatives">
+    <span class="material-symbols-outlined">arrow_forward</span>
+    العودة إلى إدارة المنتجات
+  </a>
+
+  <!-- Search bar -->
+  <div class="search-row">
+    <div class="search-box">
+      <span class="material-symbols-outlined">search</span>
+      <input type="text" id="search-input" placeholder="ابحث عن منتج محذوف...">
+    </div>
+  </div>
+
+  <section class="results">
+    <div class="results-head">
+      <span id="results-count">عرض 0 منتج</span>
+    </div>
+
+    <div class="product-grid" id="products-grid">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="empty-state" id="no-results" style="display:none;">
+      <span class="material-symbols-outlined">delete_sweep</span>
+      <h3>لا توجد منتجات محذوفة</h3>
+      <p>المنتجات التي تحذفها ستظهر هنا ويمكن استرجاعها.</p>
+    </div>
+  </section>
+</main>
+
+<!-- Restore confirm popup -->
+<div class="modal-overlay" id="restore-modal">
+  <div class="modal-content small">
+    <h3 class="modal-title">استرجاع المنتج</h3>
+    <p class="delete-text" id="restore-product-name"></p>
+    <p class="modal-hint">سيعود المنتج للظهور في متجر العملاء.</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" id="restore-cancel-btn">إلغاء</button>
+      <button class="btn btn-primary" id="restore-confirm-btn">استرجاع</button>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
+<script type="module" src="/js/scripts/deleted-products.js"></script>
+</body>
+</html>

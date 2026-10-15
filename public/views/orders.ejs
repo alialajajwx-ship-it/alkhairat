@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>طلباتي | الخيرات</title>
+<meta name="description" content="متابعة حالة طلباتك الحالية والسابقة في بقالة الخيرات.">
+<link rel="icon" type="image/webp" href="/images/logo.webp">
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/orders.css">
+</head>
+<body>
+
+<%- include('partials/header', { activePage: 'orders' }) %>
+
+<main class="container orders-wrap">
+  <div class="page-hero">
+    <h1>طلباتي</h1>
+    <p>سجل جميع طلباتك السابقة والحالية</p>
+  </div>
+
+  <ul class="orders-list" id="orders-list">
+    <!-- Static loading skeletons: visible from the first paint, replaced by
+         the real cards the moment the orders arrive -->
+    <li class="order-card skeleton-card" aria-hidden="true">
+      <div class="order-top">
+        <span class="skel skel-line w-40" style="margin:0;"></span>
+        <span class="skel skel-line w-30" style="margin:0;"></span>
+      </div>
+      <div class="order-body">
+        <div class="order-items-preview">
+          <span class="skel skel-thumb"></span>
+          <span class="skel skel-thumb"></span>
+          <span class="skel skel-thumb"></span>
+        </div>
+        <div class="order-info">
+          <span class="skel skel-line w-60" style="margin:0;"></span>
+          <span class="skel skel-line w-30" style="margin:0;"></span>
+        </div>
+      </div>
+    </li>
+    <li class="order-card skeleton-card" aria-hidden="true">
+      <div class="order-top">
+        <span class="skel skel-line w-40" style="margin:0;"></span>
+        <span class="skel skel-line w-30" style="margin:0;"></span>
+      </div>
+      <div class="order-body">
+        <div class="order-items-preview">
+          <span class="skel skel-thumb"></span>
+          <span class="skel skel-thumb"></span>
+          <span class="skel skel-thumb"></span>
+        </div>
+        <div class="order-info">
+          <span class="skel skel-line w-60" style="margin:0;"></span>
+          <span class="skel skel-line w-30" style="margin:0;"></span>
+        </div>
+      </div>
+    </li>
+    <li class="order-card skeleton-card" aria-hidden="true">
+      <div class="order-top">
+        <span class="skel skel-line w-40" style="margin:0;"></span>
+        <span class="skel skel-line w-30" style="margin:0;"></span>
+      </div>
+      <div class="order-body">
+        <div class="order-items-preview">
+          <span class="skel skel-thumb"></span>
+          <span class="skel skel-thumb"></span>
+          <span class="skel skel-thumb"></span>
+        </div>
+        <div class="order-info">
+          <span class="skel skel-line w-60" style="margin:0;"></span>
+          <span class="skel skel-line w-30" style="margin:0;"></span>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+  <div class="empty-state" id="no-orders" style="display:none;">
+    <span class="material-symbols-outlined">receipt_long</span>
+    <h3>لا توجد طلبات بعد</h3>
+    <p>ابدأ بالتصفح واضف منتجات إلى السلة</p>
+    <a href="/browse" class="btn btn-primary" style="margin-top:16px;">تصفح المنتجات</a>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+
+<script type="module" src="/js/data/products.js"></script>
+<script type="module" src="/js/data/cart.js"></script>
+<script type="module" src="/js/scripts/orders.js"></script>
+</body>
+</html>

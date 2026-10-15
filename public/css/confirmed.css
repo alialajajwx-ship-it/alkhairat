@@ -1,0 +1,71 @@
+/* ===== Order confirmed page ===== */
+.confirmed-wrap{
+  display:flex;
+  justify-content:center;
+  padding:60px 24px 80px;
+}
+.confirmed-card{
+  max-width:600px;
+  width:100%;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:48px 40px;
+  text-align:center;
+  box-shadow:var(--shadow);
+}
+.success-icon{
+  width:76px;height:76px;
+  margin:0 auto 20px;
+  border-radius:50%;
+  background:var(--green);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+}
+.success-icon .material-symbols-outlined{font-size:40px;font-variation-settings:'wght' 700;}
+.eyebrow.center{justify-content:center;}
+.confirmed-card h1{font-size:1.7rem;margin:8px 0 10px;}
+.confirmed-card p{color:var(--muted);max-width:440px;margin:0 auto 30px;}
+
+.order-meta{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:20px;
+  margin-bottom:34px;
+  text-align:center;
+}
+.order-meta div{display:flex;flex-direction:column;gap:4px;}
+.order-meta span{color:var(--muted);font-size:.76rem;}
+.order-meta strong{font-family:'Tajawal',sans-serif;font-size:1rem;}
+
+/* SMS review notice */
+.notice-box{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  background:var(--paper);
+  border:1px solid var(--amber);
+  border-radius:var(--radius);
+  padding:18px 20px;
+  margin:0 auto 30px;
+  text-align:right;
+}
+.notice-box .material-symbols-outlined{color:var(--amber);font-size:24px;flex:none;}
+.notice-text{color:var(--ink);font-size:.92rem;line-height:1.8;}
+.notice-text strong{display:block;margin-bottom:4px;color:var(--ink);}
+/* …but the held amount in the card notice is part of the sentence, not a
+   heading like «ملاحظة مهمة:» above: keep it inline so the message reads as
+   one line instead of the price pushing a line break above and below it. */
+.hold-notice .notice-text strong{display:inline;margin-bottom:0;}
+
+.confirmed-actions{display:flex;gap:12px;justify-content:center;}
+
+@media (max-width:560px){
+  .confirmed-card{padding:34px 22px;}
+  .order-meta{grid-template-columns:1fr;text-align:center;}
+  .confirmed-actions{flex-direction:column;}
+}

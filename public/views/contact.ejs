@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تواصل معنا | الخيرات</title>
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/contact.css">
+</head>
+<body>
+
+<%- include('partials/header', { activePage: 'contact' }) %>
+
+<main class="container contact-page">
+
+  <div class="contact-hero">
+    <span class="material-symbols-outlined">forum</span>
+    <h1>تواصل معنا</h1>
+    <p>أرسل رسالتك إلى إدارة المتجر مباشرة، وسنوصلها إلى صاحب المتجر فوراً.</p>
+  </div>
+
+  <section class="contact-card" id="contact-card">
+
+    <!-- The success state replaces the form once the message is sent -->
+    <div class="contact-success" id="contact-success" style="display:none;">
+      <span class="material-symbols-outlined">check_circle</span>
+      <h2>تم إرسال رسالتك</h2>
+      <p>شكراً لتواصلك، سيراجع صاحب المتجر رسالتك في أقرب وقت.</p>
+      <button type="button" class="btn btn-outline" id="contact-another">إرسال رسالة أخرى</button>
+    </div>
+
+    <form class="contact-form" id="contact-form" novalidate>
+
+      <div class="contact-row">
+        <div class="contact-field">
+          <label for="contact-name">الاسم <span class="required-star">*</span></label>
+          <input type="text" id="contact-name" class="contact-input" maxlength="100"
+                 placeholder="اكتب اسمك" value="<%= (typeof currentUser !== 'undefined' && currentUser) ? (currentUser.name || '') : '' %>">
+        </div>
+
+        <div class="contact-field">
+          <label for="contact-phone">رقم الجوال <span class="required-star">*</span></label>
+          <input type="tel" id="contact-phone" class="contact-input" dir="ltr" maxlength="20"
+                 placeholder="05xxxxxxxx" value="<%= (typeof currentUser !== 'undefined' && currentUser) ? (currentUser.phone || '') : '' %>">
+        </div>
+      </div>
+
+      <div class="contact-field">
+        <label for="contact-topic">الموضوع <span class="optional-note">(اختياري)</span></label>
+        <input type="text" id="contact-topic" class="contact-input" maxlength="120"
+               placeholder="مثال: استفسار عن طلب">
+      </div>
+
+      <div class="contact-field">
+        <label for="contact-message">الرسالة <span class="required-star">*</span></label>
+        <textarea id="contact-message" class="contact-input contact-textarea" maxlength="2000" rows="7"
+                  placeholder="اكتب رسالتك هنا..."></textarea>
+        <div class="contact-counter"><span id="contact-counter">0</span> / 2000</div>
+      </div>
+
+      <div class="contact-actions">
+        <button type="submit" class="btn btn-primary" id="contact-submit">
+          <span class="material-symbols-outlined">send</span>
+          إرسال الرسالة
+        </button>
+      </div>
+    </form>
+
+  </section>
+
+  <!-- The customer's own history: every message they already sent -->
+  <section class="contact-history" id="contact-history">
+    <div class="contact-history-head">
+      <span class="material-symbols-outlined">history</span>
+      <h2>رسائلك السابقة</h2>
+      <span class="contact-history-count" id="contact-history-count"></span>
+    </div>
+
+    <div class="messages-loading" id="contact-history-loading">
+      <span class="material-symbols-outlined">progress_activity</span>
+      جاري تحميل رسائلك...
+    </div>
+
+    <div class="history-list" id="contact-history-list"></div>
+
+    <div class="empty-state" id="contact-history-empty" style="display:none;">
+      <span class="material-symbols-outlined">outbox</span>
+      <h3>لم ترسل أي رسالة بعد</h3>
+      <p>كل رسالة ترسلها إلى إدارة المتجر ستظهر هنا.</p>
+    </div>
+  </section>
+</main>
+
+<%- include('partials/footer') %>
+
+<script type="module" src="/js/scripts/contact.js"></script>
+</body>
+</html>

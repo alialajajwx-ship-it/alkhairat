@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%
+  // Which auth panel is visible on first paint. Default: login.
+  // The /login route passes initialMode when the URL asks for ?mode=register
+  // or ?mode=forgot so the correct form renders immediately (no flash).
+  const authInitialMode = typeof initialMode === 'string' && initialMode ? initialMode : 'login';
+%>
+<title><%= authInitialMode === 'register' ? 'انشاء حساب جديد' : 'تسجيل الدخول' %> | الخيرات</title>
+<meta name="description" content="تسجيل الدخول أو إنشاء حساب جديد في بقالة الخيرات لإتمام ومتابعة طلباتك.">
+<link rel="icon" type="image/webp" href="/images/logo.webp">
+<link rel="stylesheet" href="/css/common.css">
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+
+<%- include('partials/header', { activePage: 'login' }) %>
+
+<main class="auth-page">
+  <div class="auth-card">
+    <!-- Login form -->
+    <section id="page-login" style="display:<%= authInitialMode === 'login' ? '' : 'none' %>;">
+      <h1 class="auth-title">تسجيل الدخول</h1>
+      <p class="auth-page-subtitle">ادخل بيانات حسابك للمتابعة</p>
+
+      <form id="page-login-form" autocomplete="off">
+        <div class="auth-field">
+          <label>رقم الجوال</label>
+          <input type="tel" id="page-login-phone" placeholder="05xxxxxxxx" maxlength="10" required>
+        </div>
+        <div class="auth-field">
+          <label>كلمة المرور</label>
+          <div class="password-wrap">
+            <input type="password" id="page-login-password" placeholder="كلمة المرور" required>
+            <button type="button" class="password-toggle" data-target="page-login-password" aria-label="إظهار كلمة المرور">
+              <span class="material-symbols-outlined">visibility</span>
+            </button>
+          </div>
+        </div>
+        <div class="auth-error" id="page-login-error"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="page-login-submit">تسجيل الدخول</button>
+      </form>
+
+      <button type="button" class="auth-switch-link forgot-link" id="forgot-link">نسيت كلمة المرور؟</button>
+
+      <p class="auth-switch">ليس لديك حساب؟ <button type="button" class="auth-switch-link" id="switch-to-register">انشئ حساباً جديداً</button></p>
+    </section>
+
+    <!-- Forgot password: step 1 (request a code) -->
+    <section id="page-forgot" style="display:<%= authInitialMode === 'forgot' ? '' : 'none' %>;">
+      <h1 class="auth-title">إعادة تعيين كلمة المرور</h1>
+      <p class="auth-page-subtitle">أدخل رقم جوالك وسنرسل لك كود التحقق</p>
+
+      <form id="page-forgot-form" autocomplete="off">
+        <div class="auth-field">
+          <label>رقم الجوال</label>
+          <input type="tel" id="page-forgot-phone" placeholder="05xxxxxxxx" maxlength="10" required>
+        </div>
+        <div class="auth-error" id="page-forgot-error"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="page-forgot-submit">إرسال الكود</button>
+      </form>
+
+      <p class="auth-switch">تذكرت كلمة المرور؟ <button type="button" class="auth-switch-link" id="forgot-to-login">تسجيل الدخول</button></p>
+    </section>
+
+    <!-- Registration form -->
+    <section id="page-register" style="display:<%= authInitialMode === 'register' ? '' : 'none' %>;">
+      <h1 class="auth-title">انشاء حساب جديد</h1>
+      <p class="auth-page-subtitle">سيستغرق أقل من دقيقتين</p>
+
+      <form id="page-register-form" autocomplete="off">
+        <div class="auth-field">
+          <label>الاسم</label>
+          <input type="text" id="page-reg-name" placeholder="اختر اسماً لك" maxlength="60" required>
+        </div>
+        <div class="auth-field">
+          <label>رقم الجوال</label>
+          <input type="tel" id="page-reg-phone" placeholder="05xxxxxxxx" maxlength="10" required>
+        </div>
+        <div class="auth-field">
+          <label>كلمة المرور</label>
+          <div class="password-wrap">
+            <input type="password" id="page-reg-password" placeholder="6 أحرف على الأقل" minlength="6" required>
+            <button type="button" class="password-toggle" data-target="page-reg-password" aria-label="إظهار كلمة المرور">
+              <span class="material-symbols-outlined">visibility</span>
+            </button>
+          </div>
+        </div>
+        <div class="auth-field">
+          <label>تأكيد كلمة المرور</label>
+          <div class="password-wrap">
+            <input type="password" id="page-reg-confirm" placeholder="أعد إدخال كلمة المرور" minlength="6" required>
+            <button type="button" class="password-toggle" data-target="page-reg-confirm" aria-label="إظهار كلمة المرور">
+              <span class="material-symbols-outlined">visibility</span>
+            </button>
+          </div>
+        </div>
+        <div class="auth-consent">
+          <label class="auth-checkbox">
+            <input type="checkbox" id="page-reg-terms" required>
+            <span>أوافق على <a href="/terms" target="_blank" rel="noopener" class="auth-policy-link">الشروط والأحكام</a></span>
+          </label>
+          <label class="auth-checkbox">
+            <input type="checkbox" id="page-reg-privacy" required>
+            <span>أوافق على <a href="/privacy" target="_blank" rel="noopener" class="auth-policy-link">سياسة الخصوصية</a></span>
+          </label>
+        </div>
+        <div class="auth-error" id="page-reg-error"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="page-reg-submit">التالي</button>
+      </form>
+
+      <p class="auth-switch">لديك حساب بالفعل؟ <button type="button" class="auth-switch-link" id="switch-to-login">سجل دخولك</button></p>
+    </section>
+
+    <!-- OTP verification (shared by register + forgot-password flows) -->
+    <section id="page-otp" style="display:none;">
+      <h1 class="auth-title" id="otp-title">تحقق من رقم هاتفك</h1>
+      <p class="auth-page-subtitle" id="otp-subtitle">أدخل الكود المرسل إلى هاتفك</p>
+
+      <div class="otp-fields" dir="ltr">
+        <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" class="otp-digit">
+        <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" class="otp-digit">
+        <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" class="otp-digit">
+        <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" class="otp-digit">
+        <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" class="otp-digit">
+        <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" class="otp-digit">
+      </div>
+      <div class="auth-error" id="page-otp-error"></div>
+      <button class="btn btn-primary btn-block" id="page-otp-verify">تحقق</button>
+      <div class="resend-wrap" id="page-resend-wrap" style="display:none;">
+        <button class="btn btn-text" id="page-otp-resend">إعادة إرسال الكود</button>
+        <p class="resend-timer" id="page-resend-timer"></p>
+      </div>
+      <button class="btn btn-text" id="page-otp-back">تغيير رقم الجوال</button>
+    </section>
+
+    <!-- Reset password (after the reset code is verified) -->
+    <section id="page-reset" style="display:none;">
+      <h1 class="auth-title">كلمة مرور جديدة</h1>
+      <p class="auth-page-subtitle">اختر كلمة مرور جديدة لحسابك</p>
+
+      <form id="page-reset-form" autocomplete="off">
+        <div class="auth-field">
+          <label>كلمة المرور الجديدة</label>
+          <div class="password-wrap">
+            <input type="password" id="page-reset-password" placeholder="6 أحرف على الأقل" minlength="6" required>
+            <button type="button" class="password-toggle" data-target="page-reset-password" aria-label="إظهار كلمة المرور">
+              <span class="material-symbols-outlined">visibility</span>
+            </button>
+          </div>
+        </div>
+        <div class="auth-field">
+          <label>تأكيد كلمة المرور</label>
+          <div class="password-wrap">
+            <input type="password" id="page-reset-confirm" placeholder="أعد إدخال كلمة المرور" minlength="6" required>
+            <button type="button" class="password-toggle" data-target="page-reset-confirm" aria-label="إظهار كلمة المرور">
+              <span class="material-symbols-outlined">visibility</span>
+            </button>
+          </div>
+        </div>
+        <div class="auth-error" id="page-reset-error"></div>
+        <button type="submit" class="btn btn-primary btn-block" id="page-reset-submit">تغيير كلمة المرور</button>
+      </form>
+    </section>
+
+    <!-- Success -->
+    <section id="page-success" style="display:none;">
+      <span class="material-symbols-outlined auth-success-icon">check_circle</span>
+      <h1 class="auth-title" id="success-title">تم بنجاح!</h1>
+      <p class="auth-page-subtitle" id="success-subtitle">جاري تحويلك للرئيسية...</p>
+    </section>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
+
+<script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@4/dist/fp.min.js"></script>
+<script type="module" src="/js/scripts/auth.js"></script>
+</body>
+</html>
